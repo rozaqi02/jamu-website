@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { FaRobot, FaTimes } from 'react-icons/fa';
+import { FaRobot, FaTimes } from 'react-icons/fa'; // Tambahkan impor FaRobot
 import { motion, AnimatePresence } from 'framer-motion';
 
 function ChatBot() {
@@ -58,7 +58,7 @@ function ChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
           >
-            <div className="flex justify-between items-center p-3 bg-[#a3e4b7] text-white rounded-t-lg">
+            <div className="flex justify-between items-center p-3 bg-[#4a704a] text-white rounded-t-lg">
               <span className="flex items-center gap-2"><FaRobot /> Grok Bot</span>
               <motion.button onClick={() => setIsOpen(false)} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <FaTimes />
@@ -72,7 +72,7 @@ function ChatBot() {
                     layout
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`text-sm p-2 rounded max-w-[80%] ${msg.sender === 'user' ? 'bg-[#a3e4b7] self-end ml-auto' : 'bg-gray-100 self-start mr-auto'}`}
+                    className={`text-sm p-2 rounded max-w-[80%] ${msg.sender === 'user' ? 'bg-[#4a704a] self-end ml-auto' : 'bg-gray-100 self-start mr-auto'}`}
                   >
                     {msg.text}
                   </motion.div>
@@ -87,21 +87,22 @@ function ChatBot() {
                 placeholder="Ketik pesan..."
                 className="flex-1 p-2 border-none focus:outline-none"
               />
-              <button type="submit" className="p-2 bg-[#a3e4b7] text-white">
+              <button type="submit" className="p-2 bg-[#4a704a] text-white">
                 Kirim
               </button>
             </form>
           </motion.div>
         ) : (
           <motion.button
-            className="bg-[#a3e4b7] text-white p-4 rounded-full shadow-lg hover:bg-[#7fd8a1]"
+            className="bg-[#4a704a] text-white p-4 rounded-full shadow-lg hover:bg-[#355e3b]"
             onClick={() => setIsOpen(true)}
             whileHover={{ scale: 1.1, rotate: 15 }}
             whileTap={{ scale: 0.9 }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            style={{ backgroundImage: `url('/assets/images/logo-chatbot.png')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
           >
-            <FaRobot size={24} />
+            {/* Placeholder kosong agar gambar muncul sebagai latar belakang */}
           </motion.button>
         )}
       </AnimatePresence>

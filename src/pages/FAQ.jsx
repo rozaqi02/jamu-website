@@ -1,52 +1,55 @@
-// src/pages/FAQ.jsx
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaPlus, FaMinus } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
-const faqs = [
-  { q: 'Apa itu Jakora?', a: 'Jakora adalah produk vegan berbasis jamur.' },
-  { q: 'Bagaimana cara memesan?', a: 'Pesan melalui WhatsApp kami.' },
-];
-
-function FAQ() {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const toggleFAQ = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
+function FAQ({ theme, toggleTheme, cartItems, addToCart }) {
+  const faqs = [
+    { question: 'Apa itu Jakora?', answer: 'Jakora adalah produk rendang jamur vegan inovatif yang mendukung gaya hidup sehat dan berkelanjutan.' },
+    { question: 'Bagaimana cara memesan produk?', answer: 'Pesanan dapat dilakukan melalui WhatsApp (+62 813-9154-6240) dengan menyebutkan detail produk yang diinginkan.' },
+    { question: 'Apakah produk Jakora bersertifikat halal?', answer: 'Ya, semua produk Jakora telah bersertifikat halal dan aman untuk dikonsumsi.' },
+    { question: 'Berapa lama waktu pengiriman?', answer: 'Pengiriman memakan waktu 2-5 hari tergantung lokasi, menggunakan jasa ekspedisi terpercaya.' },
+    { question: 'Adakah promo atau diskon tersedia?', answer: 'Informasi promo terbaru dapat dilihat di akun Instagram resmi kami.' },
+    { question: 'Bagaimana cara menyimpan produk dengan baik?', answer: 'Simpan produk di tempat sejuk dan kering, jauhkan dari paparan sinar matahari langsung.' },
+    { question: 'Bisa pesan produk secara khusus?', answer: 'Ya, hubungi kami melalui WhatsApp untuk pemesanan khusus sesuai kebutuhan.' },
+    { question: 'Apa manfaat kesehatan dari konsumsi jamur?', answer: 'Jamur kaya akan vitamin D, antioksidan, dan serat yang mendukung sistem kekebalan tubuh.' },
+  ];
 
   return (
-    <section className="py-24 px-4 max-w-4xl mx-auto">
-      <h2 className="text-4xl font-bold text-center text-[var(--yumsert-green)] mb-12">
-      </h2>
-      <div className="space-y-4">
-        {faqs.map((item, idx) => (
-          <div key={idx} className="bg-cream-100 dark:bg-green-900 rounded-lg shadow-md overflow-hidden">
-            <button
-              onClick={() => toggleFAQ(idx)}
-              className="w-full flex justify-between items-center text-left p-6 hover:bg-cream-200 dark:hover:bg-green-800 focus:outline-none"
-            >
-              <h3 className="font-semibold text-[var(--yumsert-green)] dark:text-cream-100 text-lg">{item.q}</h3>
-              <span className="text-[var(--yumsert-green)]">
-                {openIndex === idx ? <FaMinus /> : <FaPlus />}
-              </span>
-            </button>
-            <AnimatePresence>
-              {openIndex === idx && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                >
-                  <p className="p-6 pt-0 text-gray-700 dark:text-cream-200">{item.a}</p>
-                </motion.div>
-              )}
-            </AnimatePresence>
+    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
+      <Navbar theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} />
+      <main className="pt-16">
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="py-16 px-4 max-w-7xl mx-auto"
+        >
+          <h2 className="text-4xl font-bold text-center text-[#4a704a] dark:text-[#a3e4b7] mb-12">Pertanyaan yang Sering Diajukan</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                className="bg-white dark:bg-[#2a344a] p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+                whileHover={{ scale: 1.05, rotate: 1 }}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                onClick={() => document.getElementById(`faq-${index}`).classList.toggle('hidden')}
+              >
+                <h3 className="text-xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-2 flex items-center justify-between">
+                  {faq.question}
+                  <span className="text-2xl">▼</span>
+                </h3>
+                <p id={`faq-${index}`} className="text-gray-600 dark:text-white mt-2 hidden">
+                  {faq.answer}
+                </p>
+              </motion.div>
+            ))}
           </div>
-        ))}
-      </div>
-    </section>
+        </motion.section>
+      </main>
+      <Footer />
+    </div>
   );
 }
 

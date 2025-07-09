@@ -1,4 +1,3 @@
-// src/components/HeroSection.jsx
 import { motion } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
@@ -6,6 +5,12 @@ import { useState, useEffect } from 'react';
 function HeroSection() {
   const [typingText, setTypingText] = useState('DAPATKAN');
   const texts = ['DAPATKAN', 'EKSPERIENSI', 'NIKMATI'];
+  const [currentImage, setCurrentImage] = useState(0);
+  const images = [
+    '/assets/images/jakora-premium1.png',
+    '/assets/images/jakora-premium2.png',
+    '/assets/images/jakora-premium3.png',
+  ];
 
   useEffect(() => {
     let index = 0;
@@ -19,6 +24,13 @@ function HeroSection() {
       }, 200);
     }, 3000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const imageInterval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(imageInterval);
   }, []);
 
   const containerVariants = {
@@ -54,19 +66,19 @@ function HeroSection() {
       >
         <div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
           <motion.h2
-            className="text-lg font-semibold text-green-600 uppercase typing-effect"
+            className="text-lg font-semibold text-[#4a704a] uppercase typing-effect"
             variants={itemVariants}
           >
             {typingText}
           </motion.h2>
           <motion.h1
-            className="text-4xl md:text-6xl font-bold text-green-700 my-4 leading-tight"
+            className="text-4xl md:text-6xl font-bold text-[#4a704a] my-4 leading-tight"
             variants={itemVariants}
           >
             Produk Inovatif dan Sehat
           </motion.h1>
           <motion.p
-            className="text-base md:text-lg text-gray-700 mb-8"
+            className="text-base md:text-lg text-gray-600 dark:text-white mb-8"
             variants={itemVariants}
           >
             Kewirausahaan sosial berbasis jamur guna mewujudkan Green Economy dan Ecological Sustainability di Indonesia.
@@ -74,7 +86,7 @@ function HeroSection() {
           <motion.div variants={itemVariants}>
             <motion.a
               href="/produk"
-              className="inline-flex items-center gap-2 bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105"
+              className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#355e3b] transition-all duration-300 transform hover:scale-105"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -88,7 +100,16 @@ function HeroSection() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.5, type: 'spring' }}
         >
-          <img src="/assets/images/jakora-premium.jpg" alt="Produk Jakora" className="w-full max-w-md drop-shadow-2xl" />
+          <motion.img
+            key={currentImage}
+            src={images[currentImage]}
+            alt="Produk Jakora"
+            className="w-full max-w-md drop-shadow-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+          />
         </motion.div>
       </motion.div>
     </section>

@@ -6,7 +6,7 @@
 
 :root {
   --yumsert-cream: #ffffff;
-  --yumsert-green: #a3e4b7; /* Hijau sage/neon */
+  --yumsert-green: #4a704a; /* Hijau gelap untuk light mode */
 }
 
 body {
@@ -23,6 +23,7 @@ html.light {
   --bg-color: #ffffff;
   --text-color: #333;
   --section-bg: #f9f9f9;
+  --yumsert-green: #4a704a; /* Tetap hijau gelap */
 }
 
 /* Dark mode */
@@ -30,6 +31,7 @@ html.dark {
   --bg-color: #1a1f2b; /* Hitam temaram */
   --text-color: #ffffff; /* Teks putih */
   --section-bg: #2a344a;
+  --yumsert-green: #a3e4b7; /* Hijau sage/neon */
 }
 
 .font-poppins {
@@ -41,10 +43,7 @@ html.dark {
 }
 
 .text-yumsert-green {
-  color: #a3e4b7;
-}
-.dark .text-yumsert-green {
-  color: #a3e4b7;
+  color: var(--yumsert-green);
 }
 
 .sticker {
@@ -68,7 +67,7 @@ body::before {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(163, 228, 183, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(74, 112, 74, 0.1) 0%, transparent 70%);
   animation: rotate 20s linear infinite;
   z-index: -1;
   transition: transform 0.1s ease-out;
@@ -87,7 +86,7 @@ body::after {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="10" fill="%23a3e4b7" opacity="0.3"/></svg>') repeat;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="10" fill="%234a704a" opacity="0.3"/></svg>') repeat;
   animation: moveParticles 20s linear infinite;
   z-index: -1;
 }
@@ -110,10 +109,10 @@ button, a.button {
 }
 
 button:hover, a.button:hover {
-  background-color: #7fd8a1;
+  background-color: #355e3b;
 }
 
-/* Marquee untuk Testimoni, FAQ, dan Label Produk */
+/* Marquee untuk Testimoni */
 @keyframes marquee-left {
   0% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
@@ -121,7 +120,7 @@ button:hover, a.button:hover {
 
 @keyframes marquee-right {
   0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  100% { transform: translateX(0); }
 }
 
 .marquee-container {
@@ -131,12 +130,12 @@ button:hover, a.button:hover {
 
 .marquee-content-left {
   display: inline-flex;
-  animation: marquee-left 120s linear infinite;
+  animation: marquee-left 60s linear infinite;
 }
 
 .marquee-content-right {
   display: inline-flex;
-  animation: marquee-right 120s linear infinite;
+  animation: marquee-right 60s linear infinite;
 }
 
 .marquee-item {

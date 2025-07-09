@@ -1,77 +1,76 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
-function Kontak() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const message = `Nama: ${formData.name}%0AEmail: ${formData.email}%0APesan: ${formData.message}`;
-    const waLink = `https://wa.me/6281391546240?text=${message}`;
-    window.open(waLink, '_blank');
-    setFormData({ name: '', email: '', message: '' });
-  };
-
+function Kontak({ theme, toggleTheme, cartItems, addToCart }) {
   return (
-    <section className="py-16 px-4 max-w-3xl mx-auto text-center">
-      <h2 className="text-4xl font-bold text-green-700 mb-6">Hubungi Kami 📱</h2>
-      <p className="text-lg mb-8 text-gray-700">
-        Ada pertanyaan atau pesanan? Isi formulir di bawah ini!
-      </p>
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Nama Anda"
-              className="w-full p-2 border border-gray-300 rounded"
-              required
-            />
+    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
+      <Navbar theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} />
+      <main className="pt-16">
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          className="py-16 px-4 max-w-7xl mx-auto"
+        >
+          <h2 className="text-4xl font-bold text-center text-[#4a704a] dark:text-[#a3e4b7] mb-12">Hubungi Kami</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <motion.div
+              className="bg-white dark:bg-[#2a344a] p-8 rounded-xl shadow-lg"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              <h3 className="text-2xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-4">Informasi Kontak</h3>
+              <p className="text-gray-600 dark:text-white mb-2">WhatsApp: +62 813-9154-6240</p>
+              <p className="text-gray-600 dark:text-white mb-2">Email: info@jakora.id</p>
+              <p className="text-gray-600 dark:text-white mb-2">Instagram: @jakora.id</p>
+              <motion.a
+                href="https://wa.me/6281391546240"
+                className="inline-flex items-center gap-2 bg-[#4a704a] dark:bg-[#a3e4b7] text-white font-bold py-3 px-6 rounded-full mt-6 hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Chat Sekarang
+              </motion.a>
+            </motion.div>
+            <motion.div
+              className="bg-white dark:bg-[#2a344a] p-8 rounded-xl shadow-lg"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
+              <h3 className="text-2xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-4">Kirim Pesan</h3>
+              <form className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Nama"
+                  className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white border-none focus:outline-none"
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white border-none focus:outline-none"
+                />
+                <textarea
+                  placeholder="Pesan"
+                  className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white border-none focus:outline-none h-32"
+                />
+                <motion.button
+                  type="submit"
+                  className="w-full bg-[#4a704a] dark:bg-[#a3e4b7] text-white font-bold py-3 rounded-lg hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition-all duration-300"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Kirim
+                </motion.button>
+              </form>
+            </motion.div>
           </div>
-          <div>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email Anda"
-              className="w-full p-2 border border-gray-300 rounded"
-              required
-            />
-          </div>
-          <div>
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Pesan Anda"
-              className="w-full p-2 border border-gray-300 rounded h-24"
-              required
-            />
-          </div>
-          <motion.button
-            type="submit"
-            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Kirim via WhatsApp
-          </motion.button>
-        </form>
-      </div>
-      <div className="mt-8 text-gray-700">
-        <p><strong>Alamat:</strong> Limau Manis, Kec. Pauh Kota Padang Sumatera Barat</p>
-        <p><strong>Email:</strong> jakorafood@gmail.com</p>
-        <p><strong>WA:</strong> ‪+62 813-9154-6240‬</p>
-      </div>
-    </section>
+        </motion.section>
+      </main>
+      <Footer />
+    </div>
   );
 }
 

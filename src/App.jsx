@@ -14,7 +14,7 @@ import { motion } from 'framer-motion';
 // Komponen Layout Baru
 function AppLayout({ theme, toggleTheme, cartItems, addToCart }) {
   return (
-    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
+    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
       <Navbar theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} />
       <main className="pt-16">
         <Outlet />
@@ -32,13 +32,12 @@ function App() {
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
-    localStorage.setItem('theme', newTheme); // Simpan tema ke localStorage
+    localStorage.setItem('theme', newTheme);
     document.documentElement.classList.remove('light', 'dark');
     document.documentElement.classList.add(newTheme);
   };
 
   useEffect(() => {
-    // Terapkan tema awal dari localStorage atau default ke 'light'
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
     document.documentElement.classList.add(savedTheme);
@@ -61,12 +60,12 @@ function App() {
     <Router>
       <Routes>
         <Route element={<AppLayout theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} addToCart={addToCart} />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/produk" element={<Produk />} />
-          <Route path="/testimoni" element={<Testimoni />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/kontak" element={<Kontak />} />
-          <Route path="/keranjang" element={<Keranjang cartItems={cartItems} />} />
+          <Route path="/" element={<Home theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} addToCart={addToCart} />} />
+          <Route path="/produk" element={<Produk theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} addToCart={addToCart} />} />
+          <Route path="/testimoni" element={<Testimoni theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} addToCart={addToCart} />} />
+          <Route path="/faq" element={<FAQ theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} addToCart={addToCart} />} />
+          <Route path="/kontak" element={<Kontak theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} addToCart={addToCart} />} />
+          <Route path="/keranjang" element={<Keranjang cartItems={cartItems} theme={theme} toggleTheme={toggleTheme} addToCart={addToCart} />} />
         </Route>
       </Routes>
     </Router>
