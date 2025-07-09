@@ -1,13 +1,150 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Anton&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --yumsert-blue: #1e3a8a;
+  --yumsert-orange: #f97316;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light mode */
+html.light {
+  --bg-color: #fffaf0;
+  --text-color: #1e3a8a;
+  --section-bg: #ffffff;
+}
+
+/* Dark mode */
+html.dark {
+  --bg-color: #09101a;
+  --text-color: #ffffff;
+  --section-bg: #09101a;
+}
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+.font-anton {
+  font-family: 'Anton', sans-serif;
+}
+
+.text-yumsert-blue {
+  color: #61dafb;
+}
+.dark .text-yumsert-blue {
+  color: #61dafb;
+}
+
+.sticker {
+  position: absolute;
+  opacity: 0.5;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+button, a.button {
+  background-color: var(--yumsert-blue);
+  color: #ffffff;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+button:hover, a.button:hover {
+  background-color: var(--yumsert-orange);
+}
+
+/* Marquee untuk Testimoni, FAQ, dan Label Produk */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-content-left {
+  display: inline-flex;
+  animation: marquee-left 120s linear infinite;
+}
+
+.marquee-content-right {
+  display: inline-flex;
+  animation: marquee-right 120s linear infinite;
+}
+
+.marquee-item {
+  margin-right: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.marquee-item img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+  border: 2px solid var(--yumsert-orange);
+}
+
+/* Animasi untuk Gen-Z */
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 10s linear infinite;
+}
+
+/* Animasi ketikan untuk titles utama */
+.typing-effect {
+  display: inline-block;
+  border-right: 2px solid var(--yumsert-blue);
+  animation: blink-caret 0.75s step-end infinite;
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--yumsert-blue); }
+}
+
+/* Responsive untuk mobile */
+@media (max-width: 640px) {
+  .title-home {
+    font-size: 1.8rem !important;
+    line-height: 2.2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    text-wrap: balance;
+  }
+
+  .marquee-item {
+    margin-right: 1rem;
+  }
 }
