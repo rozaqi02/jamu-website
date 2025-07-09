@@ -1,39 +1,51 @@
-import { useLanguage } from '../context/LanguageContext';
+// src/pages/FAQ.jsx
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaPlus, FaMinus } from 'react-icons/fa';
 
 const faqs = [
-  {
-    q: 'Berapa lama masa simpan Jakora dan Jatastik?',
-    a: 'Simpen di suhu ruang dan hindari sinar matahari langsung. Bisa tahan 1-2 minggu.',
-  },
-  {
-    q: 'Apakah produk vegan?',
-    a: '100% vegan. Bebas daging dan bahan hewani.',
-  },
-  {
-    q: 'Bisa request varian khusus?',
-    a: 'Untuk saat ini belum bisa, tapi segera hadir custom mix!',
-  },
-  {
-    q: 'Bagaimana pengiriman?',
-    a: 'Kami kirim dari Padang. Estimasi 1-3 hari tergantung lokasi.',
-  },
+  { q: 'Apa itu Jakora?', a: 'Jakora adalah produk vegan berbasis jamur.' },
+  { q: 'Bagaimana cara memesan?', a: 'Pesan melalui WhatsApp kami.' },
 ];
 
 function FAQ() {
-  const { language } = useLanguage();
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
-    <section className="py-16 px-4 max-w-4xl mx-auto">
-      <h2 className="text-4xl font-bold text-center text-blue-700 mb-8">
-        {language === 'id' ? 'Pertanyaan Umum ❓' : 'Frequently Asked Questions ❓'}
+    <section className="py-24 px-4 max-w-4xl mx-auto">
+      <h2 className="text-4xl font-bold text-center text-[var(--yumsert-green)] mb-12">
       </h2>
-      <ul className="space-y-6">
+      <div className="space-y-4">
         {faqs.map((item, idx) => (
-          <li key={idx} className="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-            <h3 className="font-semibold text-blue-600 dark:text-white text-lg mb-2">{item.q}</h3>
-            <p className="text-gray-700 dark:text-gray-300">{item.a}</p>
-          </li>
+          <div key={idx} className="bg-cream-100 dark:bg-green-900 rounded-lg shadow-md overflow-hidden">
+            <button
+              onClick={() => toggleFAQ(idx)}
+              className="w-full flex justify-between items-center text-left p-6 hover:bg-cream-200 dark:hover:bg-green-800 focus:outline-none"
+            >
+              <h3 className="font-semibold text-[var(--yumsert-green)] dark:text-cream-100 text-lg">{item.q}</h3>
+              <span className="text-[var(--yumsert-green)]">
+                {openIndex === idx ? <FaMinus /> : <FaPlus />}
+              </span>
+            </button>
+            <AnimatePresence>
+              {openIndex === idx && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                >
+                  <p className="p-6 pt-0 text-gray-700 dark:text-cream-200">{item.a}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }

@@ -1,62 +1,96 @@
 // src/components/HeroSection.jsx
-import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { FaArrowRight } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
 
 function HeroSection() {
-  const [currentTitle, setCurrentTitle] = useState(0);
-  const [displayedTitle, setDisplayedTitle] = useState('');
-  const titleRef = useRef(null);
-
-  const titles = [
-    'Jajanan Jamur Kekinian 🍄',
-    'Jakora, Jamur Rasa Rendang! 🍛',
-    'Jatastik, Renyah Nabati Tanpa Ragu! 💥',
-    '100% Vegan & Natural ✨',
-  ];
+  const [typingText, setTypingText] = useState('DAPATKAN');
+  const texts = ['DAPATKAN', 'EKSPERIENSI', 'NIKMATI'];
 
   useEffect(() => {
+    let index = 0;
     const interval = setInterval(() => {
-      setCurrentTitle((prev) => (prev + 1) % titles.length);
-    }, 4000);
+      index = (index + 1) % texts.length;
+      let i = 0;
+      const timer = setInterval(() => {
+        setTypingText(texts[index].slice(0, i + 1));
+        i++;
+        if (i > texts[index].length) clearInterval(timer);
+      }, 200);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    setDisplayedTitle('');
-    let charIndex = 0;
-    const currentText = titles[currentTitle];
-    const typingInterval = setInterval(() => {
-      if (charIndex < currentText.length) {
-        setDisplayedTitle((prev) => prev + currentText[charIndex]);
-        charIndex++;
-      } else {
-        clearInterval(typingInterval);
-      }
-    }, 50);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
 
-    return () => clearInterval(typingInterval);
-  }, [currentTitle]);
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+      },
+    },
+  };
 
   return (
-    <section
-      id="home"
-      className="h-screen flex items-center justify-center bg-cover bg-center relative overflow-hidden"
-      style={{ backgroundImage: "url('/assets/images/hero-bg.jpg')" }}
-    >
-      <div className="text-center">
-        <motion.h1
-          ref={titleRef}
-          className="text-4xl md:text-6xl font-bold text-[var(--yumsert-blue)] drop-shadow-lg px-4 typing-effect"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+    <section id="home" className="h-screen flex items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: "url('/assets/images/hero-bg.jpg')" }}>
+      <div className="absolute inset-0 bg-white/50 dark:bg-black/60" />
+      <motion.div
+        className="container mx-auto px-6 z-10 flex flex-col md:flex-row items-center justify-between"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
+          <motion.h2
+            className="text-lg font-semibold text-green-600 uppercase typing-effect"
+            variants={itemVariants}
+          >
+            {typingText}
+          </motion.h2>
+          <motion.h1
+            className="text-4xl md:text-6xl font-bold text-green-700 my-4 leading-tight"
+            variants={itemVariants}
+          >
+            Produk Inovatif dan Sehat
+          </motion.h1>
+          <motion.p
+            className="text-base md:text-lg text-gray-700 mb-8"
+            variants={itemVariants}
+          >
+            Kewirausahaan sosial berbasis jamur guna mewujudkan Green Economy dan Ecological Sustainability di Indonesia.
+          </motion.p>
+          <motion.div variants={itemVariants}>
+            <motion.a
+              href="/produk"
+              className="inline-flex items-center gap-2 bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-green-700 transition-all duration-300 transform hover:scale-105"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Lihat Produknya <FaArrowRight />
+            </motion.a>
+          </motion.div>
+        </div>
+        <motion.div
+          className="md:w-1/2 flex justify-center"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.5, type: 'spring' }}
         >
-          {displayedTitle}
-        </motion.h1>
-        <p className="mt-4 text-lg md:text-2xl text-[var(--yumsert-orange)]">
-          Nikmati camilan sehat dari jamur premium ✨
-        </p>
-      </div>
+          <img src="/assets/images/jakora-premium.jpg" alt="Produk Jakora" className="w-full max-w-md drop-shadow-2xl" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

@@ -5,28 +5,31 @@
 @tailwind utilities;
 
 :root {
-  --yumsert-blue: #1e3a8a;
-  --yumsert-orange: #f97316;
+  --yumsert-cream: #ffffff;
+  --yumsert-green: #a3e4b7; /* Hijau sage/neon */
 }
 
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+  position: relative;
+  color: #333;
 }
 
 /* Light mode */
 html.light {
-  --bg-color: #fffaf0;
-  --text-color: #1e3a8a;
-  --section-bg: #ffffff;
+  --bg-color: #ffffff;
+  --text-color: #333;
+  --section-bg: #f9f9f9;
 }
 
 /* Dark mode */
 html.dark {
-  --bg-color: #09101a;
-  --text-color: #ffffff;
-  --section-bg: #09101a;
+  --bg-color: #1a1f2b; /* Hitam temaram */
+  --text-color: #ffffff; /* Teks putih */
+  --section-bg: #2a344a;
 }
 
 .font-poppins {
@@ -37,11 +40,11 @@ html.dark {
   font-family: 'Anton', sans-serif;
 }
 
-.text-yumsert-blue {
-  color: #61dafb;
+.text-yumsert-green {
+  color: #a3e4b7;
 }
-.dark .text-yumsert-blue {
-  color: #61dafb;
+.dark .text-yumsert-green {
+  color: #a3e4b7;
 }
 
 .sticker {
@@ -49,17 +52,65 @@ html.dark {
   opacity: 0.5;
   pointer-events: none;
   filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+  animation: float 6s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Background Moving Elements dengan Interaksi Scroll */
+body::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(163, 228, 183, 0.1) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  z-index: -1;
+  transition: transform 0.1s ease-out;
+}
+
+body {
+  background: linear-gradient(135deg, var(--bg-color) 0%, var(--section-bg) 100%);
+  overflow-x: hidden;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="10" fill="%23a3e4b7" opacity="0.3"/></svg>') repeat;
+  animation: moveParticles 20s linear infinite;
+  z-index: -1;
+}
+
+@keyframes moveParticles {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 button, a.button {
-  background-color: var(--yumsert-blue);
+  background-color: var(--yumsert-green);
   color: #ffffff;
   opacity: 1;
   transition: all 0.3s ease;
 }
 
 button:hover, a.button:hover {
-  background-color: var(--yumsert-orange);
+  background-color: #7fd8a1;
 }
 
 /* Marquee untuk Testimoni, FAQ, dan Label Produk */
@@ -101,7 +152,7 @@ button:hover, a.button:hover {
   height: 40px;
   border-radius: 50%;
   margin-bottom: 0.5rem;
-  border: 2px solid var(--yumsert-orange);
+  border: 2px solid var(--yumsert-green);
 }
 
 /* Animasi untuk Gen-Z */
@@ -125,13 +176,13 @@ button:hover, a.button:hover {
 /* Animasi ketikan untuk titles utama */
 .typing-effect {
   display: inline-block;
-  border-right: 2px solid var(--yumsert-blue);
+  border-right: 2px solid var(--yumsert-green);
   animation: blink-caret 0.75s step-end infinite;
 }
 
 @keyframes blink-caret {
   from, to { border-color: transparent; }
-  50% { border-color: var(--yumsert-blue); }
+  50% { border-color: var(--yumsert-green); }
 }
 
 /* Responsive untuk mobile */
