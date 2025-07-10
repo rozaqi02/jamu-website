@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
-function Kontak({ theme, toggleTheme, cartItems, addToCart }) {
+function Kontak({ theme, toggleTheme }) {
   return (
     <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
-      <Navbar theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} />
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main className="pt-16">
         <motion.section
           initial={{ opacity: 0 }}
@@ -13,7 +12,7 @@ function Kontak({ theme, toggleTheme, cartItems, addToCart }) {
           transition={{ duration: 0.6 }}
           className="py-16 px-4 max-w-7xl mx-auto"
         >
-          <h2 className="text-4xl font-bold text-center text-[#4a704a] dark:text-[#a3e4b7] mb-12">Hubungi Kami</h2>
+          <h2 className={`text-4xl font-bold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'} mb-12 animate-fadeIn`}>Hubungi Kami</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <motion.div
               className="bg-white dark:bg-[#2a344a] p-8 rounded-xl shadow-lg"
@@ -69,7 +68,6 @@ function Kontak({ theme, toggleTheme, cartItems, addToCart }) {
           </div>
         </motion.section>
       </main>
-      <Footer />
     </div>
   );
 }

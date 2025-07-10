@@ -2,15 +2,22 @@ import { motion } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 
-function HeroSection() {
+function HeroSection({ theme }) {
   const [typingText, setTypingText] = useState('DAPATKAN');
   const texts = ['DAPATKAN', 'EKSPERIENSI', 'NIKMATI'];
   const [currentImage, setCurrentImage] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   const images = [
     '/assets/images/jakora-premium1.png',
     '/assets/images/jakora-premium2.png',
     '/assets/images/jakora-premium3.png',
   ];
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     let index = 0;
@@ -57,7 +64,10 @@ function HeroSection() {
 
   return (
     <section id="home" className="h-screen flex items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: "url('/assets/images/hero-bg.jpg')" }}>
-      <div className="absolute inset-0 bg-white/50 dark:bg-black/60" />
+      <div
+        className="absolute inset-0 bg-white/50 dark:bg-black/60"
+        style={{ transform: `translateY(${scrollY * 0.2}px)` }}
+      />
       <motion.div
         className="container mx-auto px-6 z-10 flex flex-col md:flex-row items-center justify-between"
         variants={containerVariants}
@@ -66,13 +76,13 @@ function HeroSection() {
       >
         <div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
           <motion.h2
-            className="text-lg font-semibold text-[#4a704a] uppercase typing-effect"
+            className={`text-lg font-semibold text-[#4a704a] uppercase typing-effect ${theme === 'dark' ? 'text-[#a3e4b7]' : ''}`}
             variants={itemVariants}
           >
             {typingText}
           </motion.h2>
           <motion.h1
-            className="text-4xl md:text-6xl font-bold text-[#4a704a] my-4 leading-tight"
+            className="text-4xl md:text-6xl font-bold text-[#4a704a] my-4 leading-tight dark:text-[#a3e4b7]"
             variants={itemVariants}
           >
             Produk Inovatif dan Sehat
@@ -86,7 +96,7 @@ function HeroSection() {
           <motion.div variants={itemVariants}>
             <motion.a
               href="/produk"
-              className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#355e3b] transition-all duration-300 transform hover:scale-105"
+              className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all duration-300 transform hover:scale-105"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { FaRobot, FaTimes } from 'react-icons/fa'; // Tambahkan impor FaRobot
+import { FaTimes } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function ChatBot() {
@@ -7,17 +7,30 @@ function ChatBot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const chatContainerRef = useRef(null);
-  const userName = 'Pengguna'; // Bisa diganti dengan nama pengguna yang sesungguhnya jika ada autentikasi
+  const userName = 'Pengguna';
 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [messages]);
+    if (messages.length === 0 && !isOpen) {
+      setMessages([{ text: "Halo! Kirim 'halo' atau 'hai' untuk mulai chat.", sender: 'bot' }]);
+    }
+  }, [isOpen, messages.length]);
 
   const generateResponse = (inputText) => {
     const lowerInput = inputText.toLowerCase().trim();
-    if (lowerInput.includes('tas') || lowerInput.includes('bahan')) {
+    if (lowerInput.includes('halo') || lowerInput.includes('hai')) {
+      const greetings = [
+        `${userName}! Halo, selamat datang di Jakora Chat! Apa yang bisa aku bantu hari ini? 😊`,
+        `${userName}! Hai, senang kamu ada di sini! Ada pertanyaan tentang produk? 🌱`,
+        `${userName}! Halo bro, apa kabar? Mau tahu lebih banyak tentang Jakora? 🔥`,
+        `${userName}! Hai teman, siap jelajahi produk kami? Aku bantu ya! 🎉`,
+      ];
+      return greetings[Math.floor(Math.random() * greetings.length)];
+    } else if (lowerInput.includes('terima kasih') || lowerInput.includes('makasih') || lowerInput.includes('thank you')) {
+      return `${userName}! Sama-sama! 😊 Senang bisa membantu. Ada lagi yang mau ditanyakan?`;
+    } else if (lowerInput.includes('tas') || lowerInput.includes('bahan')) {
       if (lowerInput.includes('harga')) {
         return `${userName}! 😊 Tas atau bahan craft kami mulai dari Rp 80.000, tergantung desain dan material. Mau cek koleksi di toko atau custom? Aku bantu pilih yang kece buat kamu! 🎨`;
       } else if (lowerInput.includes('kustom')) {
@@ -31,8 +44,6 @@ function ChatBot() {
       return `${userName}! 🛒 Yuk, pesen via WhatsApp (+62 852-3202-9768). Kasih tahu aku detailnya (warna, ukuran), aku bantu prosesin cepet! 🚀`;
     } else if (lowerInput.includes('kontak') || lowerInput.includes('hubungi')) {
       return `${userName}! 📞 Hubungi aku via WhatsApp (+62 852-3202-9768) atau cek Instagram @izzalia.id. Aku siap bantu 24/7! 😄`;
-    } else if (lowerInput.includes('terima kasih') || lowerInput.includes('makasih')) {
-      return `${userName}! Sama-sama! 😊 Seneng banget bisa bantu. Ada lagi yang mau ditanyain?`;
     } else {
       return `${userName}! Hmm, aku agak bingung nih 😅 Maksud kamu apa ya? Coba ceritain lebih detail, aku bantu sebisanya! 🌟`;
     }
@@ -53,18 +64,18 @@ function ChatBot() {
       <AnimatePresence>
         {isOpen ? (
           <motion.div
-            className="bg-white rounded-lg shadow-xl w-80"
+            className="bg-white rounded-lg shadow-xl w-[90%] max-w-md"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
           >
-            <div className="flex justify-between items-center p-3 bg-[#4a704a] text-white rounded-t-lg">
-              <span className="flex items-center gap-2"><FaRobot /> Grok Bot</span>
+            <div className="flex justify-between items-center p-4 bg-[#4a704a] text-white rounded-t-lg">
+              <span className="flex items-center gap-2"><img src="/assets/images/logo-chatbot.png" alt="Jakora Chat" className="w-8 h-8" /> Jakora Chat</span>
               <motion.button onClick={() => setIsOpen(false)} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <FaTimes />
               </motion.button>
             </div>
-            <div ref={chatContainerRef} className="p-3 h-64 overflow-y-auto space-y-2">
+            <div ref={chatContainerRef} className="p-4 h-80 overflow-y-auto space-y-2">
               <AnimatePresence>
                 {messages.map((msg, i) => (
                   <motion.div
@@ -72,38 +83,49 @@ function ChatBot() {
                     layout
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`text-sm p-2 rounded max-w-[80%] ${msg.sender === 'user' ? 'bg-[#4a704a] self-end ml-auto' : 'bg-gray-100 self-start mr-auto'}`}
+                    className={`text-sm p-3 rounded-lg max-w-[80%] ${msg.sender === 'user' ? 'bg-[#4a704a] text-white self-end ml-auto' : 'bg-gray-100 text-gray-800 self-start mr-auto'} shadow-md glow`}
+                    style={{ boxShadow: '0 0 10px rgba(74, 112, 74, 0.3)' }}
                   >
                     {msg.text}
                   </motion.div>
                 ))}
               </AnimatePresence>
             </div>
-            <form onSubmit={sendMessage} className="flex border-t border-gray-300">
+            <form onSubmit={sendMessage} className="flex border-t border-gray-300 p-2">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Ketik pesan..."
-                className="flex-1 p-2 border-none focus:outline-none"
+                className="flex-1 p-3 border-none focus:outline-none rounded-l-lg"
               />
-              <button type="submit" className="p-2 bg-[#4a704a] text-white">
+              <button type="submit" className="bg-[#4a704a] text-white p-3 rounded-r-lg hover:bg-[#355e3b] transition-all duration-300">
                 Kirim
               </button>
             </form>
           </motion.div>
         ) : (
-          <motion.button
-            className="bg-[#4a704a] text-white p-4 rounded-full shadow-lg hover:bg-[#355e3b]"
-            onClick={() => setIsOpen(true)}
-            whileHover={{ scale: 1.1, rotate: 15 }}
-            whileTap={{ scale: 0.9 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{ backgroundImage: `url('/assets/images/logo-chatbot.png')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
-          >
-            {/* Placeholder kosong agar gambar muncul sebagai latar belakang */}
-          </motion.button>
+          <motion.div className="relative">
+            <motion.button
+              className="bg-[#4a704a] text-white p-6 rounded-full shadow-lg hover:bg-[#355e3b]"
+              onClick={() => setIsOpen(true)}
+              whileHover={{ scale: 1.1, rotate: 15 }}
+              whileTap={{ scale: 0.9 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{ backgroundImage: `url('/assets/images/logo-chatbot.png')`, backgroundSize: 'cover', backgroundPosition: 'center', width: '60px', height: '60px' }}
+            >
+              {/* Placeholder kosong agar gambar muncul sebagai latar belakang */}
+            </motion.button>
+            <motion.div
+              className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs rounded-full px-3 py-1 shadow-lg"
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              1
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

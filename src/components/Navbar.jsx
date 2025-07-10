@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaSun, FaMoon, FaShoppingCart, FaBars } from 'react-icons/fa';
+import { FaSun, FaMoon, FaBars } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-function Navbar({ theme, toggleTheme, cartItems = [] }) {
+function Navbar({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +14,6 @@ function Navbar({ theme, toggleTheme, cartItems = [] }) {
     { name: 'Testimoni', path: '/testimoni' },
     { name: 'FAQ', path: '/faq' },
     { name: 'Kontak', path: '/kontak' },
-    { name: 'Keranjang', path: '/keranjang', count: cartItems.length },
   ];
 
   const handleNavClick = (path) => {
@@ -66,9 +65,6 @@ function Navbar({ theme, toggleTheme, cartItems = [] }) {
                 className={`text-sm font-medium transition ${location.pathname === link.path ? 'border-b-2 border-[#4a704a] dark:border-[#a3e4b7]' : theme === 'dark' ? 'text-white' : 'text-gray-600 hover:text-gray-900'}`}
               >
                 {link.name}
-                {link.name === 'Keranjang' && link.count > 0 && (
-                  <span className="ml-1 text-xs bg-red-500 text-white rounded-full px-1">{link.count}</span>
-                )}
               </a>
             ))}
           </div>
@@ -104,9 +100,6 @@ function Navbar({ theme, toggleTheme, cartItems = [] }) {
                   className={`block px-3 py-2 text-base font-medium ${location.pathname === link.path ? 'border-b-2 border-[#4a704a] dark:border-[#a3e4b7]' : theme === 'dark' ? 'text-white' : 'text-gray-600 hover:text-gray-900'}`}
                 >
                   {link.name}
-                  {link.name === 'Keranjang' && link.count > 0 && (
-                    <span className="ml-1 text-xs bg-red-500 text-white rounded-full px-1">{link.count}</span>
-                  )}
                 </a>
               ))}
             </div>

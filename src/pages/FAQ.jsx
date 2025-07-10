@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
-function FAQ({ theme, toggleTheme, cartItems, addToCart }) {
+function FAQ({ theme, toggleTheme }) {
   const faqs = [
     { question: 'Apa itu Jakora?', answer: 'Jakora adalah produk rendang jamur vegan inovatif yang mendukung gaya hidup sehat dan berkelanjutan.' },
     { question: 'Bagaimana cara memesan produk?', answer: 'Pesanan dapat dilakukan melalui WhatsApp (+62 813-9154-6240) dengan menyebutkan detail produk yang diinginkan.' },
@@ -16,7 +15,7 @@ function FAQ({ theme, toggleTheme, cartItems, addToCart }) {
 
   return (
     <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
-      <Navbar theme={theme} toggleTheme={toggleTheme} cartItems={cartItems} />
+      <Navbar theme={theme} toggleTheme={toggleTheme} />
       <main className="pt-16">
         <motion.section
           initial={{ opacity: 0 }}
@@ -24,7 +23,7 @@ function FAQ({ theme, toggleTheme, cartItems, addToCart }) {
           transition={{ duration: 0.6 }}
           className="py-16 px-4 max-w-7xl mx-auto"
         >
-          <h2 className="text-4xl font-bold text-center text-[#4a704a] dark:text-[#a3e4b7] mb-12">Pertanyaan yang Sering Diajukan</h2>
+          <h2 className={`text-4xl font-bold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'} mb-12 animate-fadeIn`}>Pertanyaan yang Sering Diajukan</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {faqs.map((faq, index) => (
               <motion.div
@@ -48,7 +47,6 @@ function FAQ({ theme, toggleTheme, cartItems, addToCart }) {
           </div>
         </motion.section>
       </main>
-      <Footer />
     </div>
   );
 }

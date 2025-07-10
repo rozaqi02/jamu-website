@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import HeroSection from '../components/HeroSection';
 
-function Home({ theme, toggleTheme, cartItems, addToCart }) {
+function Home({ theme, toggleTheme }) {
   const educations = [
     { title: 'Manfaat Jamur untuk Kesehatan', content: 'Jamur kaya akan vitamin D, antioksidan, dan serat yang baik untuk sistem kekebalan tubuh.' },
     { title: 'Proses Pembuatan Jakora', content: 'Jakora dibuat dengan proses fermentasi alami menggunakan jamur pilihan untuk rasa autentik.' },
@@ -18,7 +18,7 @@ function Home({ theme, toggleTheme, cartItems, addToCart }) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, type: 'spring' }}
       >
-        <HeroSection />
+        <HeroSection theme={theme} />
       </motion.section>
       <motion.div
         className="container mx-auto px-6 py-12 z-10"
@@ -26,7 +26,7 @@ function Home({ theme, toggleTheme, cartItems, addToCart }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, duration: 0.8 }}
       >
-        <h2 className="text-3xl font-bold text-center text-[#4a704a] dark:text-[#a3e4b7] mb-8">Edukasi Menarik tentang Jakora</h2>
+        <h2 className={`text-3xl font-bold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'} mb-8 animate-pulse`}>Edukasi Menarik tentang Jakora</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {educations.map((edu, index) => (
             <motion.div
@@ -38,7 +38,7 @@ function Home({ theme, toggleTheme, cartItems, addToCart }) {
               transition={{ delay: index * 0.1 + 0.6 }}
             >
               <h3 className="text-xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-2">{edu.title}</h3>
-              <p className={theme === 'dark' ? 'text-white' : 'text-gray-600'}>{edu.content}</p>
+              <p className="text-black dark:text-black">{edu.content}</p>
             </motion.div>
           ))}
         </div>

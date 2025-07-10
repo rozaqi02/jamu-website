@@ -1,57 +1,54 @@
 import { motion } from 'framer-motion';
-import { FaInstagram, FaTiktok, FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
 
 function Footer() {
   return (
-    <footer className="bg-green-700 text-white py-12 mt-20">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center md:text-left"
-        >
-          <h3 className="text-2xl font-bold mb-4">Jakora</h3>
-          <p className="mb-4">Jajanan Vegan Berbasis Jamur</p>
-          <div className="flex justify-center md:justify-start space-x-4">
-            <motion.a href="https://instagram.com" whileHover={{ scale: 1.2 }} className="text-white">
-              <FaInstagram size={24} />
-            </motion.a>
-            <motion.a href="https://tiktok.com" whileHover={{ scale: 1.2 }} className="text-white">
-              <FaTiktok size={24} />
-            </motion.a>
-          </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-center"
-        >
-          <h4 className="text-lg font-semibold mb-2">Kontak Kami</h4>
-          <p className="flex items-center justify-center gap-2 mb-2"><FaMapMarkerAlt /> Limau Manis, Kec. Pauh Kota Padang</p>
-          <p className="flex items-center justify-center gap-2 mb-2"><FaEnvelope /> jakorafood@gmail.com</p>
-          <p className="flex items-center justify-center gap-2"><FaPhone /> +62 813-9154-6240</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-center"
-        >
-          <h4 className="text-lg font-semibold mb-2">Ikuti Kami</h4>
-          <p className="mb-2">Dapatkan update terbaru dan promo eksklusif!</p>
-          <motion.button
-            className="bg-white text-green-700 px-4 py-2 rounded-full hover:bg-green-100 transition"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Berlangganan
-          </motion.button>
-        </motion.div>
-      </div>
-      <div className="mt-8 text-center text-sm">
-        <p>© 2025 Jakora. All rights reserved.</p>
+    <footer className="bg-[#4a704a] dark:bg-[#1a1f2b] text-white py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.img
+          src="/assets/images/logo-jakora2.png"
+          alt="Jakora Logo"
+          className="h-12 w-auto mx-auto mb-4"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        />
+        <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-8 mb-4">
+          <a href="/" className="hover:text-[#a3e4b7] transition-colors duration-300">Beranda</a>
+          <a href="/produk" className="hover:text-[#a3e4b7] transition-colors duration-300">Produk</a>
+          <a href="/testimoni" className="hover:text-[#a3e4b7] transition-colors duration-300">Testimoni</a>
+          <a href="/faq" className="hover:text-[#a3e4b7] transition-colors duration-300">FAQ</a>
+          <a href="/kontak" className="hover:text-[#a3e4b7] transition-colors duration-300">Kontak</a>
+        </div>
+        <div className="flex justify-center space-x-4">
+          <a href="https://instagram.com" className="hover:text-[#a3e4b7] transition-colors duration-300">
+            <span className="sr-only">Instagram</span>
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.318 3.608 1.293.975.975 1.231 2.242 1.293 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.318 2.633-1.293 3.608-.975.975-2.242 1.231-3.608 1.293-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.318-3.608-1.293-.975-.975-1.231-2.242-1.293-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.318-2.633 1.293-3.608.975-.975 2.242-1.231 3.608-1.293 1.266-.058 1.646-.07 4.85-.07m0-2.163c-3.331 0-3.752.015-5.065.08-1.394.068-2.634.326-3.621 1.313C2.48 2.293 2.222 3.533 2.15 4.935 2.085 6.248 2.07 6.669 2.07 10s.015 3.752.08 5.065c.068 1.394.326 2.634 1.313 3.621 1.287 1.287 3.227 1.545 4.935 1.613 1.313.065 1.734.08 5.065.08s3.752-.015 5.065-.08c1.394-.068 2.634-.326 3.621-1.313 1.287-1.287 1.545-3.227 1.613-4.935.065-1.313.08-1.734.08-5.065s-.015-3.752-.08-5.065c-.068-1.394-.326-2.634-1.313-3.621-1.287-1.287-3.227-1.545-4.935-1.613C15.752 0.085 15.331 0.07 12 0.07"/>
+            </svg>
+          </a>
+          <a href="mailto:info@jakora.id" className="hover:text-[#a3e4b7] transition-colors duration-300">
+            <span className="sr-only">Email</span>
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/6281391546240" className="hover:text-[#a3e4b7] transition-colors duration-300">
+            <span className="sr-only">WhatsApp</span>
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12.002 2.001c-5.522 0-9.999 4.477-9.999 9.999 0 2.218.707 4.264 1.904 5.94l-1.356 4.038 4.1-1.356c1.64 1.141 3.671 1.842 5.351 1.842 5.522 0 9.999-4.477 9.999-9.999 0-5.522-4.477-9.999-9.999-9.999zm4.349 11.897c-.05-.061-1.164-.737-1.344-.821-.179-.085-.307-.127-.436.085-.128.212-.501.821-.613.987-.112.166-.225.188-.415.062-.19-.125-.805-.395-1.535-.794-.729-.4-1.221-.672-1.528-.845-.307-.173-.614-.221-.693-.278-.079-.057-.102-.087-.218-.345-.116-.258-.459-.695-.561-.882-.102-.187-.208-.203-.372-.203-.164 0-.347.015-.532.082-.185.067-.697.302-1.336.648-.639.346-1.043.565-1.247.712-.204.147-.406.164-.595.098-.189-.066-.729-.243-1.392-.487-.662-.245-1.102-.405-1.278-.512-.176-.107-.233-.171-.278-.221-.045-.05-.056-.078-.112-.171-.056-.093-.229-.403-.229-.403s.205-.207.347-.347c.141-.14.301-.386.451-.578.149-.192.223-.356.314-.475.091-.119.121-.194.182-.32.061-.126.026-.243-.021-.337-.047-.094-.402-.808-.551-1.106-.149-.298-.301-.517-.414-.653-.113-.136-.257-.187-.436-.125-.179.062-.614.258-1.179.622-.564.364-1.036.627-1.473.793-.437.166-.818.247-1.139.247-.321 0-.656-.08-.999-.238-.343-.158-.641-.38-.89-.658-.249-.278-.374-.614-.374-.998 0-.384.142-.749.376-1.092.234-.343.56-.65.973-.916.413-.266 1.01-.472 1.776-.622.766-.15 1.336-.183 1.719-.103.383.08 1.126.373 1.708.853.583.48 1.081.959 1.49 1.437.409.478.687.916.838 1.314.151.398.199.677.226.855.027.178.005.361-.069.548-.074.187-.209.431-.406.697-.197.266-.437.56-.718.883-.281.323-.585.604-.914.841-.329.237-.65.408-.962.515-.312.107-.622.16-.927.16-.305 0-.611-.069-.917-.205-.306-.136-.583-.333-.827-.588-.244-.255-.437-.57-.579-.942-.142-.372-.166-.776-.078-1.207.088-.431.293-.828.613-1.188.32-.36.749-.685 1.278-.973.529-.288 1.123-.488 1.779-.598.656-.11 1.287-.098 1.887.041.6.139 1.102.404 1.505.795.403.391.68.821.825 1.291.145.47.174.978.093 1.523-.081.545-.275.994-.583 1.347-.308.353-.708.624-1.197.813-.489.189-.99.283-1.502.283-.512 0-1.01-.094-1.492-.281-.482-.187-.901-.456-1.257-.806-.356-.35-.636-.78-.838-1.288-.202-.508-.248-.977-.144-1.406.104-.429.339-.801.699-1.115.36-.314.831-.56 1.412-.739.581-.179 1.205-.212 1.872-.094.667.118 1.246.368 1.737.747.491.379.876.83 1.153 1.354.277.524.416 1.057.416 1.599 0 .542-.145 1.034-.435 1.477-.29.443-.694.815-1.213 1.115-.519.3-1.075.45-1.668.45-.593 0-1.187-.15-1.781-.45-.594-.3-1.108-.733-1.543-1.299-.435-.566-.653-1.25-.653-2.053 0-.803.22-1.537.661-2.201.441-.664 1.025-1.183 1.752-1.557.727-.374 1.512-.528 2.354-.458.842.07 1.585.288 2.23.652.645.364 1.186.832 1.624 1.401.438.569.657 1.196.657 1.881 0 .685-.177 1.312-.531 1.881-.354.569-.848.999-1.484 1.293-.636.294-1.337.441-2.102.441-.765 0-1.514-.147-2.247-.441-.733-.294-1.366-.733-1.897-1.318-.531-.585-.79-1.296-.79-2.132 0-.836.223-1.604.669-2.303.446-.699.995-1.24 1.646-1.622.651-.382 1.321-.541 2.011-.475.69.066 1.315.258 1.875.576.56.318 1.022.73 1.388 1.233.366.503.549.99.549 1.462 0 .472-.123.907-.369 1.306-.246.399-.586.716-.1016 1.011-.43.295-.966.5-1.598.612-.632.112-1.317.067-2.054-.125-.737-.192-1.391-.514-1.962-.971-.571-.457-1.009-1.003-1.316-1.638-.307-.635-.46-1.315-.46-2.041 0-.726.152-1.406.456-2.041.304-.635.721-1.173 1.246-1.614.525-.441 1.113-.74 1.763-.896.65-.156 1.318-.192 2.006-.108.688.084 1.304.288 1.849.613.545.325 1.001.767 1.368 1.323.367.556.55 1.162.55 1.817 0 .655-.165 1.258-.495 1.811-.33.553-.788 1.012-1.371 1.377-.583.365-1.208.547-1.875.547-.667 0-1.317-.182-1.949-.547-.632-.365-1.171-.824-1.616-1.377-.445-.553-.667-1.156-.667-1.811 0-.655.166-1.261.498-1.817.332-.556.789-1.012 1.369-1.377.58-.365 1.205-.547 1.872-.547.667 0 1.317.182 1.949.547.632.365 1.171.824 1.616 1.377.445.553.667 1.156.667 1.811 0 .655-.165 1.258-.495 1.811-.33.553-.788 1.012-1.371 1.377-.583.365-1.208.547-1.875.547-.667 0-1.317-.182-1.949-.547-.632-.365-1.171-.824-1.616-1.377-.445-.553-.667-1.156-.667-1.811 0-.655.166-1.261.498-1.817z" />
+            </svg>
+          </a>
+          <a href="https://tiktok.com" className="hover:text-[#a3e4b7] transition-colors duration-300">
+            <span className="sr-only">TikTok</span>
+            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19.589 6.686a4.793 4.793 0 0 1-3.698-2.447 4.71 4.71 0 0 1-.288-1.496c0-.552-.1-1.112-.247-1.644h4.03a1 1 0 0 0 0-2H12.73c-.576 1.363-1.226 2.395-1.948 3.087-.723.692-1.474 1.038-2.254 1.038-.8 0-1.506-.298-2.122-.893-.616-.595-1.02-1.451-1.2-2.565H1.015a1 1 0 0 0 0 2h2.186c.246 1.384.774 2.426 1.586 3.122.811.697 1.855.995 3.126.985h1.613v9.01a4.76 4.76 0 0 1-1.723 3.686 4.7 4.7 0 0 1-3.374 1.374 4.73 4.73 0 0 1-3.65-1.767 1 1 0 0 0-1.552 1.248 6.728 6.728 0 0 0 5.202 2.518 6.74 6.74 0 0 0 4.88-2.078 6.77 6.77 0 0 0 2.145-5.12V6.686h-1.803zm-3.295 10.746a2.76 2.76 0 0 0 .855-2.13V8.708h-3.17v6.704a2.749 2.749 0 0 0 2.315 2.02z"/>
+            </svg>
+          </a>
+        </div>
+        <p className="text-sm mt-4">
+          <a href="https://maps.app.goo.gl/KdFpSD5uySJCUWSq9" className="hover:text-[#a3e4b7] transition-colors duration-300">Alamat Usaha:
+          Limau Manis, Kec. Pauh Kota Padang Sumatera Barat</a>
+        </p>
+        <p className="text-sm mt-2">© 2025 Jakora. Semua hak cipta dilindungi.</p>
       </div>
     </footer>
   );
