@@ -6,7 +6,7 @@ function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(localStorage.getItem('chatbotUsername') || '');
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
@@ -14,17 +14,22 @@ function ChatBot() {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
     if (messages.length === 0 && !isOpen) {
-      setMessages([{ text: "Halo! Kirim 'halo' atau 'hai' untuk mulai chat.", sender: 'bot' }]);
+      setMessages([{ text: username ? `Halo ${username}! Selamat datang di Jakora Chat! Apa yang bisa aku bantu? 😊` : "Halo! Silakan ketik nama panggilanmu atau langsung ajukan pertanyaan.", sender: 'bot' }]);
     }
-  }, [isOpen, messages.length]);
+  }, [isOpen, messages.length, username]);
 
   const generateResponse = (inputText) => {
     const lowerInput = inputText.toLowerCase().trim();
-    if (!username && !lowerInput.includes('nama')) {
-      return `Halo! Sebelum lanjut, tolong beri tahu nama panggilanmu dengan mengetik 'nama [nama panggilan]'. 🌱`;
-    }
     const userName = username || 'Teman Jakora';
-    if (lowerInput.includes('halo') || lowerInput.includes('hai')) {
+    
+    if (!username && lowerInput.split(' ')[0] === 'nama') {
+      const newUsername = inputText.replace('nama ', '').trim();
+      if (newUsername) {
+        setUsername(newUsername);
+        localStorage.setItem('chatbotUsername', newUsername);
+        return `${newUsername}! Terima kasih sudah memberi nama panggilan. Sekarang, apa yang bisa aku bantu tentang Jakora? 🌱`;
+      }
+    } else if (lowerInput.includes('halo') || lowerInput.includes('hai')) {
       const greetings = [
         `${userName}! Halo, selamat datang di Jakora Chat! Apa yang bisa aku bantu tentang produk jamur kami? 😊`,
         `${userName}! Hai, senang kamu ada di sini! Ingin tahu lebih tentang Jakora atau Jatastik? 🌱`,
@@ -42,10 +47,6 @@ function ChatBot() {
       }
     } else if (lowerInput.includes('kontak') || lowerInput.includes('hubungi')) {
       return `${userName}! 📞 Hubungi kami via WhatsApp (+62 813-9154-6240) atau email info@jakora.id. Aku siap bantu! 😄`;
-    } else if (lowerInput.startsWith('nama ')) {
-      const newUsername = inputText.split('nama ')[1];
-      setUsername(newUsername);
-      return `${newUsername}! Terima kasih sudah memberi nama panggilan. Sekarang, apa yang bisa aku bantu tentang Jakora? 🌱`;
     } else {
       return `${userName}! Hmm, aku agak bingung nih 😅 Coba tanyakan tentang produk Jakora, kontak, atau info lainnya ya!`;
     }
