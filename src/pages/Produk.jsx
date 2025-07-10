@@ -16,7 +16,7 @@ function Produk({ theme, toggleTheme }) {
   ];
 
   return (
-    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative'}>
+    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
