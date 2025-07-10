@@ -33,5 +33,11 @@ function App() {
     </Router>
   );
 }
+      <Router basename="/subfolder">
+        <Routes>
+          <Route path="/" element={<Home theme={theme} toggleTheme={toggleTheme} />} />
+          <Route path="/produk" element={<Produk theme={theme} toggleTheme={toggleTheme} />} />
+        </Routes>
+      </Router>
 
 export default App;

@@ -91,9 +91,9 @@ function HeroSection() {
         <motion.div variants={itemVariants}>
           <motion.a
             href="/produk"
-            className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#355e3b] transition-all duration-300 transform hover:scale-105"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all duration-300 transform hover:scale-105"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
           >
             Lihat Produknya <FaArrowRight />
           </motion.a>
