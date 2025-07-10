@@ -31,14 +31,14 @@ function HeroSection({ theme }) {
       }, 200);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [texts]);
 
   useEffect(() => {
     const imageInterval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
     }, 3000);
     return () => clearInterval(imageInterval);
-  }, []);
+  }, [images.length]);
 
   const containerVariants = {
     hidden: { opacity: 0 },

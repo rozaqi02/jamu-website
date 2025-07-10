@@ -3,8 +3,6 @@ import { motion } from 'framer-motion';
 import ProductCard from '../components/ProductCard';
 
 function Produk({ theme, toggleTheme }) {
-  const [activeSection] = useState('jakora');
-
   const jakoraProducts = [
     { name: 'Jakora Original', image: '/assets/images/jakora-original.jpg', description: 'Rendang jamur vegan dengan cita rasa autentik dan sehat.', price: 38000 },
     { name: 'Jakora Spicy', image: '/assets/images/jakora-spicy.jpg', description: 'Rendang jamur pedas dengan cita rasa khas.', price: 38000 },
@@ -18,7 +16,7 @@ function Produk({ theme, toggleTheme }) {
   ];
 
   return (
-    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
+    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative'}>
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
