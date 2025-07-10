@@ -1,7 +1,23 @@
 import { motion } from 'framer-motion';
 import Navbar from '../components/Navbar';
+import { useState } from 'react';
 
 function Kontak({ theme, toggleTheme }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const whatsappNumber = '+6281391546240';
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    const whatsappMessage = `Halo, saya ${name} (${email}):\nPesan: ${message}\nSilakan hubungi saya!`;
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+    window.open(url, '_blank');
+    setName('');
+    setEmail('');
+    setMessage('');
+  };
+
   return (
     <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
@@ -40,19 +56,25 @@ function Kontak({ theme, toggleTheme }) {
               transition={{ delay: 0.4, duration: 0.5 }}
             >
               <h3 className="text-2xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-4">Kirim Pesan</h3>
-              <form className="space-y-4">
+              <form onSubmit={handleSend} className="space-y-4">
                 <input
                   type="text"
                   placeholder="Nama"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white border-none focus:outline-none"
                 />
                 <input
                   type="email"
                   placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white border-none focus:outline-none"
                 />
                 <textarea
                   placeholder="Pesan"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                   className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white border-none focus:outline-none h-32"
                 />
                 <motion.button

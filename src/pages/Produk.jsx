@@ -16,40 +16,48 @@ function Produk({ theme, toggleTheme }) {
   ];
 
   return (
-    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
+    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative pt-16`}>
       <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
         className="py-16 px-4 max-w-7xl mx-auto"
       >
-        <h2 className={`text-3xl font-bold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'} mb-8 animate-pulse`}>Varian Jakora</h2>
-        <p className={`text-center ${theme === 'dark' ? 'text-white' : 'text-gray-600'} mb-6`}>{jakoraProducts[0].description}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <h2 className={`text-4xl font-bold text-center ${theme === 'dark' ? 'text-[#8A9A5B]' : 'text-[#4a704a]'} mb-12 border-b-2 border-[#4a704a]/20 pb-4`}>Varian Jakora</h2>
+        <p className={`text-center ${theme === 'dark' ? 'text-white' : 'text-gray-600'} mb-10 text-lg`}>{jakoraProducts[0].description}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {jakoraProducts.map((product, index) => (
-            <ProductCard
+            <motion.div
               key={index}
-              {...product}
-              theme={theme}
-            />
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+              whileHover={{ scale: 1.05, boxShadow: '0 10px 20px rgba(0,0,0,0.2)' }}
+            >
+              <ProductCard {...product} theme={theme} />
+            </motion.div>
           ))}
         </div>
       </motion.section>
       <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
         className="py-16 px-4 max-w-7xl mx-auto"
       >
-        <h2 className={`text-3xl font-bold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'} mb-8 animate-pulse`}>Varian Jatastik</h2>
-        <p className={`text-center ${theme === 'dark' ? 'text-white' : 'text-gray-600'} mb-6`}>{jatastikProducts[0].description}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <h2 className={`text-4xl font-bold text-center ${theme === 'dark' ? 'text-[#8A9A5B]' : 'text-[#4a704a]'} mb-12 border-b-2 border-[#4a704a]/20 pb-4`}>Varian Jatastik</h2>
+        <p className={`text-center ${theme === 'dark' ? 'text-white' : 'text-gray-600'} mb-10 text-lg`}>{jatastikProducts[0].description}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {jatastikProducts.map((product, index) => (
-            <ProductCard
+            <motion.div
               key={index}
-              {...product}
-              theme={theme}
-            />
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+              whileHover={{ scale: 1.05, boxShadow: '0 10px 20px rgba(0,0,0,0.2)' }}
+            >
+              <ProductCard {...product} theme={theme} />
+            </motion.div>
           ))}
         </div>
       </motion.section>

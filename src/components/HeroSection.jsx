@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 
-function HeroSection({ theme }) {
+function HeroSection({ theme, toggleTheme }) {
   const [typingText, setTypingText] = useState('DAPATKAN');
   const texts = ['DAPATKAN', 'EKSPERIENSI', 'NIKMATI'];
   const [currentImage, setCurrentImage] = useState(0);
@@ -74,7 +74,11 @@ function HeroSection({ theme }) {
         initial="hidden"
         animate="visible"
       >
-        <div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
+        <motion.div
+          className="md:w-1/2 text-center md:text-left mb-10 md:mb-0"
+          variants={itemVariants}
+          whileHover={{ scale: 1.02 }}
+        >
           <motion.h2
             className={`text-lg font-semibold text-[#4a704a] uppercase typing-effect ${theme === 'dark' ? 'text-[#a3e4b7]' : ''}`}
             variants={itemVariants}
@@ -103,12 +107,13 @@ function HeroSection({ theme }) {
               Lihat Produknya <FaArrowRight />
             </motion.a>
           </motion.div>
-        </div>
+        </motion.div>
         <motion.div
           className="md:w-1/2 flex justify-center"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.5, type: 'spring' }}
+          whileHover={{ scale: 1.02 }}
         >
           <motion.img
             key={currentImage}

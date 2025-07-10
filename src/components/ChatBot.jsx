@@ -6,8 +6,8 @@ function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [username, setUsername] = useState('');
   const chatContainerRef = useRef(null);
-  const userName = 'Pengguna';
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -20,32 +20,34 @@ function ChatBot() {
 
   const generateResponse = (inputText) => {
     const lowerInput = inputText.toLowerCase().trim();
+    if (!username && !lowerInput.includes('nama')) {
+      return `Halo! Sebelum lanjut, tolong beri tahu nama panggilanmu dengan mengetik 'nama [nama panggilan]'. 🌱`;
+    }
+    const userName = username || 'Teman Jakora';
     if (lowerInput.includes('halo') || lowerInput.includes('hai')) {
       const greetings = [
-        `${userName}! Halo, selamat datang di Jakora Chat! Apa yang bisa aku bantu hari ini? 😊`,
-        `${userName}! Hai, senang kamu ada di sini! Ada pertanyaan tentang produk? 🌱`,
-        `${userName}! Halo bro, apa kabar? Mau tahu lebih banyak tentang Jakora? 🔥`,
-        `${userName}! Hai teman, siap jelajahi produk kami? Aku bantu ya! 🎉`,
+        `${userName}! Halo, selamat datang di Jakora Chat! Apa yang bisa aku bantu tentang produk jamur kami? 😊`,
+        `${userName}! Hai, senang kamu ada di sini! Ingin tahu lebih tentang Jakora atau Jatastik? 🌱`,
+        `${userName}! Halo bro, apa kabar? Mau info sehat dari produk kami? 🔥`,
+        `${userName}! Hai teman, siap jelajahi kebaikan jamur Jakora? Aku bantu ya! 🎉`,
       ];
       return greetings[Math.floor(Math.random() * greetings.length)];
     } else if (lowerInput.includes('terima kasih') || lowerInput.includes('makasih') || lowerInput.includes('thank you')) {
-      return `${userName}! Sama-sama! 😊 Senang bisa membantu. Ada lagi yang mau ditanyakan?`;
-    } else if (lowerInput.includes('tas') || lowerInput.includes('bahan')) {
+      return `${userName}! Sama-sama! 😊 Senang bisa membantu. Ada lagi tentang Jakora?`;
+    } else if (lowerInput.includes('produk') || lowerInput.includes('jakora') || lowerInput.includes('jatastik')) {
       if (lowerInput.includes('harga')) {
-        return `${userName}! 😊 Tas atau bahan craft kami mulai dari Rp 80.000, tergantung desain dan material. Mau cek koleksi di toko atau custom? Aku bantu pilih yang kece buat kamu! 🎨`;
-      } else if (lowerInput.includes('kustom')) {
-        return `${userName}! 🔥 Kustom tas seru banget! Kamu bisa pilih warna, bahan, sama aksesori di halaman Kustomisasi. Mau aku bantu desain yang unik buat kamu? 😎`;
+        return `${userName}! 😊 Jakora mulai dari Rp 38.000, Jatastik Rp 12.000. Cek detail di halaman Produk ya!`;
       } else {
-        return `${userName}! 👜 Kami punya banyak tas handmade dan bahan craft kece. Cek di halaman Toko atau Instagram @izzalia.id ya! Ada yang kamu suka?`;
+        return `${userName}! 🌱 Kami punya Jakora (rendang jamur) dan Jatastik (snack jamur). Lihat variasinya di halaman Produk!`;
       }
-    } else if (lowerInput.includes('tutorial') || lowerInput.includes('belajar')) {
-      return `${userName}! 🎉 Tutorial craft ada di halaman Tutorial. Mulai dari jahit tas sederhana sampe proyek kreatif. Mau aku kasih tips spesial? 😄`;
-    } else if (lowerInput.includes('pesan') || lowerInput.includes('beli')) {
-      return `${userName}! 🛒 Yuk, pesen via WhatsApp (+62 852-3202-9768). Kasih tahu aku detailnya (warna, ukuran), aku bantu prosesin cepet! 🚀`;
     } else if (lowerInput.includes('kontak') || lowerInput.includes('hubungi')) {
-      return `${userName}! 📞 Hubungi aku via WhatsApp (+62 852-3202-9768) atau cek Instagram @izzalia.id. Aku siap bantu 24/7! 😄`;
+      return `${userName}! 📞 Hubungi kami via WhatsApp (+62 813-9154-6240) atau email info@jakora.id. Aku siap bantu! 😄`;
+    } else if (lowerInput.startsWith('nama ')) {
+      const newUsername = inputText.split('nama ')[1];
+      setUsername(newUsername);
+      return `${newUsername}! Terima kasih sudah memberi nama panggilan. Sekarang, apa yang bisa aku bantu tentang Jakora? 🌱`;
     } else {
-      return `${userName}! Hmm, aku agak bingung nih 😅 Maksud kamu apa ya? Coba ceritain lebih detail, aku bantu sebisanya! 🌟`;
+      return `${userName}! Hmm, aku agak bingung nih 😅 Coba tanyakan tentang produk Jakora, kontak, atau info lainnya ya!`;
     }
   };
 

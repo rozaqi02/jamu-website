@@ -5,7 +5,7 @@ import { useState } from 'react';
 function ProductCard({ name, image, description, price, theme }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [quantity, setQuantity] = useState(1);
-  const whatsappNumber = '+6281283497492';
+  const whatsappNumber = '+6281391546240';
   const whatsappMessage = `Halo, saya ingin membeli:\n- ${name} x ${quantity} (Rp ${price * quantity})\nTotal: Rp ${price * quantity}\nSilakan proses pesanannya!`;
 
   const handleBuy = () => {
@@ -48,7 +48,7 @@ function ProductCard({ name, image, description, price, theme }) {
           />
           <motion.button
             onClick={handleBuy}
-            className="bg-blue-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300"
+            className="bg-[#4a704a] text-white px-4 py-2 rounded-full shadow-lg hover:bg-[#355e3b] transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, y: 10 }}

@@ -10,7 +10,7 @@ import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
 
 function App() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('light'); // Tetap default 'light' tanpa deteksi otomatis
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
