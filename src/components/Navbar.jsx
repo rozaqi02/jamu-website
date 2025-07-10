@@ -51,8 +51,8 @@ function Navbar({ theme, toggleTheme }) {
             <motion.img
               src="/assets/images/logo-jakora2.png"
               alt="Jakora Logo"
-              className="h-10 w-auto"
-              whileTap={{ rotate: 360 }}
+              className="h-12 w-auto"
+              whileTap={{ rotate: 70 }}
               transition={{ duration: 0.5 }}
             />
           </motion.div>

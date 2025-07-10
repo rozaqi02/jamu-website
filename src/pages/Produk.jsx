@@ -10,9 +10,9 @@ function Produk({ theme, toggleTheme }) {
   ];
 
   const jatastikProducts = [
-    { name: 'Jatastik Original', image: '/assets/images/jatastik-original.jpg', description: 'Snack jamur sawit rasa original.', price: 12000 },
-    { name: 'Jatastik Spicy', image: '/assets/images/jatastik-spicy.png', description: 'Snack jamur pedas gurih.', price: 12000 },
-    { name: 'Jatastik Cheese', image: '/assets/images/jatastik-cheese.jpg', description: 'Jatastik rasa keju yang creamy.', price: 12000 }
+    { name: 'Jatastik Original', image: '/assets/images/original.jpg', description: 'Snack jamur sawit rasa original.', price: 12000 },
+    { name: 'Jatastik Spicy', image: '/assets/images/spicy.jpg', description: 'Snack jamur pedas gurih.', price: 12000 },
+    { name: 'Jatastik Cheese', image: '/assets/images/cheese.jpg', description: 'Jatastik rasa keju yang creamy.', price: 12000 }
   ];
 
   return (
