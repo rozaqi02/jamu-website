@@ -371,7 +371,7 @@ function Beranda({ theme }) {
           </motion.div>
         </div>
 
-        {/* EDUKASI JAMUR */}
+        {/* EDUKASI */}
         <motion.section
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -384,99 +384,98 @@ function Beranda({ theme }) {
           <div className="relative">
             <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-[#4a704a]/20 top-0"></div>
           <div className="relative">
-  {/* Garis Tengah */}
-  <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-[#4a704a]/30"></div>
 
-  {[1, 2, 3].map((index) => (
-    <motion.div
-      key={index}
-      className={`w-full md:w-1/2 mb-2 ${
-        index % 2 === 0 ? 'ml-auto' : 'mr-auto'
-      }`}
-      initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
-    >
-      <div className="flex items-center gap-4 bg-white dark:bg-[#344e41] p-2 md:p-4 rounded-xl shadow-lg"
-        onMouseEnter={() => setHoveredIndex(index)}
-        onMouseLeave={() => setHoveredIndex(null)}
-      >
-        <img
-          src={
-            index === 1
-              ? '/assets/images/kelapa.jpg'
-              : index === 2
-              ? '/assets/images/pasar.jpg'
-              : '/assets/images/diabetes.jpg'
-          }
-          alt="Info"
-          className="w-24 h-24 rounded-md object-cover flex-shrink-0"
-        />
-        <div>
-          <h3 className="text-lg md:text-xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-1">
-            {index === 1
-              ? 'Indonesia Produsen Sawit Terbesar Di Dunia'
-              : index === 2
-              ? 'Pertumbuhan Pasar Plant-Based Food'
-              : '21 Juta Kasus Diabetes Melitus'}
-          </h3>
-          <p className="text-gray-600 dark:text-white text-justify">
-            {hoveredIndex === index ? (
-              index === 1 ? (
-                'Indonesia adalah produsen minyak sawit terbesar di dunia. Sejak 2006, Indonesia mengungguli Malaysia sebagai produsen minyak sawit mentah (crude palm oil ) terbesar. Pada tahun 2023, produksi minyak sawit nasional mencapai sekitar 47 juta ton , menyumbang lebih dari 50% total produksi global (Sumber: Ditjenbun Kementan RI, 2023).'
-              ) : index === 2 ? (
-                'Pasar plant-based food di Asia Tenggara diperkirakan tumbuh hingga USD 3,4 miliar pada 2027 , dengan Indonesia sebagai salah satu pasar utama (Mordor Intelligence, 2023).'
-              ) : (
-                'Lebih dari 21 juta orang Indonesia hidup dengan diabetes pada tahun 2024 Kementerian Kesehatan (2024) mencatat bahwa terdapat 21,8 juta kasus Diabetes Melitus di Indonesia. Prevalensi ini menunjukkan tren kenaikan yang signifikan, dengan mayoritas kasus terjadi di usia 15 tahun ke atas. Dari jumlah tersebut, sekitar 50% penderita tidak menyadari bahwa mereka mengidap diabetes. Risiko komplikasi serius seperti penyakit jantung, gagal ginjal, dan amputasi juga meningkat secara drastis akibat keterlambatan diagnosis dan pengobatan.'
-              )
-            ) : (
-              'Hover untuk detail!'
-            )}
-          </p>
+        {/* Garis Tengah */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-[#4a704a]/30"></div>
+          {[1, 2, 3].map((index) => (
+            <motion.div
+              key={index}
+              className={`w-full md:w-1/2 mb-2 ${
+                index % 2 === 0 ? 'ml-auto' : 'mr-auto'
+              }`}
+              initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            >
+              <div className="flex items-center gap-4 bg-white dark:bg-[#344e41] p-2 md:p-4 rounded-xl shadow-lg"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                <img
+                  src={
+                    index === 1
+                      ? '/assets/images/kelapa.jpg'
+                      : index === 2
+                      ? '/assets/images/pasar.jpg'
+                      : '/assets/images/diabetes.jpg'
+                  }
+                  alt="Info"
+                  className="w-24 h-24 rounded-md object-cover flex-shrink-0"
+                />
+                <div>
+                  <h3 className="text-lg md:text-xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-1">
+                    {index === 1
+                      ? 'Indonesia Produsen Sawit Terbesar Di Dunia'
+                      : index === 2
+                      ? 'Pertumbuhan Pasar Plant-Based Food'
+                      : '21 Juta Kasus Diabetes Melitus'}
+                  </h3>
+                  <p className="text-gray-600 dark:text-white text-justify">
+                    {hoveredIndex === index ? (
+                      index === 1 ? (
+                        'Indonesia adalah produsen minyak sawit terbesar di dunia. Sejak 2006, Indonesia mengungguli Malaysia sebagai produsen minyak sawit mentah (crude palm oil ) terbesar. Pada tahun 2023, produksi minyak sawit nasional mencapai sekitar 47 juta ton , menyumbang lebih dari 50% total produksi global (Sumber: Ditjenbun Kementan RI, 2023).'
+                      ) : index === 2 ? (
+                        'Pasar plant-based food di Asia Tenggara diperkirakan tumbuh hingga USD 3,4 miliar pada 2027 , dengan Indonesia sebagai salah satu pasar utama (Mordor Intelligence, 2023).'
+                      ) : (
+                        'Lebih dari 21 juta orang Indonesia hidup dengan diabetes pada tahun 2024 Kementerian Kesehatan (2024) mencatat bahwa terdapat 21,8 juta kasus Diabetes Melitus di Indonesia. Prevalensi ini menunjukkan tren kenaikan yang signifikan, dengan mayoritas kasus terjadi di usia 15 tahun ke atas. Dari jumlah tersebut, sekitar 50% penderita tidak menyadari bahwa mereka mengidap diabetes. Risiko komplikasi serius seperti penyakit jantung, gagal ginjal, dan amputasi juga meningkat secara drastis akibat keterlambatan diagnosis dan pengobatan.'
+                      )
+                    ) : (
+                      'Hover untuk detail!'
+                    )}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      </div>
-    </motion.div>
-  ))}
-</div>
-
           </div>
         </motion.section>
       </motion.section>
 
-{/* SECTION PEMESANAN LIMBAH TANGKOS SAWIT */}
-<section className="py-20 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8">
-  <img
-    src="/assets/images/limbah.jpg"
-    alt="Limbah Tangkos Sawit"
-    className="w-[34rem] h-80 rounded-md object-cover"
-  />
-  <div className="md:w-1/2">
-    <h2 className={`text-2xl font-extrabold mb-3 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
-      Menerima Pemesanan Limbah Tangkos Sawit di Daerah Terdekat Anda
-    </h2>
-    <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">
-      Memberdayakan Limbah, Menciptakan Nilai: Menyediakan Tangkos Sawit Berkualitas sebagai Substrat Budidaya Jamur dan Solusi Pengelolaan Limbah Pabrik Kelapa Sawit.
-    </p>
-    <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">
-      Kami hadir sebagai mitra dalam mendorong ekonomi sirkular di sektor perkebunan sawit dengan memanfaatkan limbah tangkos sawit secara optimal. Sebagai rantai ketiga dari proses pengolahan TBS, kami menyediakan tangkos sawit berkualitas untuk berbagai kebutuhan industri hijau, termasuk budidaya jamur, pupuk organik, hingga energi terbarukan. Dengan pendekatan berkelanjutan, kami membantu pabrik sawit mengurangi dampak lingkungan sekaligus menciptakan nilai tambah dari limbah yang selama ini terbuang.
-    </p>
-    <p className="font-semibold text-lg text-[#4a704a] dark:text-[#a3e4b7] mb-3">
-      Harga: 1 Truk Rp. 400.000
-    </p>
-    <div className="flex justify-center md:justify-end">
-  <a
-    href="https://wa.me/6281391546240"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] text-sm transition-all duration-300 transform hover:scale-105"
-  >
-    Pesan Sekarang via WhatsApp
-  </a>
-</div>
+      {/* SECTION PEMESANAN LIMBAH TANGKOS SAWIT */}
+      <section className="pt-4 pb-20 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8">
 
-  </div>
-</section>
+        <img
+          src="/assets/images/limbah.jpg"
+          alt="Limbah Tangkos Sawit"
+          className="w-[34rem] h-80 rounded-md object-cover"
+        />
+        <div className="md:w-1/2">
+          <h2 className={`text-2xl font-extrabold mb-3 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
+            Menerima Pemesanan Limbah Tangkos Sawit di Daerah Terdekat Anda
+          </h2>
+          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">
+            Memberdayakan Limbah, Menciptakan Nilai: Menyediakan Tangkos Sawit Berkualitas sebagai Substrat Budidaya Jamur dan Solusi Pengelolaan Limbah Pabrik Kelapa Sawit.
+          </p>
+          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">
+            Kami hadir sebagai mitra dalam mendorong ekonomi sirkular di sektor perkebunan sawit dengan memanfaatkan limbah tangkos sawit secara optimal. Sebagai rantai ketiga dari proses pengolahan TBS, kami menyediakan tangkos sawit berkualitas untuk berbagai kebutuhan industri hijau, termasuk budidaya jamur, pupuk organik, hingga energi terbarukan. Dengan pendekatan berkelanjutan, kami membantu pabrik sawit mengurangi dampak lingkungan sekaligus menciptakan nilai tambah dari limbah yang selama ini terbuang.
+          </p>
+          <p className="font-semibold text-lg text-[#4a704a] dark:text-[#a3e4b7] mb-3">
+            Harga: 1 Truk Rp. 400.000
+          </p>
+          <div className="flex justify-center md:justify-end">
+        <a
+          href="https://wa.me/6281391546240"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] text-sm transition-all duration-300 transform hover:scale-105"
+        >
+          Pesan Sekarang via WhatsApp
+        </a>
+      </div>
 
+        </div>
+      </section>
 
 
       {/* FAQ */}
