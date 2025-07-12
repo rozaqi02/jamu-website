@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaEye, FaPlus, FaMinus } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 import { useState } from 'react';
 
 function ProductCard({ name, image, description, price, theme, onViewDetail }) {
@@ -10,6 +10,13 @@ function ProductCard({ name, image, description, price, theme, onViewDetail }) {
   const handleBuy = () => {
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
     window.open(url, '_blank');
+  };
+
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (value >= 1) {
+      setQuantity(value);
+    }
   };
 
   return (
@@ -38,29 +45,13 @@ function ProductCard({ name, image, description, price, theme, onViewDetail }) {
         <h3 className="text-xl font-bold text-[#4a704a] mb-2 bg-white/80 px-2 rounded-full">{name}</h3>
         <p className="text-lg font-semibold text-[#4a704a]">Rp {price.toLocaleString('id-ID')}</p>
         <div className="flex items-center gap-4 mt-4">
-          <motion.button
-            onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="bg-[#4a704a] text-white p-2 rounded-full hover:bg-[#355e3b] transition-all"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FaMinus />
-          </motion.button>
-          <motion.span
-            className="text-xl font-bold text-[#4a704a] w-12 text-center"
-            initial={{ scale: 1 }}
-            animate={{ scale: [1, 1.1, 1], transition: { duration: 0.3, repeat: Infinity, repeatDelay: 2 } }}
-          >
-            {quantity}
-          </motion.span>
-          <motion.button
-            onClick={() => setQuantity(quantity + 1)}
-            className="bg-[#4a704a] text-white p-2 rounded-full hover:bg-[#355e3b] transition-all"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FaPlus />
-          </motion.button>
+          <input
+            type="number"
+            min="1"
+            value={quantity}
+            onChange={handleQuantityChange}
+            className="w-20 px-3 py-2 border border-gray-300 rounded-full text-center text-[#4a704a] font-bold"
+          />
           <motion.button
             onClick={handleBuy}
             className="bg-[#4a704a] text-white px-4 py-2 rounded-full shadow-lg hover:bg-[#355e3b] transition-all duration-300"

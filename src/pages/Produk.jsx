@@ -30,7 +30,7 @@ function Produk({ theme, toggleTheme }) {
         transition={{ duration: 0.8 }}
         className="py-20 px-4 max-w-7xl mx-auto"
       >
-        <h2 className={`text-5xl font-extrabold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
+        <h2 className={`text-5xl font-extrabold text-center mb-6 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
           Jelajahi Produk Kami
         </h2>
         <div className="mb-8">
@@ -45,7 +45,7 @@ function Produk({ theme, toggleTheme }) {
             <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
           </div>
         </div>
-        <div className="flex justify-center mb-12 space-x-4">
+        <div className="flex justify-center mb-10 space-x-4">
           <motion.button
             onClick={() => setActiveCategory('Jakora')}
             className={`px-6 py-3 rounded-full font-semibold ${activeCategory === 'Jakora' ? 'bg-[#4a704a] text-white' : 'bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white'} transition-all duration-300`}

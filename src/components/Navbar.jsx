@@ -26,7 +26,7 @@ function Navbar({ theme, toggleTheme }) {
       <div
         className="absolute inset-0"
         style={{
-          background: theme === 'dark' ? 'rgba(26, 31, 43, 0.1)' : 'rgba(255, 255, 255, 0.1)',
+          background: theme === 'dark' ? 'rgba(26, 31, 43, 0.1)' : 'rgb(255, 255, 255)',
           backdropFilter: 'blur(12px) saturate(1.5)',
           WebkitBackdropFilter: 'blur(12px) saturate(1.5)',
           boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
