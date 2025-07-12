@@ -5,7 +5,12 @@ module.exports = {
     "./public/index.html"
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'jakora-green': '#4a704a',
+        'jakora-light-green': '#a3e4b7',
+      },
+    },
   },
   plugins: [],
 }

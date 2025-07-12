@@ -1,16 +1,17 @@
-import { motion } from 'framer-motion';
-import Navbar from '../components/Navbar';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FaEnvelope, FaWhatsapp } from 'react-icons/fa';
 
-function Kontak({ theme, toggleTheme }) {
+function Kontak({ theme }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const whatsappNumber = '+6281391546240';
 
-  const handleSend = (e) => {
+  const whatsappMessage = `Halo, saya ${name} (${email}):\nPesan: ${message}\n${message ? '' : 'Silakan hubungi saya!'}`;
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const whatsappMessage = `Halo, saya ${name} (${email}):\nPesan: ${message}\nSilakan hubungi saya!`;
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
     window.open(url, '_blank');
     setName('');
@@ -19,77 +20,69 @@ function Kontak({ theme, toggleTheme }) {
   };
 
   return (
-    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
-      <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main className="pt-16">
-        <motion.section
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="py-16 px-4 max-w-7xl mx-auto"
-        >
-          <h2 className={`text-4xl font-bold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'} mb-12 animate-fadeIn`}>Hubungi Kami</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <motion.div
-              className="bg-white dark:bg-[#2a344a] p-8 rounded-xl shadow-lg"
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#1a1f2b] text-white' : 'bg-gray-100 text-gray-800'} py-16 relative pt-16`}>
+      <motion.section
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="max-w-4xl mx-auto px-4"
+      >
+        <h2 className={`text-5xl font-extrabold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'} mb-12`}>
+          Hubungi Kami
+        </h2>
+        <div className="bg-white dark:bg-[#2a344a] p-8 rounded-xl shadow-2xl">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium mb-2">Nama</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[#4a704a] dark:focus:ring-[#a3e4b7]"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[#4a704a] dark:focus:ring-[#a3e4b7]"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Pesan</label>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[#4a704a] dark:focus:ring-[#a3e4b7] h-32"
+                placeholder="Tulis pesan Anda di sini..."
+              />
+            </div>
+            <motion.button
+              type="submit"
+              className="w-full bg-[#4a704a] text-white py-3 rounded-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <h3 className="text-2xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-4">Informasi Kontak</h3>
-              <p className="text-gray-600 dark:text-white mb-2">WhatsApp: +62 813-9154-6240</p>
-              <p className="text-gray-600 dark:text-white mb-2">Email: info@jakora.id</p>
-              <p className="text-gray-600 dark:text-white mb-2">Instagram: @jakora.id</p>
-              <motion.a
-                href="https://wa.me/6281391546240"
-                className="inline-flex items-center gap-2 bg-[#4a704a] dark:bg-[#a3e4b7] text-white font-bold py-3 px-6 rounded-full mt-6 hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Chat Sekarang
-              </motion.a>
-            </motion.div>
-            <motion.div
-              className="bg-white dark:bg-[#2a344a] p-8 rounded-xl shadow-lg"
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              <h3 className="text-2xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-4">Kirim Pesan</h3>
-              <form onSubmit={handleSend} className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Nama"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white border-none focus:outline-none"
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white border-none focus:outline-none"
-                />
-                <textarea
-                  placeholder="Pesan"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="w-full p-3 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white border-none focus:outline-none h-32"
-                />
-                <motion.button
-                  type="submit"
-                  className="w-full bg-[#4a704a] dark:bg-[#a3e4b7] text-white font-bold py-3 rounded-lg hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Kirim
-                </motion.button>
-              </form>
-            </motion.div>
+              Kirim Pesan
+            </motion.button>
+          </form>
+          <div className="mt-8 text-center">
+            <p className="text-lg mb-2">Atau hubungi kami langsung:</p>
+            <div className="flex justify-center space-x-6">
+              <a href={`mailto:jakorafood@gmail.com`} className="text-[#4a704a] dark:text-[#a3e4b7] hover:underline">
+                <FaEnvelope size={24} />
+              </a>
+              <a href={`https://wa.me/${whatsappNumber}`} className="text-[#4a704a] dark:text-[#a3e4b7] hover:underline" target="_blank" rel="noopener noreferrer">
+                <FaWhatsapp size={24} />
+              </a>
+            </div>
           </div>
-        </motion.section>
-      </main>
+        </div>
+      </motion.section>
     </div>
   );
 }

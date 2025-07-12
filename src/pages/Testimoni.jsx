@@ -1,92 +1,78 @@
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../components/Navbar';
-
-const testimonials = [
-  { name: 'Ani', text: 'Rendang Jakora enak banget, vegan tapi rasanya kaya daging!', image: 'https://i.pravatar.cc/150?img=1' },
-  { name: 'Budi', text: 'Jatastik Spicy jadi camilan favorit keluarga!', image: 'https://i.pravatar.cc/150?img=2' },
-  { name: 'Cici', text: 'Suka banget sama konsep sustainability-nya!', image: 'https://i.pravatar.cc/150?img=3' },
-  { name: 'Dedi', text: 'Pengiriman cepat, produk segar!', image: 'https://i.pravatar.cc/150?img=4' },
-  { name: 'Eka', text: 'Rasa originalnya autentik, recommended!', image: 'https://i.pravatar.cc/150?img=5' },
-  { name: 'Fani', text: 'Harga worth it untuk kualitas ini!', image: 'https://i.pravatar.cc/150?img=6' },
-  { name: 'Gani', text: 'Blackpaper unik, beda dari yang lain!', image: 'https://i.pravatar.cc/150?img=7' },
-  { name: 'Hadi', text: 'Customer service ramah banget!', image: 'https://i.pravatar.cc/150?img=8' },
-  { name: 'Indi', text: 'Diet jadi mudah dengan Jakora!', image: 'https://i.pravatar.cc/150?img=9' },
-  { name: 'Joko', text: 'Jatastik Cheese creamy, suka!', image: 'https://i.pravatar.cc/150?img=10' },
-  { name: 'Kiki', text: 'Packing rapi, sampai kondisi bagus!', image: 'https://i.pravatar.cc/150?img=11' },
-  { name: 'Lina', text: 'Suka banget sama tekstur jamurnya!', image: 'https://i.pravatar.cc/150?img=12' },
-  { name: 'Mira', text: 'Promo di IG bikin hemat!', image: 'https://i.pravatar.cc/150?img=13' },
-  { name: 'Nico', text: 'Spicy-nya pas, nggak terlalu pedas!', image: 'https://i.pravatar.cc/150?img=14' },
-  { name: 'Oki', text: 'Produk lokal yang berkualitas!', image: 'https://i.pravatar.cc/150?img=15' },
-];
+import { FaStar, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 function Testimoni({ theme, toggleTheme }) {
+  const testimonials = [
+    { name: 'Ani', text: 'Jakora sangat lezat dan sehat, cocok untuk diet vegan!', rating: 5 },
+    { name: 'Budi', text: 'Jatastik rasa keju bikin nagih, pengiriman cepat pula!', rating: 4 },
+    { name: 'Citra', text: 'Produk ramah lingkungan, rasa autentik banget!', rating: 5 }
+  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [testimonials.length]);
+
+  const nextTestimonial = () => setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  const prevTestimonial = () => setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+
   return (
-    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
+    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative pt-16`}>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <main className="pt-16">
-        <motion.section
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="py-16 px-4 max-w-7xl mx-auto"
-        >
-          <h2 className={`text-3xl font-bold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'} mb-8 animate-fadeIn`}>Testimoni Pelanggan</h2>
-          <div className="space-y-8">
-            <div className="marquee-container overflow-hidden whitespace-nowrap">
-              <motion.div
-                className="marquee-content-left inline-flex space-x-6"
-                animate={{ x: ['0%', '-100%'] }}
-                transition={{ duration: 480, ease: 'linear', repeat: Infinity }}
-              >
-                {testimonials.slice(0, 8).map((testi, index) => (
-                  <div key={index} className="marquee-item inline-flex items-center space-x-2">
-                    <img src={testi.image} alt={testi.name} className="w-10 h-10 rounded-full" />
-                    <div>
-                      <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>{testi.text}</p>
-                      <span className={`text-sm ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>{testi.name}</span>
-                    </div>
-                  </div>
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="py-20 px-4 max-w-7xl mx-auto pt-32"
+      >
+        <h2 className={`text-5xl font-extrabold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
+          Apa Kata Mereka?
+        </h2>
+        <div className="relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              className="bg-white dark:bg-[#2a344a] p-8 rounded-xl shadow-2xl text-center max-w-2xl mx-auto"
+              initial={{ opacity: 0, x: currentIndex === 0 ? 100 : -100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: currentIndex === testimonials.length - 1 ? -100 : 100 }}
+              transition={{ duration: 0.5 }}
+            >
+              <p className="text-lg text-gray-600 dark:text-white mb-4 italic">"{testimonials[currentIndex].text}"</p>
+              <div className="flex justify-center mb-2">
+                {[...Array(5)].map((_, i) => (
+                  <FaStar
+                    key={i}
+                    className={i < testimonials[currentIndex].rating ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}
+                  />
                 ))}
-                {testimonials.slice(0, 8).map((testi, index) => (
-                  <div key={`dup-${index}`} className="marquee-item inline-flex items-center space-x-2">
-                    <img src={testi.image} alt={testi.name} className="w-10 h-10 rounded-full" />
-                    <div>
-                      <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>{testi.text}</p>
-                      <span className={`text-sm ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>{testi.name}</span>
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-            <div className="marquee-container overflow-hidden whitespace-nowrap">
-              <motion.div
-                className="marquee-content-right inline-flex space-x-6"
-                animate={{ x: ['-100%', '0%'] }}
-                transition={{ duration: 480, ease: 'linear', repeat: Infinity }}
-              >
-                {testimonials.slice(8, 15).map((testi, index) => (
-                  <div key={index} className="marquee-item inline-flex items-center space-x-2">
-                    <img src={testi.image} alt={testi.name} className="w-10 h-10 rounded-full" />
-                    <div>
-                      <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>{testi.text}</p>
-                      <span className={`text-sm ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>{testi.name}</span>
-                    </div>
-                  </div>
-                ))}
-                {testimonials.slice(8, 15).map((testi, index) => (
-                  <div key={`dup-${index}`} className="marquee-item inline-flex items-center space-x-2">
-                    <img src={testi.image} alt={testi.name} className="w-10 h-10 rounded-full" />
-                    <div>
-                      <p className={theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}>{testi.text}</p>
-                      <span className={`text-sm ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>{testi.name}</span>
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        </motion.section>
-      </main>
+              </div>
+              <p className="font-semibold text-[#4a704a] dark:text-[#a3e4b7]">- {testimonials[currentIndex].name}</p>
+            </motion.div>
+          </AnimatePresence>
+          <motion.button
+            onClick={prevTestimonial}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-[#4a704a] text-white p-3 rounded-full hover:bg-[#355e3b] transition-all"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaArrowLeft />
+          </motion.button>
+          <motion.button
+            onClick={nextTestimonial}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-[#4a704a] text-white p-3 rounded-full hover:bg-[#355e3b] transition-all"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaArrowRight />
+          </motion.button>
+        </div>
+      </motion.section>
     </div>
   );
 }

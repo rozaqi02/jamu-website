@@ -34,10 +34,7 @@ function Navbar({ theme, toggleTheme }) {
       >
         <div
           className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent)',
-            pointerEvents: 'none',
-          }}
+          style={{ background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.2), transparent)', pointerEvents: 'none' }}
         />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">

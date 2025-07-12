@@ -4,9 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showWelcomeMessage, setShowWelcomeMessage] = useState(true);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [username, setUsername] = useState(localStorage.getItem('chatbotUsername') || '');
+  const [showNameForm, setShowNameForm] = useState(!username);
   const chatContainerRef = useRef(null);
 
   useEffect(() => {
@@ -14,22 +16,26 @@ function ChatBot() {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
     if (messages.length === 0 && !isOpen) {
-      setMessages([{ text: username ? `Halo ${username}! Selamat datang di Jakora Chat! Apa yang bisa aku bantu? 😊` : "Halo! Silakan ketik nama panggilanmu atau langsung ajukan pertanyaan.", sender: 'bot' }]);
+      setMessages([{ text: showNameForm ? 'Halo! Silakan masukkan nama panggilanmu.' : `Halo ${username}! Selamat datang di Jakora Chat! Apa yang bisa aku bantu? 😊`, sender: 'bot' }]);
     }
-  }, [isOpen, messages.length, username]);
+  }, [isOpen, messages.length, username, showNameForm]);
+
+  const handleSetUsername = (e) => {
+    e.preventDefault();
+    const newUsername = e.target.elements.name.value.trim();
+    if (newUsername) {
+      setUsername(newUsername);
+      localStorage.setItem('chatbotUsername', newUsername);
+      setShowNameForm(false);
+      setMessages((prev) => [...prev, { text: `${newUsername}! Terima kasih, sekarang apa yang bisa aku bantu tentang Jakora? 🌱`, sender: 'bot' }]);
+    }
+  };
 
   const generateResponse = (inputText) => {
     const lowerInput = inputText.toLowerCase().trim();
     const userName = username || 'Teman Jakora';
-    
-    if (!username && lowerInput.split(' ')[0] === 'nama') {
-      const newUsername = inputText.replace('nama ', '').trim();
-      if (newUsername) {
-        setUsername(newUsername);
-        localStorage.setItem('chatbotUsername', newUsername);
-        return `${newUsername}! Terima kasih sudah memberi nama panggilan. Sekarang, apa yang bisa aku bantu tentang Jakora? 🌱`;
-      }
-    } else if (lowerInput.includes('halo') || lowerInput.includes('hai')) {
+
+    if (lowerInput.includes('halo') || lowerInput.includes('hai')) {
       const greetings = [
         `${userName}! Halo, selamat datang di Jakora Chat! Apa yang bisa aku bantu tentang produk jamur kami? 😊`,
         `${userName}! Hai, senang kamu ada di sini! Ingin tahu lebih tentang Jakora atau Jatastik? 🌱`,
@@ -64,6 +70,68 @@ function ChatBot() {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
+      {showWelcomeMessage && !isOpen && (
+        <div
+          id="welcomeMessages"
+          dir="auto"
+          style={{
+            backgroundColor: 'white',
+            color: 'black',
+            boxShadow: 'rgba(111, 111, 111, 0.2) 0px 10px 30px 0px, rgba(96, 96, 96, 0.2) 0px 0px 0px 1px',
+            borderRadius: '10px',
+            padding: '20px',
+            margin: '8px',
+            fontSize: '14px',
+            opacity: 1,
+            transform: 'scale(1)',
+            transition: 'opacity 0.5s, transform 0.5s',
+            position: 'fixed',
+            bottom: '90px',
+            cursor: 'pointer',
+            zIndex: 2147483647,
+            maxWidth: '400px',
+            right: '20px',
+            fontFamily: '"Segoe UI", "Segoe UI Emoji", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif',
+          }}
+          onClick={() => setIsOpen(true)}
+        >
+          Hai, Jakora Friend! Ada yang bisa kami bantu?
+          <div
+            id="welcomeMessagesCross"
+            style={{
+              backgroundColor: 'rgb(225, 225, 225)',
+              width: '10px',
+              height: '10px',
+              color: 'black',
+              boxShadow: 'rgba(111, 111, 111, 0.2) 0px 10px 30px 0px, rgba(96, 96, 96, 0.2) 0px 0px 0px 1px',
+              borderRadius: '9999px',
+              padding: '6px',
+              margin: '8px',
+              fontSize: '12px',
+              transform: 'scale(1)',
+              transition: 'opacity 0.5s, transform 0.5s',
+              position: 'absolute',
+              top: '-15px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontWeight: 500,
+              border: '1px solid rgb(215, 215, 215)',
+              cursor: 'pointer',
+              zIndex: 2147483647,
+              right: '-13px',
+              opacity: 1,
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowWelcomeMessage(false);
+            }}
+          >
+            X
+          </div>
+        </div>
+      )}
+
       <AnimatePresence>
         {isOpen ? (
           <motion.div
@@ -94,18 +162,42 @@ function ChatBot() {
                 ))}
               </AnimatePresence>
             </div>
-            <form onSubmit={sendMessage} className="flex border-t border-gray-300 p-2">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ketik pesan..."
-                className="flex-1 p-3 border-none focus:outline-none rounded-l-lg"
-              />
-              <button type="submit" className="bg-[#4a704a] text-white p-3 rounded-r-lg hover:bg-[#355e3b] transition-all duration-300">
-                Kirim
-              </button>
-            </form>
+            {showNameForm ? (
+              <form onSubmit={handleSetUsername} className="p-4 border-t border-gray-300 flex flex-col gap-2">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Masukkan nama panggilanmu"
+                  className="p-2 border rounded-lg focus:outline-none"
+                />
+                <motion.button
+                  type="submit"
+                  className="bg-[#4a704a] text-white p-2 rounded-lg hover:bg-[#355e3b] transition-all"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Simpan
+                </motion.button>
+              </form>
+            ) : (
+              <form onSubmit={sendMessage} className="flex border-t border-gray-300 p-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ketik pesan..."
+                  className="flex-1 p-3 border-none focus:outline-none rounded-l-lg"
+                />
+                <motion.button
+                  type="submit"
+                  className="bg-[#4a704a] text-white p-3 rounded-r-lg hover:bg-[#355e3b] transition-all duration-300"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Kirim
+                </motion.button>
+              </form>
+            )}
           </motion.div>
         ) : (
           <motion.div className="relative">
@@ -118,16 +210,7 @@ function ChatBot() {
               animate={{ opacity: 1, y: 0 }}
               style={{ backgroundImage: `url('/assets/images/logo-chatbot.png')`, backgroundSize: 'cover', backgroundPosition: 'center', width: '60px', height: '60px' }}
             >
-              {/* Placeholder kosong agar gambar muncul sebagai latar belakang */}
             </motion.button>
-            <motion.div
-              className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs rounded-full px-3 py-1 shadow-lg"
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              1
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
