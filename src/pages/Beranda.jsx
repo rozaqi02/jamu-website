@@ -420,7 +420,7 @@ function Beranda({ theme }) {
               ? 'Pertumbuhan Pasar Plant-Based Food'
               : '21 Juta Kasus Diabetes Melitus'}
           </h3>
-          <p className="text-gray-600 dark:text-white">
+          <p className="text-gray-600 dark:text-white text-justify">
             {hoveredIndex === index ? (
               index === 1 ? (
                 'Indonesia adalah produsen minyak sawit terbesar di dunia. Sejak 2006, Indonesia mengungguli Malaysia sebagai produsen minyak sawit mentah (crude palm oil ) terbesar. Pada tahun 2023, produksi minyak sawit nasional mencapai sekitar 47 juta ton , menyumbang lebih dari 50% total produksi global (Sumber: Ditjenbun Kementan RI, 2023).'
