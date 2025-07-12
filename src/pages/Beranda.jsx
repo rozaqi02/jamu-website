@@ -443,6 +443,42 @@ function Beranda({ theme }) {
         </motion.section>
       </motion.section>
 
+{/* SECTION PEMESANAN LIMBAH TANGKOS SAWIT */}
+<section className="py-20 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8">
+  <img
+    src="/assets/images/limbah.jpg"
+    alt="Limbah Tangkos Sawit"
+    className="w-[34rem] h-80 rounded-md object-cover"
+  />
+  <div className="md:w-1/2">
+    <h2 className={`text-2xl font-extrabold mb-3 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
+      Menerima Pemesanan Limbah Tangkos Sawit di Daerah Terdekat Anda
+    </h2>
+    <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">
+      Memberdayakan Limbah, Menciptakan Nilai: Menyediakan Tangkos Sawit Berkualitas sebagai Substrat Budidaya Jamur dan Solusi Pengelolaan Limbah Pabrik Kelapa Sawit.
+    </p>
+    <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">
+      Kami hadir sebagai mitra dalam mendorong ekonomi sirkular di sektor perkebunan sawit dengan memanfaatkan limbah tangkos sawit secara optimal. Sebagai rantai ketiga dari proses pengolahan TBS, kami menyediakan tangkos sawit berkualitas untuk berbagai kebutuhan industri hijau, termasuk budidaya jamur, pupuk organik, hingga energi terbarukan. Dengan pendekatan berkelanjutan, kami membantu pabrik sawit mengurangi dampak lingkungan sekaligus menciptakan nilai tambah dari limbah yang selama ini terbuang.
+    </p>
+    <p className="font-semibold text-lg text-[#4a704a] dark:text-[#a3e4b7] mb-3">
+      Harga: 1 Truk Rp. 400.000
+    </p>
+    <div className="flex justify-center md:justify-end">
+  <a
+    href="https://wa.me/6281391546240"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] text-sm transition-all duration-300 transform hover:scale-105"
+  >
+    Pesan Sekarang via WhatsApp
+  </a>
+</div>
+
+  </div>
+</section>
+
+
+
       {/* FAQ */}
       <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#1a1f2b] text-white' : 'bg-gray-100 text-gray-800'} py-16`}>
       <div className="container mx-auto px-4">
