@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 function Beranda({ theme }) {
   const [typingText, setTypingText] = useState('DAPATKAN');
@@ -63,7 +64,7 @@ function Beranda({ theme }) {
 
   return (
     <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
-      <motion.section id="home" className={`h-screen flex items-center justify-center bg-cover bg-center relative overflow-hidden ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'}`} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
+<motion.section id="home" className={`h-screen flex items-center justify-center bg-cover bg-center relative overflow-hidden ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'}`} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
     <motion.div className="container mx-auto px-6 z-10 flex flex-col md:flex-row items-center justify-between" variants={containerVariants} initial="hidden" animate="visible">
       <motion.div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0" variants={itemVariants}>
         <motion.h2 className={`text-base font-semibold uppercase ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`} variants={itemVariants}>
@@ -75,7 +76,14 @@ function Beranda({ theme }) {
         <motion.p className="text-sm md:text-base text-gray-700 dark:text-gray-300 mb-8 max-w-2xl" variants={itemVariants}>
           Pangan inovatif dari jamur tangkos sawit berteknologi kemasan self-heating yang praktis, sehat, dan cita rasa Minangkabau.
         </motion.p>
-        <motion.a href="/produk" className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title="Jelajahi Produk">
+        <motion.a
+          as={Link}
+          to="/produk"
+          className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          title="Jelajahi Produk"
+        >
           Yuk, Belanja Produk Kami <FaArrowRight />
         </motion.a>
       </motion.div>
@@ -142,7 +150,7 @@ function Beranda({ theme }) {
       <motion.a href="https://wa.me/6281391546240" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title="Pesan via WhatsApp">Pesan Sekarang</motion.a>
     </div>
   </motion.section>
-  
+
       {/* FAQ Section */}
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className={`min-h-screen ${theme === 'dark' ? 'bg-[#1a1f2b] text-white' : 'bg-gray-100 text-gray-800'} py-16`}>
         <div className="container mx-auto px-4">
