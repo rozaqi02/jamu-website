@@ -63,29 +63,27 @@ function Beranda({ theme }) {
 
   return (
     <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
-      {/* Hero Section */}
       <motion.section id="home" className={`h-screen flex items-center justify-center bg-cover bg-center relative overflow-hidden ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'}`} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" />
-        <motion.div className="container mx-auto px-6 z-10 flex flex-col md:flex-row items-center justify-between" variants={containerVariants} initial="hidden" animate="visible">
-          <motion.div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0" variants={itemVariants}>
-            <motion.h2 className={`text-base font-semibold uppercase ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`} variants={itemVariants}>
-              {typingText}
-            </motion.h2>
-            <motion.h1 className="text-4xl md:text-6xl mb-4 font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-[#4a704a] to-[#355e3b] dark:from-[#a3e4b7] dark:to-[#7fd8a1]">
-              Rendang Analog Inovatif dan Sehat
-            </motion.h1>
-            <motion.p className="text-sm md:text-base text-gray-700 dark:text-gray-300 mb-8 max-w-2xl" variants={itemVariants}>
-              Pangan inovatif dari jamur tangkos sawit berteknologi kemasan self-heating yang praktis, sehat, dan cita rasa Minangkabau.
-            </motion.p>
-            <motion.a href="/produk" className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title="Jelajahi Produk">
-              Yuk, Belanja Produk Kami <FaArrowRight />
-            </motion.a>
-          </motion.div>
-          <motion.div className="md:w-1/2 flex justify-center" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.5, type: 'spring' }} whileHover={{ scale: 1.02 }}>
-            <motion.img key={currentImage} src={images[currentImage]} alt="Produk Jakora" className="w-full max-w-md rounded-xl drop-shadow-2xl object-cover" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} />
-          </motion.div>
-        </motion.div>
-      </motion.section>
+    <motion.div className="container mx-auto px-6 z-10 flex flex-col md:flex-row items-center justify-between" variants={containerVariants} initial="hidden" animate="visible">
+      <motion.div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0" variants={itemVariants}>
+        <motion.h2 className={`text-base font-semibold uppercase ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`} variants={itemVariants}>
+          {typingText}
+        </motion.h2>
+        <motion.h1 className={`text-4xl md:text-6xl mb-4 font-bold leading-tight bg-clip-text text-transparent ${theme === 'dark' ? 'bg-gradient-to-r from-[#a3e4b7] to-[#7fd8a1]' : 'bg-gradient-to-r from-[#4a704a] to-[#355e3b]'}`}>
+          Rendang Analog Inovatif dan Sehat
+        </motion.h1>
+        <motion.p className="text-sm md:text-base text-gray-700 dark:text-gray-300 mb-8 max-w-2xl" variants={itemVariants}>
+          Pangan inovatif dari jamur tangkos sawit berteknologi kemasan self-heating yang praktis, sehat, dan cita rasa Minangkabau.
+        </motion.p>
+        <motion.a href="/produk" className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title="Jelajahi Produk">
+          Yuk, Belanja Produk Kami <FaArrowRight />
+        </motion.a>
+      </motion.div>
+      <motion.div className="md:w-1/2 flex justify-center" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.5, type: 'spring' }} whileHover={{ scale: 1.02 }}>
+        <motion.img key={currentImage} src={images[currentImage]} alt="Produk Jakora" className="w-full max-w-md rounded-xl drop-shadow-2xl object-cover" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} />
+      </motion.div>
+    </motion.div>
+  </motion.section>
 
       {/* Mengapa Memilih Jakora? */}
       <motion.section initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="py-20 px-4 max-w-7xl mx-auto">
@@ -105,9 +103,9 @@ function Beranda({ theme }) {
           <div className="relative">
             <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-[#4a704a]/20 top-0" />
             {[
-              { title: 'Indonesia Produsen Sawit Terbesar Di Dunia', img: '/assets/images/kelapa.jpg', detail: 'Indonesia adalah produsen minyak sawit terbesar di dunia. Pada 2023, produksi mencapai 47 juta ton (Ditjenbun Kementan RI, 2023).' },
-              { title: 'Pertumbuhan Pasar Plant-Based Food', img: '/assets/images/pasar.jpg', detail: 'Pasar plant-based food di Asia Tenggara diperkirakan tumbuh hingga USD 3,4 miliar pada 2027 (Mordor Intelligence, 2023).' },
-              { title: '21 Juta Kasus Diabetes Melitus', img: '/assets/images/diabetes.jpg', detail: 'Lebih dari 21 juta orang Indonesia hidup dengan diabetes pada 2024, dengan 50% tidak sadar (Kemenkes, 2024).' },
+              { title: 'Indonesia Produsen Sawit Terbesar Di Dunia', img: '/assets/images/kelapa.jpg', detail: 'Indonesia adalah produsen minyak sawit terbesar di dunia. Sejak 2006, Indonesia mengungguli Malaysia sebagai produsen minyak sawit mentah (crude palm oil ) terbesar. Pada tahun 2023, produksi minyak sawit nasional mencapai sekitar 47 juta ton , menyumbang lebih dari 50% total produksi global (Sumber: Ditjenbun Kementan RI, 2023).' },
+              { title: 'Pertumbuhan Pasar Plant-Based Food', img: '/assets/images/pasar.jpg', detail: 'Pasar plant-based food di Asia Tenggara diperkirakan tumbuh hingga USD 3,4 miliar pada 2027 , dengan Indonesia sebagai salah satu pasar utama (Mordor Intelligence, 2023).' },
+              { title: '21 Juta Kasus Diabetes Melitus', img: '/assets/images/diabetes.jpg', detail: 'Lebih dari 21 juta orang Indonesia hidup dengan diabetes pada tahun 2024 Kementerian Kesehatan (2024) mencatat bahwa terdapat 21,8 juta kasus Diabetes Melitus di Indonesia. Prevalensi ini menunjukkan tren kenaikan yang signifikan, dengan mayoritas kasus terjadi di usia 15 tahun ke atas. Dari jumlah tersebut, sekitar 50% penderita tidak menyadari bahwa mereka mengidap diabetes. Risiko komplikasi serius seperti penyakit jantung, gagal ginjal, dan amputasi juga meningkat secara drastis akibat keterlambatan diagnosis dan pengobatan.' },
             ].map((info, index) => (
               <motion.div key={index} className={`w-full md:w-1/2 mb-2 ${index % 2 === 0 ? 'ml-auto' : 'mr-auto'}`} initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.1, duration: 0.5 }}>
                 <div className="flex items-center gap-4 bg-white dark:bg-[#344e41] p-2 md:p-4 rounded-xl shadow-lg" onMouseEnter={() => setHoveredIndex(index)} onMouseLeave={() => setHoveredIndex(null)} title={`Info tentang ${info.title}`}>
@@ -124,13 +122,13 @@ function Beranda({ theme }) {
       </motion.section>
 
       {/* Pemesanan Limbah Tangkos Sawit */}
-      <motion.section initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="pt-4 pb-20 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8 bg-gradient-to-br from-[#4a704a]/10 to-[#355e3b]/10 rounded-xl shadow-lg p-6 border border-[#4a704a]/20">
+      <motion.section initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="py-12 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8 bg-gradient-to-br from-[#4a704a]/10 to-[#355e3b]/10 rounded-xl shadow-lg border border-[#4a704a]/20 min-h-[20rem]">
         <motion.img src="/assets/images/limbah.jpg" alt="Limbah Tangkos Sawit" className="w-[34rem] h-80 rounded-md object-cover" whileHover={{ scale: 1.02 }} title="Limbah Tangkos Sawit" />
-        <div className="md:w-1/2">
-          <h2 className={`text-xl font-bold mb-3 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>Pemesanan Limbah Tangkos Sawit</h2>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">Memberdayakan limbah untuk budidaya jamur dan solusi pengelolaan limbah sawit.</p>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">Kami menyediakan tangkos sawit berkualitas untuk industri hijau di Kabupaten Dharmasraya, Pasaman Barat, dan Kota Padang.</p>
-          <p className="font-semibold text-base text-[#4a704a] dark:text-[#a3e4b7] mb-3">Harga: Rp 400.000/truk</p>
+        <div className="md:w-1/2 flex-1 p-6">
+          <h2 className={`text-xl font-bold mb-3 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}> Menerima Pemesanan Limbah Tangkos Sawit di Daerah Terdekat Anda</h2>
+          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify"> Memberdayakan Limbah, Menciptakan Nilai : Menyediakan Tangkos Sawit Berkualitas sebagai Substrat Budidaya Jamur dan Solusi Pengelolaan Limbah Pabrik Kelapa Sawit.</p>
+  <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">Kami hadir sebagai mitra dalam mendorong ekonomi sirkular di sektor perkebunan sawit dengan memanfaatkan limbah tangkos sawit secara optimal. Sebagai rantai ketiga dari proses pengolahan TBS, kami menyediakan tangkos sawit berkualitas untuk berbagai kebutuhan industri hijau, termasuk budidaya jamur, pupuk organik, hingga energi terbarukan.</p>
+  <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">Layanan Kami Tersedia di: Kabupaten Dharmasraya, Kabupaten Pasaman Barat, dan Kota Padang. Hubungi kami untuk informasi pemesanan di wilayah Anda!</p>
           <motion.a href="https://wa.me/6281391546240" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title="Pesan via WhatsApp">Pesan Sekarang</motion.a>
         </div>
       </motion.section>
