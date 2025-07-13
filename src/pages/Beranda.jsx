@@ -121,18 +121,28 @@ function Beranda({ theme }) {
         </motion.section>
       </motion.section>
 
-      {/* Pemesanan Limbah Tangkos Sawit */}
       <motion.section initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="py-12 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8 bg-gradient-to-br from-[#4a704a]/10 to-[#355e3b]/10 rounded-xl shadow-lg border border-[#4a704a]/20 min-h-[20rem]">
-        <motion.img src="/assets/images/limbah.jpg" alt="Limbah Tangkos Sawit" className="w-[34rem] h-80 rounded-md object-cover" whileHover={{ scale: 1.02 }} title="Limbah Tangkos Sawit" />
-        <div className="md:w-1/2 flex-1 p-6">
-          <h2 className={`text-xl font-bold mb-3 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}> Menerima Pemesanan Limbah Tangkos Sawit di Daerah Terdekat Anda</h2>
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify"> Memberdayakan Limbah, Menciptakan Nilai : Menyediakan Tangkos Sawit Berkualitas sebagai Substrat Budidaya Jamur dan Solusi Pengelolaan Limbah Pabrik Kelapa Sawit.</p>
-  <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">Kami hadir sebagai mitra dalam mendorong ekonomi sirkular di sektor perkebunan sawit dengan memanfaatkan limbah tangkos sawit secara optimal. Sebagai rantai ketiga dari proses pengolahan TBS, kami menyediakan tangkos sawit berkualitas untuk berbagai kebutuhan industri hijau, termasuk budidaya jamur, pupuk organik, hingga energi terbarukan.</p>
-  <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">Layanan Kami Tersedia di: Kabupaten Dharmasraya, Kabupaten Pasaman Barat, dan Kota Padang. Hubungi kami untuk informasi pemesanan di wilayah Anda!</p>
-          <motion.a href="https://wa.me/6281391546240" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title="Pesan via WhatsApp">Pesan Sekarang</motion.a>
-        </div>
-      </motion.section>
-
+    <motion.img src="/assets/images/limbah.jpg" alt="Limbah Tangkos Sawit" className="w-[34rem] h-80 rounded-md object-cover" whileHover={{ scale: 1.02 }} title="Limbah Tangkos Sawit" />
+    <div className="md:w-1/2 flex-1 p-6">
+      <h2 className={`text-xl font-bold mb-3 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}> Menerima Pemesanan Limbah Tangkos Sawit di Daerah Terdekat Anda</h2>
+      <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify"> Memberdayakan Limbah, Menciptakan Nilai : Menyediakan Tangkos Sawit Berkualitas sebagai Substrat Budidaya Jamur dan Solusi Pengelolaan Limbah Pabrik Kelapa Sawit.</p>
+      <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify">Kami hadir sebagai mitra dalam mendorong ekonomi sirkular di sektor perkebunan sawit dengan memanfaatkan limbah tangkos sawit secara optimal. Sebagai rantai ketiga dari proses pengolahan TBS, kami menyediakan tangkos sawit berkualitas untuk berbagai kebutuhan industri hijau, termasuk budidaya jamur, pupuk organik, hingga energi terbarukan.</p>
+      <motion.p
+        className="text-sm text-gray-700 dark:text-gray-300 mb-3 text-justify font-bold"
+        initial={{ y: 50, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={{ once: true }}
+      >
+        Layanan Kami Tersedia di: Kabupaten Dharmasraya, Kabupaten Pasaman Barat, dan Kota Padang. Hubungi kami untuk informasi pemesanan di wilayah Anda!
+      </motion.p>
+      <p className="font-semibold text-lg text-[#4a704a] dark:text-[#a3e4b7] mb-3">
+        Harga: 1 Truk Rp. 400.000
+      </p>
+      <motion.a href="https://wa.me/6281391546240" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-[#4a704a] text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title="Pesan via WhatsApp">Pesan Sekarang</motion.a>
+    </div>
+  </motion.section>
+  
       {/* FAQ Section */}
       <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className={`min-h-screen ${theme === 'dark' ? 'bg-[#1a1f2b] text-white' : 'bg-gray-100 text-gray-800'} py-16`}>
         <div className="container mx-auto px-4">
