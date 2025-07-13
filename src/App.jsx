@@ -25,8 +25,8 @@ function App() {
           <Route path="/kontak" element={<Kontak theme={theme} />} />
           <Route path="/donasi" element={<Donasi theme={theme} />} />
         </Routes>
-        <ChatBot />
         <Footer />
+        <ChatBot theme={theme} />
       </div>
     </Router>
   );
