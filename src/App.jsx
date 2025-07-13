@@ -5,6 +5,7 @@ import Produk from './pages/Produk';
 import Testimoni from './pages/Testimoni';
 import FAQ from './pages/FAQ';
 import Kontak from './pages/Kontak';
+import Donasi from './pages/Donasi';
 import Navbar from './components/Navbar';
 import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
@@ -26,6 +27,7 @@ function App() {
           <Route path="/testimoni" element={<Testimoni theme={theme} toggleTheme={toggleTheme} />} />
           <Route path="/faq" element={<FAQ theme={theme} toggleTheme={toggleTheme} />} />
           <Route path="/kontak" element={<Kontak theme={theme} toggleTheme={toggleTheme} />} />
+          <Route path="/donasi" element={<Donasi theme={theme} toggleTheme={toggleTheme} />} />
         </Routes>
         <ChatBot />
         <Footer />
