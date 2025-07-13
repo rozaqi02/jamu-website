@@ -1,14 +1,33 @@
 import { motion } from 'framer-motion';
-import { FaArrowRight, FaSearch } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { useMemo } from 'react';
 
 function Beranda({ theme }) {
-  
-  const filteredFaqs = faqs.filter((faq) =>
-    faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const [typingText, setTypingText] = useState('DAPATKAN');
+  const [currentImage, setCurrentImage] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [showAllFaq, setShowAllFaq] = useState(false);
+  const texts = useMemo(() => ['DAPATKAN', 'NIKMATI'], []);
+  const images = [
+    '/assets/images/jakora-premium1.png',
+    '/assets/images/jakora-premium2.png',
+    '/assets/images/jakora-premium3.png',
+  ];
+  const faqs = [
+    { question: 'Apa itu Jakora?', answer: 'Jakora adalah rendang jamur inovatif yang mendukung ekonomi hijau dan keberlanjutan ekologi.' },
+    { question: 'Bagaimana cara memesan?', answer: 'Anda bisa memesan via WhatsApp di +6281391546240.' },
+    { question: 'Apa bahan utama Jatastik?', answer: 'Jatastik terbuat dari jamur pilihan yang kaya nutrisi.' },
+    { question: 'Apakah produk Jakora halal?', answer: 'Ya, semua produk Jakora telah tersertifikasi halal.' },
+    { question: 'Berapa lama pengiriman?', answer: 'Pengiriman biasanya memakan 2-5 hari tergantung lokasi.' },
+    { question: 'Apakah ada diskon?', answer: 'Ya, cek promo terbaru di Instagram atau WhatsApp kami.' },
+    { question: 'Bagaimana cara penyimpanan?', answer: 'Simpan di tempat kering dan sejuk, hindari paparan sinar matahari langsung.' },
+    { question: 'Apakah produk bebas pengawet?', answer: 'Ya, kami menggunakan bahan alami tanpa pengawet buatan.' },
+    { question: 'Bisa pesan dalam jumlah besar?', answer: 'Ya, hubungi kami via WhatsApp untuk pemesanan grosir.' },
+    { question: 'Apa keunggulan Jakora?', answer: 'Jakora ramah lingkungan dan kaya akan nutrisi dari jamur segar.' },
+    { question: 'Bagaimana cara pembayaran?', answer: 'Kami menerima transfer bank dan pembayaran via e-wallet.' },
+    { question: 'Ada garansi produk?', answer: 'Ya, kami menjamin kualitas, hubungi kami jika ada masalah.' },
+  ];
 
   useEffect(() => {
     let index = 0;
