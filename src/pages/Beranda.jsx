@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
 
 function Beranda({ theme }) {
   const [typingText, setTypingText] = useState('DAPATKAN');
   const [currentImage, setCurrentImage] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [showAllFaq, setShowAllFaq] = useState(false);
-  const texts = ['DAPATKAN', 'NIKMATI'];
+  const texts = useMemo(() => ['DAPATKAN', 'NIKMATI'], []);
   const images = [
     '/assets/images/jakora-premium1.png',
     '/assets/images/jakora-premium2.png',
