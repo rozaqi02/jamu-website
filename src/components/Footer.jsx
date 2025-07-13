@@ -66,6 +66,29 @@ function Footer() {
             </div>
           </motion.div>
         </motion.div>
+                {/* Seksi Tambahan: Misi dan Visi */}
+        <motion.div
+          className="mt-12 border-t border-[#a3e4b7]/30 pt-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <h3 className="text-2xl font-bold text-center mb-6">Misi & Visi Jakora</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <motion.div className="bg-[#355e3b]/50 p-6 rounded-lg shadow-lg" variants={itemVariants}>
+              <h4 className="text-lg font-semibold mb-2">Misi</h4>
+              <p className="text-sm leading-relaxed">
+                Mewujudkan kewirausahaan sosial berbasis jamur untuk mendukung ekonomi hijau, menyediakan produk sehat, dan meningkatkan kesejahteraan masyarakat lokal.
+              </p>
+            </motion.div>
+            <motion.div className="bg-[#355e3b]/50 p-6 rounded-lg shadow-lg" variants={itemVariants}>
+              <h4 className="text-lg font-semibold mb-2">Visi</h4>
+              <p className="text-sm leading-relaxed">
+                Menjadi pelopor keberlanjutan ekologi melalui inovasi produk jamur yang ramah lingkungan dan berkualitas tinggi di Indonesia.
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
         <motion.div className="mt-12 border-t border-[#a3e4b7]/30 pt-8 text-center" variants={itemVariants}>
           <p className="text-sm">© {currentYear} Jakora. Hak cipta dilindungi.</p>
         </motion.div>
