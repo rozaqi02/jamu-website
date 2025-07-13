@@ -5,10 +5,27 @@ import { FaStar, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 function Testimoni({ theme, toggleTheme }) {
   const testimonials = [
-    { name: 'Ani', text: 'Jakora sangat lezat dan sehat, cocok untuk diet vegan!', rating: 5 },
-    { name: 'Budi', text: 'Jatastik rasa keju bikin nagih, pengiriman cepat pula!', rating: 4 },
-    { name: 'Citra', text: 'Produk ramah lingkungan, rasa autentik banget!', rating: 5 }
-  ];
+  { name: 'Ani', text: 'Jakora sangat lezat dan sehat, cocok untuk diet vegan!', rating: 5 },
+  { name: 'Budi', text: 'Jatastik rasa keju bikin nagih, pengiriman cepat pula!', rating: 4 },
+  { name: 'Citra', text: 'Produk ramah lingkungan, rasa autentik banget!', rating: 5 },
+  { name: 'Dedi', text: 'Rasa rendangnya benar-benar seperti daging, padahal jamur!', rating: 5 },
+  { name: 'Eka', text: 'Kemasan praktis, bisa dipanaskan sendiri, mantap!', rating: 5 },
+  { name: 'Fahri', text: 'Harga terjangkau, kualitas premium, wajib coba!', rating: 4 },
+  { name: 'Gita', text: 'Keluarga saya suka banget, pasti langganan!', rating: 5 },
+  { name: 'Hana', text: 'Konsep green product yang bagus, rasanya pun top!', rating: 5 },
+  { name: 'Irfan', text: 'Rendang jamur Jakora ini bikin makan jadi sehat.', rating: 4 },
+  { name: 'Joko', text: 'Produknya unik, cocok buat yang cari alternatif plant-based.', rating: 5 },
+  { name: 'Kiki', text: 'Enak, bergizi, dan mendukung ekonomi hijau.', rating: 5 },
+  { name: 'Lala', text: 'Rasa rempahnya pas banget, tidak amis jamur.', rating: 4 },
+  { name: 'Mira', text: 'Pengiriman cepat, packing rapi, recommended!', rating: 5 },
+  { name: 'Nina', text: 'Pas untuk bekal traveling, praktis & nikmat.', rating: 5 },
+  { name: 'Oscar', text: 'Rendang jamur paling enak yang pernah saya coba.', rating: 5 },
+  { name: 'Putri', text: 'Inovasi bagus untuk pangan lokal berbasis sawit.', rating: 4 },
+  { name: 'Qori', text: 'Setiap suapan rasanya kaya rempah, bikin ketagihan.', rating: 5 },
+  { name: 'Raka', text: 'Tekstur jamurnya mirip daging, keren banget!', rating: 5 },
+  { name: 'Sita', text: 'Senang bisa dukung produk lokal yang inovatif.', rating: 4 },
+  { name: 'Tio', text: 'Sudah repeat order 3x, kualitas selalu terjaga.', rating: 5 }
+];
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
