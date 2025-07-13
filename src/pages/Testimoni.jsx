@@ -45,9 +45,9 @@ function Testimoni({ theme, toggleTheme }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="py-20 px-4 max-w-7xl mx-auto pt-32"
+        className="py-20 px-4 max-w-7xl mx-auto pt-24"
       >
-        <h2 className={`text-5xl font-extrabold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
+        <h2 className={`text-5xl font-extrabold text-center mb-12 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
           Apa Kata Mereka?
         </h2>
         <div className="relative">
