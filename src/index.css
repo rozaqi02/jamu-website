@@ -6,7 +6,8 @@
 
 :root {
   --yumsert-cream: #ffffff;
-  --yumsert-green: #4a704a; /* Hijau gelap untuk light mode */
+  --yumsert-green: #4a704a;
+    --text-color: #333;
 }
 
 body {
