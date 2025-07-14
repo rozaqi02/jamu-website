@@ -9,14 +9,14 @@ function Produk({ theme }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const products = {
     Jakora: [
-      { name: 'Jakora Original', image: '/assets/images/jakora-original.jpg', description: 'Rendang jamur vegan dengan cita rasa autentik Minangkabau.', price: 38000 },
-      { name: 'Jakora Spicy', image: '/assets/images/jakora-spicy.jpg', description: 'Rendang jamur vegan dengan sensasi pedas yang menggugah selera.', price: 38000 },
-      { name: 'Jakora Blackpaper', image: '/assets/images/jakora-blackpaper.jpg', description: 'Rendang jamur vegan dengan aroma lada hitam yang kuat.', price: 38000 },
+      { name: 'Jakora Original', image: '/assets/images/jakora-original.jpg', description: 'Rendang jamur vegan dengan cita rasa autentik Minangkabau.', price: 38000, stock: Math.floor(Math.random() * (70 - 50 + 1)) + 50 },
+      { name: 'Jakora Spicy', image: '/assets/images/jakora-spicy.jpg', description: 'Rendang jamur vegan dengan sensasi pedas yang menggugah selera.', price: 38000, stock: Math.floor(Math.random() * (70 - 50 + 1)) + 50 },
+      { name: 'Jakora Blackpaper', image: '/assets/images/jakora-blackpaper.jpg', description: 'Rendang jamur vegan dengan aroma lada hitam yang kuat.', price: 38000, stock: Math.floor(Math.random() * (70 - 50 + 1)) + 50 },
     ],
     Jatastik: [
-      { name: 'Jatastik Original', image: '/assets/images/original.jpg', description: 'Snack renyah dari jamur sawit dan beras merah, penuh nutrisi.', price: 12000 },
-      { name: 'Jatastik Spicy', image: '/assets/images/spicy.jpg', description: 'Snack pedas gurih dari jamur sawit, cocok untuk pecinta pedas.', price: 12000 },
-      { name: 'Jatastik Cheese', image: '/assets/images/cheese.jpg', description: 'Snack jamur dengan lapisan keju creamy yang menggoda.', price: 12000 },
+      { name: 'Jatastik Original', image: '/assets/images/original.jpg', description: 'Snack renyah dari jamur sawit dan beras merah, penuh nutrisi.', price: 12000, stock: Math.floor(Math.random() * (70 - 50 + 1)) + 50 },
+      { name: 'Jatastik Spicy', image: '/assets/images/spicy.jpg', description: 'Snack pedas gurih dari jamur sawit, cocok untuk pecinta pedas.', price: 12000, stock: Math.floor(Math.random() * (70 - 50 + 1)) + 50 },
+      { name: 'Jatastik Cheese', image: '/assets/images/cheese.jpg', description: 'Snack jamur dengan lapisan keju creamy yang menggoda.', price: 12000, stock: Math.floor(Math.random() * (70 - 50 + 1)) + 50 },
     ],
   };
 
@@ -28,6 +28,10 @@ function Produk({ theme }) {
     <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative pt-16`}>
       <motion.section initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="py-20 px-4 max-w-7xl mx-auto">
         <h2 className={`text-4xl font-bold text-center mb-6 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>Jelajahi Produk Kami</h2>
+        <p className={`text-center mb-8 ${theme === 'dark' ? 'text-white' : 'text-gray-600'}`}>
+          <strong>Jakora:</strong> Varian rendang jamur inovatif dengan rasa autentik dan sehat.<br />
+          <strong>Jatastik:</strong> Snack jamur sehat dengan berbagai pilihan rasa menarik.
+        </p>
         <div className="mb-8">
           <div className="relative w-full max-w-xl mx-auto">
             <input type="text" placeholder="Cari produk..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full px-6 py-3 rounded-full bg-white/70 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4a704a] text-gray-800 dark:text-white placeholder-gray-500" title="Cari produk Jakora atau Jatastik" />
@@ -61,6 +65,7 @@ function Produk({ theme }) {
                   <div className="md:w-1/2">
                     <p className="text-gray-600 dark:text-white mb-4">{selectedProduct.description}</p>
                     <p className="text-xl font-semibold text-[#4a704a] dark:text-[#a3e4b7] mb-4">Rp {selectedProduct.price.toLocaleString('id-ID')}</p>
+                    <p className="text-gray-600 dark:text-white mb-4">Stok Tersedia: {selectedProduct.stock} unit</p>
                   </div>
                 </div>
               </motion.div>

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { FaEye } from 'react-icons/fa';
 import { useState } from 'react';
 
-function ProductCard({ name, image, description, price, theme, onViewDetail }) {
+function ProductCard({ name, image, description, price, stock, theme, onViewDetail }) {
   const [quantity, setQuantity] = useState(1);
   const whatsappNumber = '+6281391546240';
   const whatsappMessage = `Halo, saya ingin membeli:\n- ${name} x ${quantity} (Rp ${price * quantity})\nTotal: Rp ${price * quantity}\nSilakan proses pesanannya!`;
@@ -10,7 +10,7 @@ function ProductCard({ name, image, description, price, theme, onViewDetail }) {
   const handleBuy = () => window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
-    if (value >= 1) setQuantity(value);
+    if (value >= 1 && value <= stock) setQuantity(value);
   };
 
   return (
@@ -22,8 +22,9 @@ function ProductCard({ name, image, description, price, theme, onViewDetail }) {
       <div className="p-4 flex-grow flex flex-col items-center">
         <h3 className="text-xl font-bold text-[#4a704a] mb-2 bg-white/80 px-2 rounded-full">{name}</h3>
         <p className="text-lg font-semibold text-[#4a704a]">Rp {price.toLocaleString('id-ID')}</p>
-        <div className="flex items-center gap-4 mt-4">
-          <input type="number" min="1" value={quantity} onChange={handleQuantityChange} className="w-20 px-3 py-2 border border-gray-300 rounded-full text-center text-[#4a704a] font-bold" title="Jumlah produk" />
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">Stok: {stock} unit</p>
+        <div className="flex items-center gap-4 mt-2">
+          <input type="number" min="1" max={stock} value={quantity} onChange={handleQuantityChange} className="w-20 px-3 py-2 border border-gray-300 rounded-full text-center text-[#4a704a] font-bold" title="Jumlah produk" />
           <motion.button onClick={handleBuy} className="bg-[#4a704a] text-white px-4 py-2 rounded-full shadow-lg hover:bg-[#355e3b] transition-all" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title="Beli via WhatsApp">Beli</motion.button>
         </div>
       </div>

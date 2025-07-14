@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom'; // Tambahkan impor Link
+import { Link } from 'react-router-dom';
 
 function Beranda({ theme }) {
   const [typingText, setTypingText] = useState('DAPATKAN');
@@ -61,11 +61,24 @@ function Beranda({ theme }) {
     visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } },
   };
 
+  const sectionVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
+  };
+
   return (
-    <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
+    <div className={`min-h-screen font-poppins ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative`}>
 
       {/* HERO SECTION */}
-      <section id="home" className="h-screen flex items-center justify-center bg-cover bg-center relative overflow-hidden" style={{ backgroundImage: `url('/assets/images/hero-bg.jpg')` }}>
+      <motion.section
+        id="home"
+        className="h-screen flex items-center justify-center bg-cover bg-center relative overflow-hidden"
+        style={{ backgroundImage: `url('/assets/images/hero-bg.jpg')` }}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-transparent" />
         <motion.div
           className="container mx-auto px-6 z-10 flex flex-col md:flex-row items-center justify-between"
@@ -77,10 +90,10 @@ function Beranda({ theme }) {
             <motion.h2 className={`text-lg font-semibold uppercase ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
               {typingText}
             </motion.h2>
-            <motion.h1 className="text-4xl md:text-6xl mb-4 font-bold leading-tight bg-clip-text text-transparent bg-gradient-to-r from-[#4a704a] to-[#355e3b] dark:from-[#a3e4b7] dark:to-[#7fd8a1]">
+            <motion.h1 className={`text-4xl md:text-6xl mb-4 font-bold leading-tight ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
               Rendang Analog Inovatif dan Sehat
             </motion.h1>
-            <motion.p className="text-base md:text-lg text-gray-700 dark:text-gray-300 mb-8 max-w-2xl">
+            <motion.p className={`text-base md:text-lg mb-8 max-w-2xl ${theme === 'dark' ? 'text-white' : 'text-gray-700'}`}>
               Pangan inovatif dari jamur tangkos sawit berteknologi kemasan self heating yang praktis,
               sehat dan citarasa Minangkabau guna mendukung produk berbasis potensi lokal.
             </motion.p>
@@ -112,14 +125,15 @@ function Beranda({ theme }) {
             />
           </motion.div>
         </motion.div>
-      </section>
+      </motion.section>
 
       {/* WHY JAKORA */}
       <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
         className="py-20 px-4 max-w-7xl mx-auto"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
       >
         <h2 className={`text-5xl font-extrabold text-center ${theme === 'dark' ? 'text-[#8A9A5B]' : 'text-[#4a704a]'} mb-12 bg-[#4a704a]/10 p-6 rounded-xl`}>
           Mengapa Memilih Jakora?
@@ -141,10 +155,11 @@ function Beranda({ theme }) {
 
         {/* EDUKASI */}
         <motion.section
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
           className="py-20 px-4 bg-[#f5f5f5] dark:bg-[#2a344a] rounded-xl"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={sectionVariants}
         >
           <h2 className={`text-5xl font-extrabold text-center ${theme === 'dark' ? 'text-[#8A9A5B]' : 'text-[#4a704a]'} mb-8`}>
             Informasi Menarik
@@ -152,17 +167,16 @@ function Beranda({ theme }) {
           <div className="relative">
             <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-[#4a704a]/20 top-0"></div>
             <div className="relative">
-              {/* Garis Tengah */}
               <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-[#4a704a]/30"></div>
               {[1, 2, 3].map((index) => (
                 <motion.div
                   key={index}
-                  className={`w-full md:w-1/2 mb-2 ${
-                    index % 2 === 0 ? 'ml-auto' : 'mr-auto'
-                  }`}
+                  className={`w-full md:w-1/2 mb-2 ${index % 2 === 0 ? 'ml-auto' : 'mr-auto'}`}
                   initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ scale: 1.05, rotate: 1, transition: { duration: 0.3 } }}
                 >
                   <div className="flex items-center gap-4 bg-white dark:bg-[#344e41] p-2 md:p-4 rounded-xl shadow-lg"
                     onMouseEnter={() => setHoveredIndex(index)}
@@ -210,7 +224,13 @@ function Beranda({ theme }) {
       </motion.section>
 
       {/* SECTION PEMESANAN LIMBAH TANGKOS SAWIT */}
-      <section className="pt-4 pb-20 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8">
+      <motion.section
+        className="pt-4 pb-20 px-4 max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
         <img
           src="/assets/images/limbah.jpg"
           alt="Limbah Tangkos Sawit"
@@ -243,10 +263,16 @@ function Beranda({ theme }) {
             </a>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* FAQ */}
-      <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#1a1f2b] text-white' : 'bg-gray-100 text-gray-800'} py-16`}>
+      <motion.div
+        className={`min-h-screen ${theme === 'dark' ? 'bg-[#1a1f2b] text-white' : 'bg-gray-100 text-gray-800'} py-16`}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
         <div className="container mx-auto px-4">
           <h1 className={`text-5xl font-extrabold text-center mb-8 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
             Pertanyaan Umum
@@ -258,8 +284,9 @@ function Beranda({ theme }) {
                 key={index}
                 className="bg-white dark:bg-[#2a344a] p-6 rounded-lg shadow-md"
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
               >
                 <h2 className="text-xl font-semibold mb-2">{faq.question}</h2>
                 <p className="text-gray-600 dark:text-gray-300">{faq.answer}</p>
@@ -267,18 +294,25 @@ function Beranda({ theme }) {
             ))}
           </div>
 
-          {!showAllFaq && (
-            <div className="flex justify-end mt-4">
+          <div className="flex justify-center mt-4">
+            {showAllFaq ? (
+              <button
+                onClick={() => setShowAllFaq(false)}
+                className="px-4 py-2 text-sm bg-[#4a704a] text-white rounded-full shadow hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all"
+              >
+                Sembunyikan
+              </button>
+            ) : (
               <button
                 onClick={() => setShowAllFaq(true)}
                 className="px-4 py-2 text-sm bg-[#4a704a] text-white rounded-full shadow hover:bg-[#355e3b] dark:bg-[#a3e4b7] dark:hover:bg-[#7fd8a1] transition-all"
               >
                 Pertanyaan Lainnya...
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -33,7 +33,7 @@ function Navbar({ theme, toggleTheme }) {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 shadow-md">
-      <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'}`}>
+      <div className={`absolute inset-0 ${theme === 'dark' ? 'bg-[#2c492f]' : 'bg-white'}`}>
         <div className="absolute inset-0 bg-gradient-to-b from-[rgba(255,255,255,0.2)] to-transparent pointer-events-none" />
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">

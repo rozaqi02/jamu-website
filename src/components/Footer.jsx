@@ -31,10 +31,10 @@ function Footer() {
   };
 
   return (
-    <footer className="bg-gradient-to-b from-[#4a704a] to-[#355e3b] text-white py-12 relative overflow-hidden">
+    <footer className="bg-gradient-to-b from-[#406843] to-[#2c492f] text-white py-12 relative overflow-hidden">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2740%27 fill=%27rgba(163,228,183,0.1)%27/%3E%3C/svg%3E')] opacity-20" />
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
-        <motion.div className="grid grid-cols-1 md:grid-cols-4 gap-8" variants={containerVariants} initial="hidden" animate="visible">
+        <motion.div className="grid grid-cols-1 md:grid-cols-4 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }}>
           <motion.div className="col-span-1" variants={itemVariants}>
             <motion.img src="/assets/images/logo-jakora2.png" alt="Jakora Logo" className="w-32 h-auto mb-4 object-contain" whileHover={{ scale: 1.1, rotate: 5 }} transition={{ duration: 0.3 }} title="Logo Jakora" />
             <p className="text-sm">Jakora: Rendang jamur dan snack Jatastik untuk ekonomi hijau dan keberlanjutan.</p>
@@ -66,12 +66,12 @@ function Footer() {
             </div>
           </motion.div>
         </motion.div>
-                {/* Seksi Tambahan: Misi dan Visi */}
         <motion.div
           className="mt-12 border-t border-[#a3e4b7]/30 pt-8"
           variants={containerVariants}
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
         >
           <h3 className="text-2xl font-bold text-center mb-6">Misi & Visi Jakora</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
