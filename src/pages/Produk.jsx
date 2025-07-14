@@ -28,10 +28,6 @@ function Produk({ theme }) {
     <div className={`min-h-screen font-poppins text-[var(--text-color)] ${theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'} overflow-hidden relative pt-16`}>
       <motion.section initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="py-20 px-4 max-w-7xl mx-auto">
         <h2 className={`text-4xl font-bold text-center mb-6 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>Jelajahi Produk Kami</h2>
-        <p className={`text-center mb-8 ${theme === 'dark' ? 'text-white' : 'text-gray-600'}`}>
-          <strong>Jakora:</strong> Varian rendang jamur inovatif dengan rasa autentik dan sehat.<br />
-          <strong>Jatastik:</strong> Snack jamur sehat dengan berbagai pilihan rasa menarik.
-        </p>
         <div className="mb-8">
           <div className="relative w-full max-w-xl mx-auto">
             <input type="text" placeholder="Cari produk..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full px-6 py-3 rounded-full bg-white/70 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4a704a] text-gray-800 dark:text-white placeholder-gray-500" title="Cari produk Jakora atau Jatastik" />
