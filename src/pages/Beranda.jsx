@@ -11,9 +11,12 @@ function Beranda({ theme }) {
   const [showAllFaq, setShowAllFaq] = useState(false);
   const texts = useMemo(() => ['DAPATKAN', 'NIKMATI'], []);
   const images = [
-    '/assets/images/jakora-premium1.png',
-    '/assets/images/jakora-premium2.png',
-    '/assets/images/jakora-premium3.png',
+    '/assets/images/jakora-blackpaper.png',
+    '/assets/images/jakora-original.png',
+    '/assets/images/jakora-spicy.png',
+    '/assets/images/spicy.png',
+    '/assets/images/original.png',
+    '/assets/images/cheese.png',
   ];
   const faqs = [
     { question: 'Apa itu Jakora?', answer: 'Jakora adalah rendang jamur inovatif yang mendukung ekonomi hijau dan keberlanjutan ekologi.' },
