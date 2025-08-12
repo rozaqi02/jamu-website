@@ -39,7 +39,7 @@ function Navbar({ theme, toggleTheme }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="flex items-center justify-between h-16">
           <motion.div className="flex items-center space-x-2 cursor-pointer" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleNavClick('/')} title="Kembali ke Beranda">
-            <motion.img src="/assets/images/logo-jakora2.png" alt="Jakora Logo" className="h-12 w-auto" whileTap={{ rotate: 70 }} transition={{ duration: 0.5 }} />
+            <motion.img src="/assets/images/jamu.png" alt="Jamu Logo" className="h-12 w-auto" whileTap={{ rotate: 70 }} transition={{ duration: 0.5 }} />
           </motion.div>
           <div className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => (

@@ -9,9 +9,10 @@ function Produk({ theme }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const products = {
   Jakora: [
-    { name: 'Jakora Original', image: '/assets/images/jakoriginal.png', description: 'Rendang jamur vegan dengan cita rasa autentik Minangkabau.', price: 38000, stock: 75 },
-    { name: 'Jakora Spicy', image: '/assets/images/jakspicy.png', description: 'Rendang jamur vegan dengan sensasi pedas yang menggugah selera.', price: 38000, stock: 75 },
-    { name: 'Jakora Blackpaper', image: '/assets/images/jakblackpaper.png', description: 'Rendang jamur vegan dengan aroma lada hitam yang kuat.', price: 38000, stock: 75 },
+    { name: 'Blue Butterfly Creamy Latte', image: '/assets/images/jakoriginal.png', description: 'Rendang jamur vegan dengan cita rasa autentik Minangkabau.', price: 38000, stock: 75 },
+    { name: 'Rosy Creamy Latte', image: '/assets/images/jakspicy.png', description: 'Rendang jamur vegan dengan sensasi pedas yang menggugah selera.', price: 38000, stock: 75 },
+    { name: 'Turmeric Creamy Latte', image: '/assets/images/jakblackpaper.png', description: 'Rendang jamur vegan dengan aroma lada hitam yang kuat.', price: 38000, stock: 75 },
+    { name: 'Wood Creamy Latte', image: '/assets/images/jakblackpaper.png', description: 'Rendang jamur vegan dengan aroma lada hitam yang kuat.', price: 38000, stock: 75 },
   ],
   Jatastik: [
     { name: 'Jatastik Original', image: '/assets/images/original.png', description: 'Snack renyah dari jamur sawit dan beras merah, penuh nutrisi.', price: 12000, stock: 75 },
@@ -35,13 +36,13 @@ function Produk({ theme }) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={`w-full px-6 py-3 rounded-full border ${theme === 'dark' ? 'bg-[#2a344a] border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-800 placeholder-gray-500'} focus:outline-none focus:ring-2 focus:ring-[#4a704a] dark:focus:ring-[#a3e4b7]`}
-              title="Cari produk Jakora atau Jatastik"
+              title="Cari produk Jamu Rempah Sugih Waras"
             />
             <FaSearch className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`} />
           </div>
         </div>
         <div className="flex justify-center mb-10 space-x-4">
-          {['Jakora', 'Jatastik'].map((category) => (
+          {['Wedang Kekinian', 'Jamu Tradisional'].map((category) => (
             <motion.button
               key={category}
               onClick={() => setActiveCategory(category)}
