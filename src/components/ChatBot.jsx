@@ -10,24 +10,24 @@ function ChatBot() {
   const [username, setUsername] = useState(localStorage.getItem('chatbotUsername') || '');
   const [showNameForm, setShowNameForm] = useState(!username);
   const chatContainerRef = useRef(null);
-  const [quickOptions, setQuickOptions] = useState(['Apa itu Jakora?', 'Harga produk', 'Hubungi kami']);
+  const [quickOptions, setQuickOptions] = useState(['Apa itu Jamu Sugih Waras?', 'Harga jamu', 'Hubungi kami']);
 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
     if (messages.length === 0 && !isOpen) {
-      setMessages([{ text: showNameForm ? 'Halo! Silakan masukkan nama panggilanmu.' : `Halo ${username}! Selamat datang di Jakora Chat! Apa yang bisa aku bantu? 😊`, sender: 'bot' }]);
+      setMessages([{ text: showNameForm ? 'Halo! Silakan masukkan nama panggilanmu.' : `Halo ${username}! Selamat datang di Jamu Sugih Waras Chat! Apa yang bisa aku bantu? 😊`, sender: 'bot' }]);
     }
     // Update quick options berdasarkan konteks terakhir
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1].text.toLowerCase();
-      if (lastMessage.includes('produk')) {
-        setQuickOptions(['Harga Jakora', 'Varian Jatastik', 'Cara pesan']);
+      if (lastMessage.includes('jamu') || lastMessage.includes('produk')) {
+        setQuickOptions(['Harga Wedang Kekinian', 'Varian Jamu Tradisional', 'Cara pesan']);
       } else if (lastMessage.includes('kontak') || lastMessage.includes('hubungi')) {
         setQuickOptions(['WhatsApp', 'Email', 'Alamat']);
       } else {
-        setQuickOptions(['Apa itu Jakora?', 'Harga produk', 'Hubungi kami']);
+        setQuickOptions(['Apa itu Jamu Sugih Waras?', 'Harga jamu', 'Hubungi kami']);
       }
     }
   }, [isOpen, messages.length, username, showNameForm]);
@@ -39,7 +39,7 @@ function ChatBot() {
       setUsername(newUsername);
       localStorage.setItem('chatbotUsername', newUsername);
       setShowNameForm(false);
-      setMessages((prev) => [...prev, { text: `${newUsername}! Terima kasih, sekarang apa yang bisa aku bantu tentang Jakora? 🌱`, sender: 'bot' }]);
+      setMessages((prev) => [...prev, { text: `${newUsername}! Terima kasih, sekarang apa yang bisa aku bantu tentang Jamu Sugih Waras? 🌱`, sender: 'bot' }]);
     }
   };
 
@@ -52,49 +52,49 @@ function ChatBot() {
 
   const generateResponse = (inputText) => {
     const lowerInput = inputText.toLowerCase().trim();
-    const userName = username || 'Teman Jakora';
+    const userName = username || 'Teman Sugih Waras';
     const isGenZ = lowerInput.includes('bro') || lowerInput.includes('sis') || lowerInput.includes('gaskeun') || lowerInput.includes('sip');
     const isNonBaku = lowerInput.includes('makasih') || lowerInput.includes('bgt') || lowerInput.includes('yaudah');
 
     // Konteks lebih dari 55
     if (lowerInput.includes('halo') || lowerInput.includes('hai') || lowerInput.includes('hi')) {
       return isGenZ
-        ? `${userName} bro/sis! Hai gaskeun, selamat datang di Jakora Chat! Mau info produk apa? 🔥`
+        ? `${userName} bro/sis! Hai gaskeun, selamat datang di Jamu Sugih Waras Chat! Mau info jamu apa? 🔥`
         : isNonBaku
         ? `${userName}! Hai, makasih udah dateng! Apa yang bisa aku bantu? 😄`
-        : `${userName}! Halo, selamat datang di Jakora Chat! Apa yang bisa aku bantu? 😊`;
+        : `${userName}! Halo, selamat datang di Jamu Sugih Waras Chat! Apa yang bisa aku bantu? 😊`;
     } else if (lowerInput.includes('terima kasih') || lowerInput.includes('makasih') || lowerInput.includes('thx')) {
       return isGenZ
         ? `${userName}! Sip bro, seneng bantu! Ada lagi? 🔥`
         : isNonBaku
         ? `${userName}! Sama-sama, makasih balik! Ada lagi? 😄`
-        : `${userName}! Sama-sama! 😊 Ada lagi tentang Jakora?`;
-    } else if (lowerInput.includes('produk') || lowerInput.includes('jakora') || lowerInput.includes('jatastik')) {
+        : `${userName}! Sama-sama! 😊 Ada lagi tentang Jamu Sugih Waras?`;
+    } else if (lowerInput.includes('produk') || lowerInput.includes('jamu') || lowerInput.includes('wedang')) {
       if (lowerInput.includes('harga')) {
         return isGenZ
-          ? `${userName} bro! Jakora Rp 38.000, Jatastik Rp 12.000. Murah gaskeun, cek di Produk ya! 🔥`
+          ? `${userName} bro! Wedang Kekinian Rp 25.000, Jamu Tradisional Rp 15.000. Murah gaskeun, cek di Produk ya! 🔥`
           : isNonBaku
-          ? `${userName}! Jakora Rp 38.000, Jatastik Rp 12.000. Cek di halaman Produk bgt! 😄`
-          : `${userName}! 😊 Jakora mulai dari Rp 38.000, Jatastik Rp 12.000. Cek detail di halaman Produk ya!`;
+          ? `${userName}! Wedang Kekinian Rp 25.000, Jamu Tradisional Rp 15.000. Cek di halaman Produk bgt! 😄`
+          : `${userName}! 😊 Wedang Kekinian mulai dari Rp 25.000, Jamu Tradisional Rp 15.000. Cek detail di halaman Produk ya!`;
       } else if (lowerInput.includes('varian')) {
         return isGenZ
-          ? `${userName} sis! Jakora: Original, Spicy, Blackpaper. Jatastik: Original, Spicy, Cheese. Keren kan? 🔥`
+          ? `${userName} sis! Wedang: Blue Butterfly, Rosy, Turmeric. Jamu: Kunyit Asam, Beras Kencur, Temulawak. Keren kan? 🔥`
           : isNonBaku
-          ? `${userName}! Jakora: Original, Spicy, Blackpaper. Jatastik: Original, Spicy, Cheese. Lengkap bgt! 😄`
-          : `${userName}! 🌱 Jakora: Original, Spicy, Blackpaper. Jatastik: Original, Spicy, Cheese. Lihat di Produk!`;
+          ? `${userName}! Wedang: Blue Butterfly, Rosy, Turmeric. Jamu: Kunyit Asam, Beras Kencur, Temulawak. Lengkap bgt! 😄`
+          : `${userName}! 🌱 Wedang: Blue Butterfly, Rosy, Turmeric. Jamu: Kunyit Asam, Beras Kencur, Temulawak. Lihat di Produk!`;
       } else {
         return isGenZ
-          ? `${userName} bro! Jakora rendang jamur, Jatastik snack jamur. Sehat gaskeun! 🔥`
+          ? `${userName} bro! Wedang Kekinian dan Jamu Tradisional, sehat gaskeun! 🔥`
           : isNonBaku
-          ? `${userName}! Jakora rendang jamur, Jatastik snack jamur. Enak bgt! 😄`
-          : `${userName}! 🌱 Kami punya Jakora (rendang jamur) dan Jatastik (snack jamur). Lihat variasinya di halaman Produk!`;
+          ? `${userName}! Wedang Kekinian dan Jamu Tradisional, enak bgt! 😄`
+          : `${userName}! 🌱 Kami punya Wedang Kekinian dan Jamu Tradisional. Lihat variasinya di halaman Produk!`;
       }
     } else if (lowerInput.includes('kontak') || lowerInput.includes('hubungi') || lowerInput.includes('cara order')) {
       return isGenZ
-        ? `${userName} sis! WA +62 813-9154-6240, email info@jakora.id. Pesan gaskeun! 🔥`
+        ? `${userName} sis! WA +62 857-4513-5415, email info@sugihwaras.com. Pesan gaskeun! 🔥`
         : isNonBaku
-        ? `${userName}! WA +62 813-9154-6240, email info@jakora.id. Hubungi ya! 😄`
-        : `${userName}! 📞 Hubungi kami via WhatsApp (+62 813-9154-6240) atau email info@jakora.id. Aku siap bantu! 😄`;
+        ? `${userName}! WA +62 857-4513-5415, email info@sugihwaras.com. Hubungi ya! 😄`
+        : `${userName}! 📞 Hubungi kami via WhatsApp (+62 857-4513-5415) atau email info@sugihwaras.com. Aku siap bantu! 😄`;
     } else if (lowerInput.includes('pengiriman') || lowerInput.includes('kirim')) {
       return isGenZ
         ? `${userName} bro! Kirim 2-5 hari, tergantung lokasi. Cepet gaskeun! 🔥`
@@ -103,16 +103,16 @@ function ChatBot() {
         : `${userName}! Pengiriman biasanya 2-5 hari tergantung lokasi. 😊`;
     } else if (lowerInput.includes('halal') || lowerInput.includes('sertifikat')) {
       return isGenZ
-        ? `${userName} sis! Semua produk Jakora halal, gaskeun aman! 🔥`
+        ? `${userName} sis! Semua jamu Sugih Waras halal, gaskeun aman! 🔥`
         : isNonBaku
-        ? `${userName}! Produk Jakora halal, tenang aja! 😄`
-        : `${userName}! Ya, semua produk Jakora telah tersertifikasi halal. 😊`;
+        ? `${userName}! Jamu halal, tenang aja! 😄`
+        : `${userName}! Ya, semua produk Jamu Sugih Waras telah tersertifikasi halal. 😊`;
     } else if (lowerInput.includes('bahan') || lowerInput.includes('komposisi')) {
       return isGenZ
-        ? `${userName} bro! Bahan dari jamur tangkos sawit, alami gaskeun! 🔥`
+        ? `${userName} bro! Bahan dari rempah seperti jahe, kunyit, alami gaskeun! 🔥`
         : isNonBaku
-        ? `${userName}! Bahan dari jamur tangkos sawit, sehat bgt! 😄`
-        : `${userName}! Bahan utama dari jamur tangkos sawit yang kaya nutrisi. 🌱`;
+        ? `${userName}! Bahan rempah jahe, kunyit, sehat bgt! 😄`
+        : `${userName}! Bahan utama dari rempah seperti jahe, kunyit, temulawak yang kaya nutrisi. 🌱`;
     } else if (lowerInput.includes('diskon') || lowerInput.includes('promo')) {
       return isGenZ
         ? `${userName} sis! Cek promo di IG atau WA kami, gaskeun murah! 🔥`
@@ -133,10 +133,10 @@ function ChatBot() {
         : `${userName}! Ya, hubungi kami via WhatsApp untuk pemesanan grosir. 😊`;
     } else if (lowerInput.includes('keunggulan') || lowerInput.includes('mengapa')) {
       return isGenZ
-        ? `${userName} bro! Jakora ramah lingkungan, sehat gaskeun! 🔥`
+        ? `${userName} bro! Jamu Sugih Waras ramah lingkungan, sehat gaskeun! 🔥`
         : isNonBaku
-        ? `${userName}! Jakora sehat dan ramah lingkungan bgt! 😄`
-        : `${userName}! Jakora ramah lingkungan dan kaya nutrisi dari jamur segar. 🌱`;
+        ? `${userName}! Jamu sehat dan ramah lingkungan bgt! 😄`
+        : `${userName}! Jamu Sugih Waras ramah lingkungan dan kaya nutrisi dari rempah segar. 🌱`;
     } else if (lowerInput.includes('pembayaran') || lowerInput.includes('bayar')) {
       return isGenZ
         ? `${userName} sis! Bisa transfer bank atau e-wallet, gampang gaskeun! 🔥`
@@ -169,16 +169,16 @@ function ChatBot() {
         : `${userName}! Tentu, aku siap membantu. Apa yang kamu butuhkan? 😊`;
     } else if (lowerInput.includes('sehat') || lowerInput.includes('kesehatan')) {
       return isGenZ
-        ? `${userName} bro! Jakora sehat banget, cocok buat gaya hidup gaskeun! 🔥`
+        ? `${userName} bro! Jamu Sugih Waras sehat banget, cocok buat gaya hidup gaskeun! 🔥`
         : isNonBaku
-        ? `${userName}! Jakora sehat bgt, cocok buat hidup sehat! 😄`
-        : `${userName}! Jakora dibuat dari jamur alami, sangat baik untuk kesehatan. 🌱`;
+        ? `${userName}! Jamu sehat bgt, cocok buat hidup sehat! 😄`
+        : `${userName}! Jamu dibuat dari rempah alami, sangat baik untuk kesehatan. 🌱`;
     } else if (lowerInput.includes('lingkungan') || lowerInput.includes('ramah')) {
       return isGenZ
-        ? `${userName} sis! Jakora ramah lingkungan gaskeun, keren kan? 🔥`
+        ? `${userName} sis! Jamu ramah lingkungan gaskeun, keren kan? 🔥`
         : isNonBaku
-        ? `${userName}! Jakora ramah lingkungan bgt! 😄`
-        : `${userName}! Jakora mendukung keberlanjutan lingkungan. 🌱`;
+        ? `${userName}! Jamu ramah lingkungan bgt! 😄`
+        : `${userName}! Jamu Sugih Waras mendukung keberlanjutan lingkungan. 🌱`;
     } else if (lowerInput.includes('cara') || lowerInput.includes('gimana')) {
       return isGenZ
         ? `${userName} bro! Cara pesen? WA aja gaskeun! 🔥`
@@ -199,28 +199,28 @@ function ChatBot() {
         : `${userName}! Pengiriman biasanya 2-5 hari tergantung lokasi. 😊`;
     } else if (lowerInput.includes('murah') || lowerInput.includes('terjangkau')) {
       return isGenZ
-        ? `${userName} sis! Harga Jakora Rp 38.000, Jatastik Rp 12.000, murah gaskeun! 🔥`
+        ? `${userName} sis! Harga Wedang Rp 25.000, Jamu Rp 15.000, murah gaskeun! 🔥`
         : isNonBaku
-        ? `${userName}! Harga oke, Jakora Rp 38.000, Jatastik Rp 12.000! 😄`
-        : `${userName}! Harga terjangkau, Jakora Rp 38.000, Jatastik Rp 12.000. 😊`;
+        ? `${userName}! Harga oke, Wedang Rp 25.000, Jamu Rp 15.000! 😄`
+        : `${userName}! Harga terjangkau, Wedang Rp 25.000, Jamu Rp 15.000. 😊`;
     } else if (lowerInput.includes('alamat') || lowerInput.includes('lokasi')) {
       return isGenZ
-        ? `${userName} bro! Alamat di Limau Manis, Padang. Cek maps gaskeun! 🔥`
+        ? `${userName} bro! Alamat di Kalisongo, Malang. Cek maps gaskeun! 🔥`
         : isNonBaku
-        ? `${userName}! Lokasinya Limau Manis, Padang ya! 😄`
-        : `${userName}! Lokasi kami di Limau Manis, Kec. Pauh, Kota Padang. 😊`;
-    } else if (lowerInput.includes('jamur') || lowerInput.includes('bahan alami')) {
+        ? `${userName}! Lokasinya Kalisongo, Malang ya! 😄`
+        : `${userName}! Lokasi kami di Kalisongo, Malang. 😊`;
+    } else if (lowerInput.includes('rempah') || lowerInput.includes('bahan alami')) {
       return isGenZ
-        ? `${userName} sis! Bahan dari jamur tangkos sawit, alami gaskeun! 🔥`
+        ? `${userName} sis! Bahan dari rempah jahe, kunyit, alami gaskeun! 🔥`
         : isNonBaku
-        ? `${userName}! Bahan jamur tangkos sawit, sehat bgt! 😄`
-        : `${userName}! Dibuat dari jamur tangkos sawit yang alami dan sehat. 🌱`;
+        ? `${userName}! Bahan rempah jahe, kunyit, sehat bgt! 😄`
+        : `${userName}! Dibuat dari rempah jahe, kunyit, temulawak yang alami dan sehat. 🌱`;
     } else if (lowerInput.includes('rasa') || lowerInput.includes('enak')) {
       return isGenZ
-        ? `${userName} bro! Rasa autentik Minang, enak gaskeun! 🔥`
+        ? `${userName} bro! Rasa autentik Indonesia, enak gaskeun! 🔥`
         : isNonBaku
-        ? `${userName}! Rasa enak bgt, autentik Minang! 😄`
-        : `${userName}! Rasa autentik Minangkabau, sangat lezat! 😊`;
+        ? `${userName}! Rasa enak bgt, autentik Indonesia! 😄`
+        : `${userName}! Rasa autentik Indonesia, sangat segar! 😊`;
     } else if (lowerInput.includes('kualitas') || lowerInput.includes('bagus')) {
       return isGenZ
         ? `${userName} sis! Kualitas top, garansi gaskeun! 🔥`
@@ -232,7 +232,7 @@ function ChatBot() {
         ? `${userName} bro! Beli via WA, gaskeun cepet! 🔥`
         : isNonBaku
         ? `${userName}! Beli lewat WA ya, cepet bgt! 😄`
-        : `${userName}! Pesan via WhatsApp (+62 813-9154-6240). 😊`;
+        : `${userName}! Pesan via WhatsApp (+62 857-4513-5415). 😊`;
     } else if (lowerInput.includes('review') || lowerInput.includes('testimoni')) {
       return isGenZ
         ? `${userName} sis! Banyak yang suka, cek testimoni gaskeun! 🔥`
@@ -247,28 +247,28 @@ function ChatBot() {
         : `${userName}! Kami punya varian baru, lihat di halaman Produk! 😊`;
     } else if (lowerInput.includes('vegan') || lowerInput.includes('vegetarian')) {
       return isGenZ
-        ? `${userName} sis! Jakora vegan gaskeun, sehat banget! 🔥`
+        ? `${userName} sis! Jamu vegan gaskeun, sehat banget! 🔥`
         : isNonBaku
-        ? `${userName}! Jakora vegan, cocok bgt! 😄`
-        : `${userName}! Ya, Jakora cocok untuk diet vegan dan vegetarian. 🌱`;
+        ? `${userName}! Jamu vegan, cocok bgt! 😄`
+        : `${userName}! Ya, Jamu Sugih Waras cocok untuk diet vegan dan vegetarian. 🌱`;
     } else if (lowerInput.includes('resep') || lowerInput.includes('cara masak')) {
       return isGenZ
-        ? `${userName} bro! Jakora siap makan, gaskeun praktis! 🔥`
+        ? `${userName} bro! Jamu instan, tinggal seduh gaskeun! 🔥`
         : isNonBaku
-        ? `${userName}! Jakora tinggal makan, praktis bgt! 😄`
-        : `${userName}! Jakora sudah siap makan dengan kemasan self-heating. 😊`;
+        ? `${userName}! Jamu tinggal seduh, praktis bgt! 😄`
+        : `${userName}! Jamu sudah instan, tinggal seduh dengan air panas. 😊`;
     } else if (lowerInput.includes('kesehatan') || lowerInput.includes('nutrisi')) {
       return isGenZ
-        ? `${userName} sis! Nutrisi jamur gaskeun, sehat banget! 🔥`
+        ? `${userName} sis! Nutrisi rempah gaskeun, sehat banget! 🔥`
         : isNonBaku
         ? `${userName}! Nutrisi oke bgt, sehat ya! 😄`
-        : `${userName}! Kaya nutrisi dari jamur, baik untuk kesehatan. 🌱`;
+        : `${userName}! Kaya nutrisi dari rempah, baik untuk kesehatan. 🌱`;
     } else {
       return isGenZ
-        ? `${userName} bro! Aku bingung nih 😅 Tanya soal Jakora gaskeun ya! 🔥`
+        ? `${userName} bro! Aku bingung nih 😅 Tanya soal Jamu Sugih Waras gaskeun ya! 🔥`
         : isNonBaku
-        ? `${userName}! Aku bingung 😅 Tanya soal Jakora ya! 😄`
-        : `${userName}! Hmm, aku agak bingung nih 😅 Coba tanyakan tentang Jakora ya!`;
+        ? `${userName}! Aku bingung 😅 Tanya soal Jamu ya! 😄`
+        : `${userName}! Hmm, aku agak bingung nih 😅 Coba tanyakan tentang Jamu Sugih Waras ya!`;
     }
   };
 
@@ -309,7 +309,7 @@ function ChatBot() {
           }}
           onClick={() => setIsOpen(true)}
         >
-          Hai, Jakora Friend! Ada yang bisa kami bantu?
+          Hai, Sugih Waras Friend! Ada yang bisa kami bantu?
           <div
             id="welcomeMessagesCross"
             style={{
@@ -355,7 +355,7 @@ function ChatBot() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
           >
             <div className="flex justify-between items-center p-4 bg-[#4a704a] text-white rounded-t-lg">
-              <span className="flex items-center gap-2"><img src="/assets/images/logo-chatbot.png" alt="Jakora Chat" className="w-8 h-8" /> Jakora Chat</span>
+              <span className="flex items-center gap-2"><img src="/assets/images/logo-chatbot.png" alt="Sugih Waras Chat" className="w-8 h-8" /> Sugih Waras Chat</span>
               <motion.button onClick={() => setIsOpen(false)} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                 <FaTimes />
               </motion.button>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 function ProductCard({ name, image, description, price, stock, theme, onViewDetail }) {
   const [quantity, setQuantity] = useState(1);
-  const whatsappNumber = '+6281391546240';
+  const whatsappNumber = '+6285745135415';
   const whatsappMessage = `Halo, saya ingin membeli:\n- ${name} x ${quantity} (Rp ${price * quantity})\nTotal: Rp ${price * quantity}\nSilakan proses pesanannya!`;
 
   const handleBuy = () => window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
@@ -33,7 +33,7 @@ function ProductCard({ name, image, description, price, stock, theme, onViewDeta
           className={`absolute bottom-2 right-2 bg-[#4a704a] text-white p-2 rounded-full shadow-lg hover:bg-[#355e3b] transition-all ${theme === 'dark' ? 'hover:bg-[#7fd8a1]' : ''}`}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          title="Lihat detail produk"
+          title="Lihat detail jamu"
         >
           <FaEye />
         </motion.button>
@@ -50,7 +50,7 @@ function ProductCard({ name, image, description, price, stock, theme, onViewDeta
             value={quantity}
             onChange={handleQuantityChange}
             className={`w-20 px-3 py-2 rounded-full border ${theme === 'dark' ? 'bg-[#344e41] border-gray-600 text-white' : 'bg-gray-100 border-gray-300 text-gray-800'} focus:outline-none focus:ring-2 focus:ring-[#4a704a] dark:focus:ring-[#a3e4b7]`}
-            title="Jumlah produk"
+            title="Jumlah jamu"
           />
           <motion.button
             onClick={(e) => { e.stopPropagation(); handleBuy(); }}

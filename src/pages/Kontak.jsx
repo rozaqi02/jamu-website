@@ -1,122 +1,94 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaEnvelope, FaWhatsapp } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { FaEnvelope, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
 function Kontak({ theme }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const whatsappNumber = '+6281391546240';
-  const whatsappMessage = `Halo, saya ${name} (${email}):\nPesan: ${message || 'Silakan hubungi saya!'}`;
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { scrollYProgress } = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
-    setName('');
-    setEmail('');
-    setMessage('');
-  };
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const backgroundStyle = isMounted
+    ? { backgroundColor: theme === 'dark' ? '#1a1f2b' : 'white', transition: 'background-color 0.3s ease' }
+    : {};
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#1a1f2b] text-white' : 'bg-gray-100 text-gray-800'} py-16 relative pt-24 font-poppins`}>
-      <motion.section initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="max-w-7xl mx-auto px-4">
-        <h2 className={`text-4xl font-bold text-center ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'} mb-12`}>Hubungi Kami</h2>
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Kartu Kontak Kiri */}
-          <motion.div
-            className="w-full md:w-1/2 bg-[#2a344a] p-8 rounded-xl shadow-2xl text-white flex-1"
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
+    <div
+      className={`min-h-screen font-[Poppins] ${theme === 'dark' ? 'text-white' : 'text-gray-800'} overflow-hidden relative pt-16`}
+      style={backgroundStyle}
+    >
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute w-64 h-64 bg-[#22624a]/20 rounded-full"
+          style={{
+            top: `${mousePosition.y - 150}px`,
+            left: `${mousePosition.x - 150}px`,
+            opacity: 0.5,
+            filter: 'blur(40px)',
+          }}
+          animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.3, 0.5] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
+      <motion.section
+        className="py-20 px-6 max-w-6xl mx-auto relative z-10"
+        style={{ scale }}
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.h2
+          className={`text-4xl font-[Montserrat] font-bold text-center mb-10 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
+          Hubungi Kami
+        </motion.h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <motion.a
+            href="mailto:info@sugihwaras.com"
+            className="p-6 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center"
+            whileHover={{ scale: 1.05, y: -5 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <h3 className="text-2xl font-semibold mb-6">Hubungi Kami!</h3>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium mb-2">Nama</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full p-3 rounded-lg bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3e4b7] placeholder-gray-400"
-                  required
-                  title="Masukkan nama Anda"
-                  placeholder="Masukkan nama Anda"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Email</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full p-3 rounded-lg bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3e4b7] placeholder-gray-400"
-                  required
-                  title="Masukkan email Anda"
-                  placeholder="Masukkan email Anda"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Pesan</label>
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="w-full p-3 rounded-lg bg-gray-700 focus:outline-none focus:ring-2 focus:ring-[#a3e4b7] placeholder-gray-400 h-32"
-                  placeholder="Tulis pesan Anda di sini..."
-                  title="Tulis pesan Anda"
-                />
-              </div>
-              <motion.button
-                type="submit"
-                className="w-full bg-[#a3e4b7] text-[#2a344a] py-3 rounded-lg hover:bg-[#7fd8a1] transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                title="Kirim pesan via WhatsApp"
-              >
-                Kirim Pesan
-              </motion.button>
-            </form>
-            <div className="mt-8 text-center">
-              <p className="text-base mb-2">Atau hubungi kami langsung:</p>
-              <div className="flex justify-center space-x-6">
-                <motion.a
-                  href="mailto:jakorafood@gmail.com"
-                  className="text-[#a3e4b7] hover:underline"
-                  whileHover={{ scale: 1.1 }}
-                  title="Kirim email ke Jakora"
-                >
-                  <FaEnvelope size={24} />
-                </motion.a>
-                <motion.a
-                  href={`https://wa.me/${whatsappNumber}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#a3e4b7] hover:underline"
-                  whileHover={{ scale: 1.1 }}
-                  title="Hubungi via WhatsApp"
-                >
-                  <FaWhatsapp size={24} />
-                </motion.a>
-              </div>
-              <p className="mt-4 text-sm">
-                <span>jakorafood@gmail.com</span><br />
-                <span>+6281391546240</span>
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Visual Kanan */}
-          <motion.div
-            className="w-full md:w-1/2 p-8 text-gray-800 dark:text-gray-200 flex flex-col justify-center"
-            initial={{ x: 20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
+            <FaEnvelope className={`text-3xl mb-4 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
+            <p className="text-center">info@sugihwaras.com</p>
+          </motion.a>
+          <motion.a
+            href="https://wa.me/6285745135415"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-6 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center"
+            whileHover={{ scale: 1.05, y: -5 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <h3 className="text-2xl font-semibold mb-6 text-[#4a704a] dark:text-[#a3e4b7]">Tingkatkan Bisnis Anda dengan Jakora</h3>
-            <p className="mb-4">👍 Jelajahi solusi pangan inovatif Jakora untuk performa bisnis yang lebih baik.</p>
-            <p className="mb-4">👍 Diskusi dengan tim kami untuk lihat bagaimana Jakora cocok untuk Anda.</p>
-            <p className="mb-4">👍 Temukan paket harga yang disesuaikan dengan tujuan bisnis Anda.</p>
-            <p className="mb-4">👍 Tingkatkan performa bisnis dengan produk jamur berkualitas tinggi Jakora.</p>
-          </motion.div>
+            <FaWhatsapp className={`text-3xl mb-4 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
+            <p className="text-center">+6285745135415</p>
+          </motion.a>
+          <motion.a
+            href="https://www.instagram.com/rumahrempahsugihwaras/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-6 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center"
+            whileHover={{ scale: 1.05, y: -5 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <FaInstagram className={`text-3xl mb-4 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
+            <p className="text-center">@rumahrempahsugihwaras</p>
+          </motion.a>
         </div>
       </motion.section>
     </div>

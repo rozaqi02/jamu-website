@@ -1,199 +1,90 @@
-// import React from 'react';
-
-// function Donasi({ theme }) {
-//   return (
-//     <section className={`pt-24 pb-28 px-4 max-w-7xl mx-auto ${theme === 'dark' ? 'bg-[#1a1f2b] text-white' : 'bg-white text-gray-800'}`}>
-//       <h2 className={`text-5xl font-extrabold text-center mb-12 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
-//         Ayo Berdonasi
-//       </h2>
-
-//       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-//         {/* Card 1 */}
-//         <div className={`rounded-xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl ${theme === 'dark' ? 'bg-[#2a344a]' : 'bg-white'}`}>
-//           <img
-//             src="/assets/images/disabilitas.jpg"
-//             alt="Penyandang Disabilitas"
-//             className="w-full h-48 object-cover"
-//           />
-//           <div className="p-6">
-//             <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
-//               Penyandang Disabilitas
-//             </h3>
-//             <p className="mb-2 text-gray-600 dark:text-gray-300">
-//               Mari berbagi untuk saudara-saudara penyandang disabilitas. Setiap bantuan berarti bagi mereka.
-//             </p>
-//             <p className="mb-4 text-gray-500 dark:text-gray-400">
-//               Lokasi: Padang, Kota Tua
-//             </p>
-//             <a
-//               href="https://kitabisa.com/explore/all"
-//               target="_blank"
-//               rel="noopener noreferrer"
-//               className="inline-block bg-[#4a704a] text-white dark:bg-[#a3e4b7] dark:text-black px-4 py-2 rounded-full shadow hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition"
-//             >
-//               Donasi
-//             </a>
-//           </div>
-//         </div>
-
-//         {/* Card 2 */}
-//         <div className={`rounded-xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl ${theme === 'dark' ? 'bg-[#2a344a]' : 'bg-white'}`}>
-//           <img
-//             src="/assets/images/asuhan.jpg"
-//             alt="Panti Asuhan"
-//             className="w-full h-48 object-cover"
-//           />
-//           <div className="p-6">
-//             <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
-//               Panti Asuhan
-//             </h3>
-//             <p className="mb-2 text-gray-600 dark:text-gray-300">
-//               Mari berbagi kebahagiaan dengan anak-anak di panti asuhan. Sumbangkan kasih dan rezekimu.
-//             </p>
-//             <p className="mb-4 text-gray-500 dark:text-gray-400">
-//               Lokasi: Bukit Tinggi
-//             </p>
-//             <a
-//               href="https://kitabisa.com/explore/all"
-//               target="_blank"
-//               rel="noopener noreferrer"
-//               className="inline-block bg-[#4a704a] text-white dark:bg-[#a3e4b7] dark:text-black px-4 py-2 rounded-full shadow hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition"
-//             >
-//               Donasi
-//             </a>
-//           </div>
-//         </div>
-
-//         {/* Card 3 */}
-//         <div className={`rounded-xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl ${theme === 'dark' ? 'bg-[#2a344a]' : 'bg-white'}`}>
-//           <img
-//             src="/assets/images/kebakaran.jpg"
-//             alt="Kebakaran Pasar"
-//             className="w-full h-48 object-cover"
-//           />
-//           <div className="p-6">
-//             <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
-//               Kebakaran Pasar
-//             </h3>
-//             <p className="mb-2 text-gray-600 dark:text-gray-300">
-//               Mari berbagi untuk saudara-saudara yang terkena musibah kebakaran pasar.
-//             </p>
-//             <p className="mb-4 text-gray-500 dark:text-gray-400">
-//               Lokasi: Pasar Raya
-//             </p>
-//             <a
-//               href="https://kitabisa.com/explore/all"
-//               target="_blank"
-//               rel="noopener noreferrer"
-//               className="inline-block bg-[#4a704a] text-white dark:bg-[#a3e4b7] dark:text-black px-4 py-2 rounded-full shadow hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition"
-//             >
-//               Donasi
-//             </a>
-//           </div>
-//         </div>
-
-//         {/* Card 4 - Gempa */}
-//         <div className={`rounded-xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl ${theme === 'dark' ? 'bg-[#2a344a]' : 'bg-white'}`}>
-//           <img
-//             src="/assets/images/gempa.jpg"
-//             alt="Bantuan Gempa"
-//             className="w-full h-48 object-cover"
-//           />
-//           <div className="p-6">
-//             <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
-//               Bantuan Gempa
-//             </h3>
-//             <p className="mb-2 text-gray-600 dark:text-gray-300">
-//               Mari bantu saudara-saudara kita yang terdampak bencana gempa bumi. Donasi Anda sangat berarti.
-//             </p>
-//             <p className="mb-4 text-gray-500 dark:text-gray-400">
-//               Lokasi: Sumatera Barat
-//             </p>
-//             <a
-//               href="https://kitabisa.com/explore/all"
-//               target="_blank"
-//               rel="noopener noreferrer"
-//               className="inline-block bg-[#4a704a] text-white dark:bg-[#a3e4b7] dark:text-black px-4 py-2 rounded-full shadow hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition"
-//             >
-//               Donasi
-//             </a>
-//           </div>
-//         </div>
-
-//         {/* Card 5 - Anak Yatim */}
-//         <div className={`rounded-xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl ${theme === 'dark' ? 'bg-[#2a344a]' : 'bg-white'}`}>
-//           <img
-//             src="/assets/images/yatim.jpg"
-//             alt="Anak Yatim"
-//             className="w-full h-48 object-cover"
-//           />
-//           <div className="p-6">
-//             <h3 className={`text-xl font-semibold mb-2 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>
-//               Anak Yatim
-//             </h3>
-//             <p className="mb-2 text-gray-600 dark:text-gray-300">
-//               Bantu ringankan beban hidup anak-anak yatim dengan uluran tangan dan rezeki terbaik Anda.
-//             </p>
-//             <p className="mb-4 text-gray-500 dark:text-gray-400">
-//               Lokasi: Sumatera Barat
-//             </p>
-//             <a
-//               href="https://kitabisa.com/explore/all"
-//               target="_blank"
-//               rel="noopener noreferrer"
-//               className="inline-block bg-[#4a704a] text-white dark:bg-[#a3e4b7] dark:text-black px-4 py-2 rounded-full shadow hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition"
-//             >
-//               Donasi
-//             </a>
-//           </div>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
-
-// export default Donasi;
-
-
-
-
-
-// 22222
-
-
-
-
-
-
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { FaDonate } from 'react-icons/fa';
 
 function Donasi({ theme }) {
-  const cards = [
-    { img: '/assets/images/disabilitas.jpg', alt: 'Penyandang Disabilitas', title: 'Penyandang Disabilitas', desc: 'Mari berbagi untuk penyandang disabilitas.', lokasi: 'Padang, Kota Tua' },
-    { img: '/assets/images/asuhan.jpg', alt: 'Panti Asuhan', title: 'Panti Asuhan', desc: 'Berbagi kebahagiaan dengan anak-anak panti asuhan.', lokasi: 'Bukit Tinggi' },
-    { img: '/assets/images/kebakaran.jpg', alt: 'Kebakaran Pasar', title: 'Kebakaran Pasar', desc: 'Bantu korban musibah kebakaran pasar.', lokasi: 'Pasar Raya' },
-    { img: '/assets/images/gempa.jpg', alt: 'Bantuan Gempa', title: 'Bantuan Gempa', desc: 'Bantu korban bencana gempa bumi.', lokasi: 'Sumatera Barat' },
-    { img: '/assets/images/yatim.jpg', alt: 'Anak Yatim', title: 'Anak Yatim', desc: 'Ringankan beban anak-anak yatim.', lokasi: 'Sumatera Barat' },
-  ];
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [donationAmount, setDonationAmount] = useState(50000);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const backgroundStyle = isMounted
+    ? { backgroundColor: theme === 'dark' ? '#1a1f2b' : 'white', transition: 'background-color 0.3s ease' }
+    : {};
 
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#1a1f2b] text-white' : 'bg-white text-gray-800'} py-16 relative pt-24`}>
-      <motion.section initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }} className="px-4 max-w-7xl mx-auto">
-        <motion.h2 className={`text-4xl font-bold text-center mb-12 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`} initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>Ayo Berdonasi</motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {cards.map((card, index) => (
-            <motion.div key={index} className={`rounded-xl shadow-lg overflow-hidden ${theme === 'dark' ? 'bg-[#2a344a]' : 'bg-white'}`} initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6, delay: index * 0.1 }} whileHover={{ scale: 1.05, boxShadow: '0 20px 25px rgba(0,0,0,0.15)' }} title={`Donasi untuk ${card.title}`}>
-              <img src={card.img} alt={card.alt} className="w-full h-48 object-cover" />
-              <div className="p-6">
-                <h3 className={`text-lg font-semibold mb-2 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#4a704a]'}`}>{card.title}</h3>
-                <p className="mb-2 text-gray-600 dark:text-gray-300">{card.desc}</p>
-                <p className="mb-4 text-gray-500 dark:text-gray-400">Lokasi: {card.lokasi}</p>
-                <motion.a href="https://kitabisa.com/explore/all" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#4a704a] text-white dark:bg-[#a3e4b7] dark:text-black px-4 py-2 rounded-full shadow hover:bg-[#355e3b] dark:hover:bg-[#7fd8a1] transition" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} title="Donasi sekarang">Donasi</motion.a>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+    <div
+      className={`min-h-screen font-[Poppins] ${theme === 'dark' ? 'text-white' : 'text-gray-800'} overflow-hidden relative pt-16`}
+      style={backgroundStyle}
+    >
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          className="absolute w-64 h-64 bg-[#22624a]/20 rounded-full"
+          style={{
+            top: `${mousePosition.y - 150}px`,
+            left: `${mousePosition.x - 150}px`,
+            opacity: 0.5,
+            filter: 'blur(40px)',
+          }}
+          animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.3, 0.5] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
+      <motion.section
+        className="py-20 px-6 max-w-6xl mx-auto relative z-10"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.h2
+          className={`text-4xl font-[Montserrat] font-bold text-center mb-10 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
+          Dukung Kami dengan Donasi
+        </motion.h2>
+        <motion.div
+          className="bg-white dark:bg-[#2a344a] p-8 rounded-xl shadow-lg max-w-md mx-auto"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
+          <p className={`text-center mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+            Donasi Anda membantu kami melestarikan tradisi jamu dan mendukung petani lokal.
+          </p>
+          <div className="mb-6">
+            <label className={`block text-lg font-semibold mb-2 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}>Jumlah Donasi (Rp)</label>
+            <input
+              type="number"
+              value={donationAmount}
+              onChange={(e) => setDonationAmount(Math.max(10000, parseInt(e.target.value) || 0))}
+              className={`w-full px-4 py-3 rounded-full border ${theme === 'dark' ? 'bg-[#344e41] border-gray-600 text-white' : 'bg-gray-100 border-gray-300 text-gray-800'} focus:outline-none focus:ring-2 focus:ring-[#22624a] dark:focus:ring-[#a3e4b7]`}
+            />
+          </div>
+          <motion.button
+            className="w-full flex items-center justify-center gap-2 bg-[#22624a] text-white py-3 rounded-full hover:bg-[#754a28] transition-all"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              const message = `Halo, saya ingin berdonasi Rp ${donationAmount.toLocaleString('id-ID')} ke Jamu Sugih Waras.`;
+              window.open(`https://wa.me/${'+6285745135415'}?text=${encodeURIComponent(message)}`, '_blank');
+            }}
+          >
+            <FaDonate /> Donasi Sekarang
+          </motion.button>
+        </motion.div>
       </motion.section>
     </div>
   );
