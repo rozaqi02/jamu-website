@@ -60,34 +60,34 @@ function Kontak({ theme }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           <motion.a
             href="mailto:info@sugihwaras.com"
-            className="p-6 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center"
+            className="p-8 bg-white dark:bg-[#2a344a] rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 flex flex-col items-center border-2 border-transparent hover:border-[#22624a] dark:hover:border-[#a3e4b7]"
             whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <FaEnvelope className={`text-3xl mb-4 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
-            <p className="text-center">info@sugihwaras.com</p>
+            <FaEnvelope className={`text-4xl mb-6 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
+            <p className="text-center text-lg font-medium">info@sugihwaras.com</p>
           </motion.a>
           <motion.a
             href="https://wa.me/6285745135415"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-6 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center"
+            className="p-8 bg-white dark:bg-[#2a344a] rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 flex flex-col items-center border-2 border-transparent hover:border-[#22624a] dark:hover:border-[#a3e4b7]"
             whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <FaWhatsapp className={`text-3xl mb-4 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
-            <p className="text-center">+6285745135415</p>
+            <FaWhatsapp className={`text-4xl mb-6 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
+            <p className="text-center text-lg font-medium">+6285745135415</p>
           </motion.a>
           <motion.a
             href="https://www.instagram.com/rumahrempahsugihwaras/"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-6 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col items-center"
+            className="p-8 bg-white dark:bg-[#2a344a] rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 flex flex-col items-center border-2 border-transparent hover:border-[#22624a] dark:hover:border-[#a3e4b7]"
             whileHover={{ scale: 1.05, y: -5 }}
             whileTap={{ scale: 0.95 }}
           >
-            <FaInstagram className={`text-3xl mb-4 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
-            <p className="text-center">@rumahrempahsugihwaras</p>
+            <FaInstagram className={`text-4xl mb-6 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
+            <p className="text-center text-lg font-medium">@rumahrempahsugihwaras</p>
           </motion.a>
         </div>
       </motion.section>

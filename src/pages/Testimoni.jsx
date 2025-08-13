@@ -8,21 +8,21 @@ function Testimoni({ theme }) {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
 
   const testimonials = [
-    {
-      name: 'Ani S.',
-      text: 'Jamu ini benar-benar membantu kesehatan saya, rasanya enak dan alami!',
-      rating: 5,
-    },
-    {
-      name: 'Budi P.',
-      text: 'Latte rempahnya luar biasa, cocok untuk relaksasi malam hari.',
-      rating: 4,
-    },
-    {
-      name: 'Citra L.',
-      text: 'Wedang imun sangat efektif untuk daya tahan tubuh keluarga saya.',
-      rating: 5,
-    },
+    { name: 'Ani S.', text: 'Jamu ini bikin badan saya lebih segar, rasanya juga enak banget!', rating: 5 },
+    { name: 'Budi P.', text: 'Latte rempahnya juara, bantu banget buat rileks pas malam hari.', rating: 4 },
+    { name: 'Citra L.', text: 'Wedang imun ini top, anak saya jarang sakit lagi setelah minum.', rating: 5 },
+    { name: 'Dedi R.', text: 'Keren lah, teh rempahnya bikin hati tenang dan badan fit!', rating: 4 },
+    { name: 'Eka T.', text: 'Saya suka banget sama beras kencur, stamina naik drastis!', rating: 5 },
+    { name: 'Fani M.', text: 'Wedang secang ini mantap, jantungan saya agak reda nih.', rating: 4 },
+    { name: 'Gina H.', text: 'Latte kunyitnya enak dan kulit saya jadi lebih cerah, serius!', rating: 5 },
+    { name: 'Hadi K.', text: 'Produknya oke, rasa autentik dan bikin sehat, recommended!', rating: 5 },
+    { name: 'Indah Y.', text: 'Blue butterfly latte ini unik, bikin pikiran tenang pas stres.', rating: 4 },
+    { name: 'Joko S.', text: 'Wedang imun ini jadi penyelamat, badan tahan banget sama cuaca.', rating: 5 },
+    { name: 'Kiki A.', text: 'Rosy latte-nya wangi banget, cocok buat skincare dari dalam!', rating: 4 },
+    { name: 'Lina D.', text: 'Jamu dari sini bikin saya ketagihan, alami dan terpercaya.', rating: 5 },
+    { name: 'Maman R.', text: 'Wedang jinten gula aren ini enak, hangat di perut banget!', rating: 4 },
+    { name: 'Nita P.', text: 'Teh rempahnya bikin tidur nyenyak, salut sama kualitasnya.', rating: 5 },
+    { name: 'Oki W.', text: 'Wood creamy latte ini creamy abis, pas buat ngopi santai.', rating: 4 },
   ];
 
   useEffect(() => {
@@ -58,6 +58,17 @@ function Testimoni({ theme }) {
           }}
           animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.3, 0.5] }}
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute w-48 h-48 bg-[#a3e4b7]/20 rounded-full"
+          style={{
+            top: `${mousePosition.y - 120}px`,
+            right: `${window.innerWidth - mousePosition.x - 120}px`,
+            opacity: 0.4,
+            filter: 'blur(30px)',
+          }}
+          animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.2, 0.4] }}
+          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         />
       </div>
       <motion.section

@@ -17,13 +17,17 @@ function Footer({ theme }) {
       className={`py-8 text-white font-[Poppins] ${theme === 'dark' ? 'text-white' : 'text-white'}`}
       style={backgroundStyle}
     >
-      <div className="max-w-6xl mx-auto px-6 text-center">
+      <motion.div
+        className="max-w-6xl mx-auto px-6 text-center"
+        initial={{ y: 50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+      >
         <motion.div
           className="flex flex-col md:flex-row justify-center items-center gap-6 mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
         >
           <motion.a
             href="mailto:info@sugihwaras.com"
@@ -57,13 +61,12 @@ function Footer({ theme }) {
         <motion.p
           className="text-sm"
           initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2, duration: 0.5 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
         >
           © 2025 Jamu Sugih Waras. Hak cipta dilindungi.
         </motion.p>
-      </div>
+      </motion.div>
     </footer>
   );
 }

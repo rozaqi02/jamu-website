@@ -97,7 +97,7 @@ function Beranda({ theme, toggleTheme }) {
           }}
         />
         <motion.div
-          className="absolute w-64 h-64 bg-[#754a28]/20 rounded-full"
+          className="absolute w-64 h-64 bg-[#a3e4b7]/20 rounded-full"
           style={{
             top: `${mousePosition.y - 150}px`,
             right: `${window.innerWidth - mousePosition.x - 150}px`,

@@ -27,7 +27,12 @@ function Navbar({ theme, toggleTheme }) {
   }, []);
 
   const backgroundStyle = isMounted
-    ? { backgroundColor: theme === 'dark' ? '#1a1f2b' : '#22624a', transition: 'background-color 0.3s ease' }
+    ? {
+        backgroundColor: theme === 'dark' ? 'rgba(26, 31, 43, 0.9)' : 'rgba(34, 98, 74, 0.9)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)', // Untuk kompatibilitas browser
+        transition: 'background-color 0.3s ease',
+      }
     : {};
 
   return (

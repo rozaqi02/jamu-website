@@ -20,7 +20,7 @@ function Produk({ theme }) {
       { name: 'Turmeric creamy latte', image: '/assets/images/Turmeric creamy latte.jpg', description: 'Latte kunyit untuk anti-inflamasi dan kesehatan kulit.', price: 38000, stock: 80 },
     ],
     'Wedang Spesial': [
-      { name: 'Blue butterfly creamy latte', image: '/assets/images/Blue butterfly creamy_latte.jpg', description: 'Latte unik dengan bunga telang untuk ketenangan.', price: 40000, stock: 70 },
+      { name: 'Blue butterfly creamy latte', image: '/assets/images/Blue butterfly creamy latte.jpg', description: 'Latte unik dengan bunga telang untuk ketenangan.', price: 40000, stock: 70 },
       { name: 'Rosy creamy latte', image: '/assets/images/Rosy creamy latte.jpg', description: 'Latte beraroma mawar untuk relaksasi dan kecantikan.', price: 40000, stock: 70 },
       { name: 'Wedang imun', image: '/assets/images/Wedang imun.jpg', description: 'Wedang herbal untuk meningkatkan daya tahan tubuh.', price: 32000, stock: 90 },
       { name: 'Wedang jinten gula aren', image: '/assets/images/Wedang jinten gula aren.jpg', description: 'Wedang hangat dengan jinten dan gula aren alami.', price: 32000, stock: 90 },
@@ -67,10 +67,10 @@ function Produk({ theme }) {
         />
       </div>
       <motion.section
+        className="py-20 px-6 max-w-6xl mx-auto relative z-10"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="py-20 px-6 max-w-6xl mx-auto relative z-10"
       >
         <motion.h2
           className={`text-4xl font-[Montserrat] font-bold text-center mb-10 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}
@@ -105,40 +105,43 @@ function Produk({ theme }) {
             </motion.button>
           ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.map((product, index) => (
             <motion.div
               key={index}
-              className="relative overflow-hidden rounded-xl shadow-lg bg-white dark:bg-[#2a344a] hover:shadow-2xl transition-all duration-300"
+              className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#2a344a] shadow-lg hover:shadow-xl transition-all duration-300"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-              whileHover={{ scale: 1.05, rotate: 1 }}
+              whileHover={{ scale: 1.03 }}
               onClick={() => setSelectedProduct(product)}
             >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-              <motion.div
-                className="absolute bottom-4 left-4 right-4 text-white"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.3 }}
-              >
-                <h3 className="text-xl font-[Montserrat] font-bold">{product.name}</h3>
-                <p className="text-sm">{product.description.substring(0, 40)}...</p>
-                <p className="text-lg font-semibold mt-1">Rp {product.price.toLocaleString('id-ID')}</p>
+              <div className="relative h-64">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </div>
+              <div className="p-4">
+                <h3 className={`text-xl font-[Montserrat] font-bold mb-2 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}>
+                  {product.name}
+                </h3>
+                <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                  {product.description.substring(0, 50)}...
+                </p>
+                <p className={`text-lg font-semibold mt-2 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}>
+                  Rp {product.price.toLocaleString('id-ID')}
+                </p>
                 <motion.button
-                  className="mt-2 flex items-center gap-2 bg-[#22624a] text-white px-4 py-2 rounded-full hover:bg-[#754a28] transition-all"
-                  whileHover={{ scale: 1.1 }}
+                  className="mt-4 w-full flex items-center justify-center gap-2 bg-[#22624a] text-white py-2 rounded-full hover:bg-[#754a28] transition-all"
+                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <FaShoppingCart /> Beli
+                  <FaShoppingCart /> Lihat Detail
                 </motion.button>
-              </motion.div>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -151,7 +154,7 @@ function Produk({ theme }) {
               exit={{ opacity: 0 }}
             >
               <motion.div
-                className={`bg-white dark:bg-[#2a344a] p-8 rounded-xl max-w-4xl w-full mx-4 relative shadow-2xl border ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}
+                className={`bg-white dark:bg-[#2a344a] p-8 rounded-2xl max-w-3xl w-full mx-4 relative shadow-2xl border ${theme === 'dark' ? 'border-gray-700' : 'border-gray-200'}`}
                 initial={{ scale: 0.7, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.7, opacity: 0 }}
@@ -176,16 +179,24 @@ function Produk({ theme }) {
                     />
                   </div>
                   <div className="md:w-1/2 space-y-4">
-                    <h3 className={`text-3xl font-[Montserrat] font-bold ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}>{selectedProduct.name}</h3>
-                    <p className={`text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>{selectedProduct.description}</p>
-                    <p className={`text-xl font-semibold ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}>Rp {selectedProduct.price.toLocaleString('id-ID')}</p>
-                    <p className={`text-md ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>Stok Tersedia: {selectedProduct.stock} unit</p>
+                    <h3 className={`text-3xl font-[Montserrat] font-bold ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}>
+                      {selectedProduct.name}
+                    </h3>
+                    <p className={`text-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                      {selectedProduct.description}
+                    </p>
+                    <p className={`text-xl font-semibold ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}>
+                      Rp {selectedProduct.price.toLocaleString('id-ID')}
+                    </p>
+                    <p className={`text-md ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                      Stok Tersedia: {selectedProduct.stock} unit
+                    </p>
                     <div className="flex items-center gap-4">
                       <input
                         type="number"
                         min="1"
                         max={selectedProduct.stock}
-                        defaultValue={1}
+                        defaultValue="1"
                         onChange={(e) => {
                           const value = parseInt(e.target.value);
                           if (value < 1) e.target.value = 1;
