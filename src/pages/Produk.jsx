@@ -5,16 +5,16 @@ import { FaSearch } from 'react-icons/fa';
 
 function Produk({ theme }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeCategory, setActiveCategory] = useState('Jakora');
+  const [activeCategory, setActiveCategory] = useState('WedangKekinian');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const products = {
-  Jakora: [
-    { name: 'Blue Butterfly Creamy Latte', image: '/assets/images/jakoriginal.png', description: 'Rendang jamur vegan dengan cita rasa autentik Minangkabau.', price: 38000, stock: 75 },
-    { name: 'Rosy Creamy Latte', image: '/assets/images/jakspicy.png', description: 'Rendang jamur vegan dengan sensasi pedas yang menggugah selera.', price: 38000, stock: 75 },
-    { name: 'Turmeric Creamy Latte', image: '/assets/images/jakblackpaper.png', description: 'Rendang jamur vegan dengan aroma lada hitam yang kuat.', price: 38000, stock: 75 },
-    { name: 'Wood Creamy Latte', image: '/assets/images/jakblackpaper.png', description: 'Rendang jamur vegan dengan aroma lada hitam yang kuat.', price: 38000, stock: 75 },
+  WedangKekinian: [
+    { name: 'Blue Butterfly Creamy Latte', image: '/assets/images/BlueButterflyCreamyLatte.jpg', description: 'Rendang jamur vegan dengan cita rasa autentik Minangkabau.', price: 38000, stock: 75 },
+    { name: 'Rosy Creamy Latte', image: '/assets/images/RosyCreamyLatte.jpg', description: 'Rendang jamur vegan dengan sensasi pedas yang menggugah selera.', price: 38000, stock: 75 },
+    { name: 'Turmeric Creamy Latte', image: '/assets/images/TurmericCeamyLatte.jpg', description: 'Rendang jamur vegan dengan aroma lada hitam yang kuat.', price: 38000, stock: 75 },
+    { name: 'Wood Creamy Latte', image: '/assets/images/WoodCreamyLatte.jpg', description: 'Rendang jamur vegan dengan aroma lada hitam yang kuat.', price: 38000, stock: 75 },
   ],
-  Jatastik: [
+  JamuTradisional: [
     { name: 'Jatastik Original', image: '/assets/images/original.png', description: 'Snack renyah dari jamur sawit dan beras merah, penuh nutrisi.', price: 12000, stock: 75 },
     { name: 'Jatastik Spicy', image: '/assets/images/spicy.png', description: 'Snack pedas gurih dari jamur sawit, cocok untuk pecinta pedas.', price: 12000, stock: 75 },
     { name: 'Jatastik Cheese', image: '/assets/images/cheese.png', description: 'Snack jamur dengan lapisan keju creamy yang menggoda.', price: 12000, stock: 75 },
@@ -42,7 +42,7 @@ function Produk({ theme }) {
           </div>
         </div>
         <div className="flex justify-center mb-10 space-x-4">
-          {['Wedang Kekinian', 'Jamu Tradisional'].map((category) => (
+          {['WedangKekinian', 'JamuTradisional'].map((category) => (
             <motion.button
               key={category}
               onClick={() => setActiveCategory(category)}
