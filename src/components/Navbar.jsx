@@ -12,7 +12,7 @@ function Navbar({ theme, toggleTheme }) {
     { name: "Beranda", path: "/" },
     { name: "Produk", path: "/produk" },
     { name: "Testimoni", path: "/testimoni" },
-    { name: "Donasi", path: "/donasi" },
+    { name: "FAQ", path: "/donasi" },
     { name: "Kontak", path: "/kontak" },
   ];
 
