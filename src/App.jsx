@@ -3,11 +3,15 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+
+// Pages
 import Home from './pages/Beranda';
 import Produk from './pages/Produk';
 import Testimoni from './pages/Testimoni';
 import Kontak from './pages/Kontak';
 import Donasi from './pages/FAQ';
+
+// Components
 import Navbar from './components/Navbar';
 import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
@@ -22,7 +26,7 @@ function ScrollToTop() {
 
     const timer = setTimeout(() => {
       NProgress.done();
-    }, 500); // simulasi loading singkat
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [pathname]);
@@ -96,22 +100,26 @@ function AnimatedRoutes({ theme, toggleTheme }) {
 
 function App() {
   const [theme, setTheme] = useState('light');
-  const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  const toggleTheme = () =>
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
 
-  // Styling untuk progress bar agar hijau daun
+  // Apply theme ke <html> (sinkron dengan index.css)
   useEffect(() => {
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
+  }, [theme]);
+
+  // Styling NProgress → hijau daun + hilangkan spinner
+  useEffect(() => {
+    NProgress.configure({ showSpinner: false });
     const style = document.createElement('style');
     style.innerHTML = `
       #nprogress .bar {
-        background: #4a704a !important;
+        background: var(--yumsert-green) !important;
         height: 3px;
       }
       #nprogress .peg {
-        box-shadow: 0 0 10px #4a704a, 0 0 5px #4a704a;
-      }
-      #nprogress .spinner-icon {
-        border-top-color: #4a704a;
-        border-left-color: #4a704a;
+        box-shadow: 0 0 10px var(--yumsert-green), 0 0 5px var(--yumsert-green);
       }
     `;
     document.head.appendChild(style);
@@ -123,14 +131,10 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div
-        className={`min-h-screen font-poppins text-[var(--text-color)] ${
-          theme === 'dark' ? 'bg-[#1a1f2b]' : 'bg-white'
-        }`}
-      >
+      <div className="min-h-screen font-poppins text-[var(--text-color)] bg-[var(--bg-color)] transition-colors duration-500">
         <Navbar theme={theme} toggleTheme={toggleTheme} />
         <AnimatedRoutes theme={theme} toggleTheme={toggleTheme} />
-        <Footer />
+        <Footer theme={theme} />
         <ChatBot theme={theme} />
       </div>
     </Router>

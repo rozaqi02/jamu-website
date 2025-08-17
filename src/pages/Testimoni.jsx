@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaQuoteLeft } from "react-icons/fa";
 
@@ -6,6 +6,9 @@ function Testimoni({ theme }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentPage, setCurrentPage] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  const progressRef = useRef(null);
 
   const testimonials = [
     { name: "Ani S.", text: "Jamu ini bikin badan saya lebih segar, rasanya juga enak banget!", rating: 5 },
@@ -21,7 +24,7 @@ function Testimoni({ theme }) {
 
   const totalPages = Math.ceil(testimonials.length / 3);
 
-  // Efek background mengikuti mouse
+  // efek mouse glow
   useEffect(() => {
     const handleMouseMove = (e) =>
       setMousePosition({ x: e.clientX, y: e.clientY });
@@ -29,22 +32,22 @@ function Testimoni({ theme }) {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Auto-slide tiap 5 detik + progress bar
+  // auto slide + progress bar (pause aware)
   useEffect(() => {
-    setProgress(0);
-    const slideInterval = setInterval(() => {
-      setCurrentPage((prev) => (prev + 1) % totalPages);
-    }, 5000);
+    if (paused) return;
 
-    const progressInterval = setInterval(() => {
-      setProgress((prev) => (prev >= 100 ? 0 : prev + 2));
+    progressRef.current = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          setCurrentPage((p) => (p + 1) % totalPages);
+          return 0;
+        }
+        return prev + 2;
+      });
     }, 100);
 
-    return () => {
-      clearInterval(slideInterval);
-      clearInterval(progressInterval);
-    };
-  }, [totalPages, currentPage]);
+    return () => clearInterval(progressRef.current);
+  }, [paused, totalPages, currentPage]);
 
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
@@ -56,14 +59,12 @@ function Testimoni({ theme }) {
       }
     : {};
 
-  // Variants animasi transisi
   const variants = {
     enter: { opacity: 0, x: 80 },
     center: { opacity: 1, x: 0 },
     exit: { opacity: 0, x: -80 },
   };
 
-  // Fungsi tilt card
   const calcTilt = (e, card) => {
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -97,7 +98,6 @@ function Testimoni({ theme }) {
         />
       </div>
 
-      {/* Section */}
       <motion.section
         className="py-24 px-6 max-w-7xl mx-auto relative z-10"
         initial={{ y: 20, opacity: 0 }}
@@ -129,19 +129,26 @@ function Testimoni({ theme }) {
                 .map((testimonial, idx) => (
                   <motion.div
                     key={idx}
-                    className="p-6 rounded-xl shadow-lg bg-white dark:bg-[#2a344a] transition-all duration-500 cursor-pointer"
+                    className={`p-6 rounded-2xl border shadow-md transition-all duration-500 cursor-pointer 
+                    ${
+                      theme === "dark"
+                        ? "bg-gray-700 border-gray-600"
+                        : "bg-white border-gray-200"
+                    }`}
                     whileHover={{
-                      scale: 1.06,
-                      boxShadow: "0px 15px 30px rgba(0,0,0,0.25)",
+                      scale: 1.05,
+                      boxShadow: "0px 15px 30px rgba(0,0,0,0.2)",
+                    }}
+                    onMouseEnter={() => setPaused(true)}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform =
+                        "rotateX(0deg) rotateY(0deg) scale(1)";
+                      setPaused(false);
                     }}
                     onMouseMove={(e) => {
                       const card = e.currentTarget;
                       const { rotateX, rotateY } = calcTilt(e, card);
-                      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.06)`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform =
-                        "rotateX(0deg) rotateY(0deg) scale(1)";
+                      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
                     }}
                   >
                     <FaQuoteLeft
@@ -151,14 +158,14 @@ function Testimoni({ theme }) {
                     />
                     <p
                       className={`mb-4 leading-relaxed ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-600"
+                        theme === "dark" ? "text-gray-100" : "text-gray-600"
                       }`}
                     >
                       {testimonial.text}
                     </p>
                     <h4
                       className={`text-lg font-semibold ${
-                        theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
+                        theme === "dark" ? "text-white" : "text-[#22624a]"
                       }`}
                     >
                       {testimonial.name}
@@ -172,7 +179,7 @@ function Testimoni({ theme }) {
                               ? theme === "dark"
                                 ? "text-[#a3e4b7]"
                                 : "text-[#22624a]"
-                              : "text-gray-300 dark:text-gray-600"
+                              : "text-gray-400 dark:text-gray-500"
                           }`}
                         >
                           ★
@@ -190,8 +197,11 @@ function Testimoni({ theme }) {
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
               key={i}
-              onClick={() => setCurrentPage(i)}
-              className={`w-3.5 h-3.5 rounded-full transition transform ${
+              onClick={() => {
+                setCurrentPage(i);
+                setProgress(0); // reset progress biar sinkron
+              }}
+              className={`w-3 h-3 rounded-full transition transform ${
                 currentPage === i
                   ? "bg-[#22624a] scale-125"
                   : "bg-gray-400 dark:bg-gray-600"
@@ -201,7 +211,7 @@ function Testimoni({ theme }) {
         </div>
 
         {/* Progress Bar */}
-        <div className="mt-6 w-full max-w-md mx-auto h-1 bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className="mt-6 w-2/3 max-w-sm mx-auto h-1 bg-gray-300 dark:bg-gray-600 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-[#22624a] dark:bg-[#a3e4b7]"
             initial={{ width: "0%" }}

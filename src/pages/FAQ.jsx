@@ -1,30 +1,36 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { FaQuestionCircle } from "react-icons/fa";
 
 function FAQ({ theme }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [activeIndex, setActiveIndex] = useState([]); // multi-buka
   const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
+
+  // Parallax untuk section scale
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.97]);
+
+  // Parallax untuk judul FAQ
+  const yTitle = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const scaleTitle = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e) =>
       setMousePosition({ x: e.clientX, y: e.clientY });
-    };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => setIsMounted(true), []);
-
-  const backgroundStyle = isMounted
-    ? {
-        backgroundColor: theme === "dark" ? "#1a1f2b" : "#f9fafb",
-        transition: "background-color 0.3s ease",
-      }
-    : {};
+  const toggleIndex = (index) => {
+    setActiveIndex((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
 
   const faqs = [
     {
@@ -44,8 +50,7 @@ function FAQ({ theme }) {
     },
     {
       question: "Berapa lama pengiriman biasanya?",
-      answer:
-        "Pengiriman biasanya memakan waktu 2-5 hari tergantung lokasi Anda.",
+      answer: "Pengiriman biasanya memakan waktu 2-5 hari tergantung lokasi Anda.",
     },
     {
       question: "Bagaimana cara memesan dalam jumlah besar?",
@@ -54,14 +59,30 @@ function FAQ({ theme }) {
     },
   ];
 
+  const containerVariant = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15 },
+    },
+  };
+
+  const itemVariant = {
+    hidden: { opacity: 0, y: 40 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
   return (
     <div
       className={`min-h-screen font-[Poppins] ${
         theme === "dark" ? "text-white" : "text-gray-800"
       } relative pt-20`}
-      style={backgroundStyle}
+      style={{
+        backgroundColor: theme === "dark" ? "#1a1f2b" : "#f9fafb",
+        transition: "background-color 0.3s ease",
+      }}
     >
-      {/* Efek background glow */}
+      {/* Glow background mengikuti mouse */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute w-64 h-64 bg-[#22624a]/20 rounded-full"
@@ -70,58 +91,50 @@ function FAQ({ theme }) {
             left: `${mousePosition.x - 150}px`,
             filter: "blur(50px)",
           }}
-          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.15, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          animate={{ scale: [1, 1.15, 1], opacity: [0.25, 0.15, 0.25] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
-      {/* Section */}
       <motion.section
         className="py-20 px-6 max-w-4xl mx-auto relative z-10"
         style={{ scale }}
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={containerVariant}
       >
+        {/* Judul dengan Parallax */}
         <motion.h2
-          className={`text-4xl font-[Montserrat] font-bold text-center mb-14 ${
+          className={`text-4xl md:text-5xl font-[Montserrat] font-bold text-center mb-14 ${
             theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
           }`}
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
+          style={{ y: yTitle, scale: scaleTitle }}
+          variants={itemVariant}
         >
           FAQ
         </motion.h2>
 
-        <div className="space-y-5">
+        <motion.div className="space-y-5" variants={containerVariant}>
           {faqs.map((faq, index) => {
-            const isActive = activeIndex === index;
+            const isActive = activeIndex.includes(index);
             return (
               <motion.div
                 key={index}
-                className={`rounded-lg shadow-sm cursor-pointer border transition-all duration-300 relative ${
+                layout
+                variants={itemVariant}
+                className={`rounded-lg border transition-all duration-300 relative cursor-pointer overflow-hidden ${
                   isActive
-                    ? "bg-[#22624a] text-white border-[#22624a] shadow-lg"
-                    : "bg-white dark:bg-[#2a344a] border-gray-200 dark:border-gray-700 hover:shadow-md"
+                    ? "bg-gradient-to-r from-[#22624a] to-[#3b7d5c] text-white border-[#22624a] shadow-lg"
+                    : "bg-white dark:bg-[#2f3647] border-gray-200 dark:border-gray-600 hover:shadow-md"
                 }`}
-                whileHover={{ scale: 1.01 }}
-                onClick={() => setActiveIndex(isActive ? null : index)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => toggleIndex(index)}
               >
-                {/* Garis aksen kiri */}
-                {isActive && (
-                  <motion.div
-                    layoutId="active-line"
-                    className="absolute left-0 top-0 h-full w-1 bg-[#a3e4b7] rounded-l-lg"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  />
-                )}
-
                 <div className="p-5 flex justify-between items-center">
                   <motion.h3
-                    className={`flex items-center gap-2 text-base font-semibold ${
+                    className={`flex items-center gap-2 text-base font-semibold relative group ${
                       isActive
                         ? "text-white"
                         : theme === "dark"
@@ -129,40 +142,57 @@ function FAQ({ theme }) {
                         : "text-[#22624a]"
                     }`}
                   >
-                    <motion.span
-                      animate={
-                        isActive ? { scale: [1, 1.2, 1] } : { scale: 1 }
-                      }
-                      transition={{ duration: 0.4 }}
-                    >
-                      <FaQuestionCircle />
-                    </motion.span>
+                    <FaQuestionCircle />
                     {faq.question}
+
+                    {/* Underline animasi */}
+                    <span
+                      className={`absolute left-0 -bottom-1 h-[2px] bg-current rounded transition-all duration-500 origin-left
+                        ${isActive ? "w-full" : "w-0 group-hover:w-full"}
+                      `}
+                    />
                   </motion.h3>
-                  <motion.span
+                  <motion.div
+                    initial={false}
                     animate={{ rotate: isActive ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
-                    className="text-xl select-none"
+                    className="text-xl font-bold select-none"
                   >
-                    ▼
-                  </motion.span>
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={isActive ? "minus" : "plus"}
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.5 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 30,
+                        }}
+                      >
+                        {isActive ? "−" : "+"}
+                      </motion.span>
+                    </AnimatePresence>
+                  </motion.div>
                 </div>
+
                 <AnimatePresence>
                   {isActive && (
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4 }}
+                      layout
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
                       className="px-5 pb-5"
                     >
                       <p
                         className={`leading-relaxed ${
                           isActive
-                            ? "text-white/95"
+                            ? "text-white"
                             : theme === "dark"
-                            ? "text-gray-300"
-                            : "text-gray-600"
+                            ? "text-gray-200"
+                            : "text-gray-700"
                         }`}
                       >
                         {faq.answer}
@@ -173,7 +203,7 @@ function FAQ({ theme }) {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </motion.section>
     </div>
   );
