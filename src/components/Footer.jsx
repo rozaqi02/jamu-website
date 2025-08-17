@@ -60,6 +60,7 @@ function Footer({ theme }) {
               <li>
                 <Link
                   to="/"
+                  onClick={() => window.scrollTo(0, 0)}
                   className="hover:text-green-300 transition-colors"
                 >
                   Beranda
@@ -68,6 +69,7 @@ function Footer({ theme }) {
               <li>
                 <Link
                   to="/produk"
+                  onClick={() => window.scrollTo(0, 0)}
                   className="hover:text-green-300 transition-colors"
                 >
                   Produk
@@ -76,6 +78,7 @@ function Footer({ theme }) {
               <li>
                 <Link
                   to="/kontak"
+                  onClick={() => window.scrollTo(0, 0)}
                   className="hover:text-green-300 transition-colors"
                 >
                   Kontak

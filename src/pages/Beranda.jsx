@@ -3,7 +3,7 @@ import { FaArrowRight } from "react-icons/fa";
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 
-function Beranda({ theme, toggleTheme }) {
+function Beranda({ theme }) {
   const [typingText, setTypingText] = useState("");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { scrollYProgress } = useScroll();
@@ -11,25 +11,31 @@ function Beranda({ theme, toggleTheme }) {
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 15]);
 
   const texts = useMemo(() => ["DAPATKAN", "RASAKAN"], []);
-  const images = [
-    "/assets/images/Teh rempah.jpg",
-    "/assets/images/Beras kencur premium.jpg",
-    "/assets/images/Wedang secang.jpg",
-  ];
 
-  // Efek typing teks
+  // Efek typing
   useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      index = (index + 1) % texts.length;
-      let i = 0;
-      const timer = setInterval(() => {
-        setTypingText(texts[index].slice(0, i + 1));
-        i++;
-        if (i > texts[index].length) clearInterval(timer);
-      }, 200);
-    }, 3000);
-    return () => clearInterval(interval);
+    let textIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    const typingInterval = setInterval(() => {
+      if (!isDeleting) {
+        setTypingText(texts[textIndex].slice(0, charIndex + 1));
+        charIndex++;
+        if (charIndex > texts[textIndex].length) {
+          isDeleting = true;
+        }
+      } else {
+        setTypingText(texts[textIndex].slice(0, charIndex - 1));
+        charIndex--;
+        if (charIndex === 0) {
+          isDeleting = false;
+          textIndex = (textIndex + 1) % texts.length;
+        }
+      }
+    }, 200);
+
+    return () => clearInterval(typingInterval);
   }, [texts]);
 
   // Efek pergerakan mouse
@@ -76,6 +82,12 @@ function Beranda({ theme, toggleTheme }) {
       }
     : {};
 
+  const images = [
+    "/assets/images/Teh rempah.jpg",
+    "/assets/images/Beras kencur premium.jpg",
+    "/assets/images/Wedang secang.jpg",
+  ];
+
   return (
     <div
       className={`min-h-screen font-[Poppins] ${
@@ -84,7 +96,7 @@ function Beranda({ theme, toggleTheme }) {
       style={backgroundStyle}
     >
       {/* Efek lingkaran animasi mengikuti mouse */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
         <motion.div
           className="absolute w-96 h-96 bg-[#22624a]/20 rounded-full"
           style={{
@@ -99,24 +111,6 @@ function Beranda({ theme, toggleTheme }) {
           }}
           transition={{
             duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute w-64 h-64 bg-[#a3e4b7]/20 rounded-full"
-          style={{
-            top: `${mousePosition.y - 150}px`,
-            right: `${window.innerWidth - mousePosition.x - 150}px`,
-            opacity: 0.5,
-            filter: "blur(40px)",
-          }}
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.5, 0.3, 0.5],
-          }}
-          transition={{
-            duration: 4,
             repeat: Infinity,
             ease: "easeInOut",
           }}
@@ -171,7 +165,7 @@ function Beranda({ theme, toggleTheme }) {
           >
             <Link
               to="/produk"
-              className="inline-flex items-center gap-2 bg-[#22624a] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#754a28] transition-all duration-300"
+              className="inline-flex items-center gap-2 bg-[#22624a] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#14532d] transition-all duration-300"
             >
               Jelajahi Produk <FaArrowRight />
             </Link>
@@ -197,6 +191,7 @@ function Beranda({ theme, toggleTheme }) {
               src="/assets/images/ibujualjamu.png"
               alt="Rumah Rempah Sugih Waras"
               className="w-full h-[300px] object-cover rounded-lg"
+              loading="lazy"
             />
           </motion.div>
 
@@ -224,67 +219,7 @@ function Beranda({ theme, toggleTheme }) {
         </div>
       </motion.section>
 
-      {/* Kenapa Pilih Kami */}
-      <motion.section
-        className="py-16 px-6 max-w-6xl mx-auto relative z-10"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        variants={sectionVariants}
-      >
-        <motion.div
-          className={`w-full rounded-lg py-4 mb-12 ${
-            theme === "dark" ? "bg-[#1f2a37]" : "bg-[#f1f5f4]"
-          }`}
-          variants={itemVariants}
-        >
-          <h2
-            className={`text-4xl font-[Montserrat] font-bold text-center ${
-              theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
-            }`}
-          >
-            Mengapa Pilih Kami?
-          </h2>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {["Sehat Alami", "Berkelanjutan", "Rasa Autentik"].map(
-            (item, index) => (
-              <motion.div
-                key={index}
-                className="p-6 bg-white dark:bg-[#2a344a] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-                variants={itemVariants}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
-                }}
-              >
-                <h3
-                  className={`text-xl font-semibold mb-4 ${
-                    theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
-                  }`}
-                >
-                  {item}
-                </h3>
-                <p
-                  className={`text-gray-600 dark:text-gray-300 ${
-                    theme === "dark" ? "text-opacity-80" : ""
-                  }`}
-                >
-                  {item === "Sehat Alami" &&
-                    "Jamu kami dari rempah organik untuk imunitas dan kesehatan."}
-                  {item === "Berkelanjutan" &&
-                    "Mendukung petani lokal dan lingkungan hijau."}
-                  {item === "Rasa Autentik" &&
-                    "Cita rasa tradisional dalam setiap kemasan."}
-                </p>
-              </motion.div>
-            )
-          )}
-        </div>
-      </motion.section>
-
-      {/* Informasi Menarik */}
+      {/* Timeline Informasi Menarik */}
       <motion.section
         className="py-16 px-6 max-w-6xl mx-auto relative z-10"
         initial="hidden"
@@ -307,9 +242,8 @@ function Beranda({ theme, toggleTheme }) {
           </h2>
         </motion.div>
 
-        {/* Timeline */}
         <div className="relative">
-          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gray-300 dark:bg-gray-600 transform -translate-x-1/2" />
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gray-300 dark:bg-gray-600 transform -translate-x-1/2 hidden md:block" />
 
           <div className="space-y-12">
             {[
@@ -331,25 +265,28 @@ function Beranda({ theme, toggleTheme }) {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className={`relative flex items-center w-full ${
-                  index % 2 === 0 ? "justify-start" : "justify-end"
+                className={`relative flex w-full ${
+                  index % 2 === 0
+                    ? "md:justify-start"
+                    : "md:justify-end md:text-right"
                 }`}
                 variants={itemVariants}
               >
-                <div className="absolute left-1/2 transform -translate-x-1/2 bg-[#22624a] text-white font-bold w-10 h-10 rounded-full flex items-center justify-center z-10">
+                <div className="absolute left-1/2 transform -translate-x-1/2 bg-[#22624a] text-white font-bold w-10 h-10 rounded-full flex items-center justify-center z-10 hidden md:flex">
                   {String(index + 1).padStart(2, "0")}
                 </div>
 
                 <div
-                  className={`group relative w-5/12 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden ${
-                    index % 2 === 0 ? "mr-auto pr-6" : "ml-auto pl-6"
+                  className={`relative w-full md:w-5/12 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg overflow-hidden p-4 ${
+                    index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
                   }`}
                 >
-                  <div className="flex items-center gap-4 p-4">
+                  <div className="flex items-center gap-4 mb-3">
                     <img
                       src={item.img}
                       alt={item.title}
                       className="w-20 h-20 object-cover rounded-md"
+                      loading="lazy"
                     />
                     <h3
                       className={`text-lg font-semibold ${
@@ -359,16 +296,9 @@ function Beranda({ theme, toggleTheme }) {
                       {item.title}
                     </h3>
                   </div>
-
-                  <div className="p-4 text-sm text-gray-500 dark:text-gray-300 group-hover:hidden">
-                    Hover untuk detail!
-                  </div>
-
-                  <div className="hidden group-hover:block p-4 transition-all duration-500">
-                    <p className="text-sm text-justify text-gray-600 dark:text-gray-300">
-                      {item.desc}
-                    </p>
-                  </div>
+                  <p className="text-sm text-justify text-gray-600 dark:text-gray-300">
+                    {item.desc}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -392,7 +322,7 @@ function Beranda({ theme, toggleTheme }) {
         >
           Produk Terbaik Kami
         </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {images.map((img, index) => {
             const titles = [
               "Teh rempah",
@@ -402,30 +332,32 @@ function Beranda({ theme, toggleTheme }) {
             const prices = [30000, 10000, 20000];
 
             return (
-              <motion.div
-                key={index}
-                className="relative overflow-hidden rounded-lg shadow-lg"
-                variants={itemVariants}
-                whileHover={{ scale: 1.05 }}
-              >
-                <img
-                  src={img}
-                  alt={`Produk ${titles[index]}`}
-                  className="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <Link key={index} to="/produk">
                 <motion.div
-                  className="absolute bottom-4 left-4 text-white"
-                  initial={{ y: 20, opacity: 0 }}
-                  whileInView={{ y: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  className="relative overflow-hidden rounded-lg shadow-lg cursor-pointer"
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.05 }}
                 >
-                  <h4 className="text-lg font-semibold">{titles[index]}</h4>
-                  <p className="text-sm">
-                    Rp {prices[index].toLocaleString("id-ID")}
-                  </p>
+                  <img
+                    src={img}
+                    alt={`Produk ${titles[index]}`}
+                    className="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <motion.div
+                    className="absolute bottom-4 left-4 text-white"
+                    initial={{ y: 20, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                  >
+                    <h4 className="text-lg font-semibold">{titles[index]}</h4>
+                    <p className="text-sm">
+                      Rp {prices[index].toLocaleString("id-ID")}
+                    </p>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
+              </Link>
             );
           })}
         </div>
@@ -461,14 +393,12 @@ function Beranda({ theme, toggleTheme }) {
           whileTap={{ scale: 0.95 }}
           variants={itemVariants}
         >
-          <a
-            href="https://wa.me/6285745135415"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#22624a] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#754a28] transition-all duration-300"
+          <Link
+            to="/produk"
+            className="inline-flex items-center gap-2 bg-[#22624a] text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-[#14532d] transition-all duration-300"
           >
             Pesan Sekarang <FaArrowRight />
-          </a>
+          </Link>
         </motion.div>
       </motion.section>
     </div>
