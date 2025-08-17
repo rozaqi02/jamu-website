@@ -4,27 +4,88 @@ import { FaSearch, FaShoppingCart } from 'react-icons/fa';
 
 function Produk({ theme }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeCategory, setActiveCategory] = useState('Jamu Herbal');
+  const [activeCategory, setActiveCategory] = useState('Wedang Rempah');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const products = {
-    'Jamu Herbal': [
-      { name: 'Teh rempah', image: '/assets/images/Teh rempah.jpg', description: 'Teh herbal dari rempah pilihan untuk relaksasi dan kesehatan.', price: 25000, stock: 100 },
-      { name: 'Beras kencur premium', image: '/assets/images/Beras kencur premium.jpg', description: 'Minuman beras kencur untuk stamina dan pencernaan.', price: 30000, stock: 100 },
-      { name: 'Wedang secang', image: '/assets/images/Wedang secang.jpg', description: 'Wedang hangat dengan secang untuk kesehatan jantung.', price: 28000, stock: 100 },
-    ],
-    'Latte Rempah': [
-      { name: 'Latte rempah', image: '/assets/images/Latte rempah.jpg', description: 'Latte herbal dengan cita rasa unik dan menyehatkan.', price: 35000, stock: 80 },
-      { name: 'Wood creamy latte', image: '/assets/images/Wood creamy latte.jpg', description: 'Latte creamy dengan aroma kayu manis alami.', price: 38000, stock: 80 },
-      { name: 'Turmeric creamy latte', image: '/assets/images/Turmeric creamy latte.jpg', description: 'Latte kunyit untuk anti-inflamasi dan kesehatan kulit.', price: 38000, stock: 80 },
-    ],
-    'Wedang Spesial': [
-      { name: 'Blue butterfly creamy latte', image: '/assets/images/Blue butterfly creamy latte.jpg', description: 'Latte unik dengan bunga telang untuk ketenangan.', price: 40000, stock: 70 },
-      { name: 'Rosy creamy latte', image: '/assets/images/Rosy creamy latte.jpg', description: 'Latte beraroma mawar untuk relaksasi dan kecantikan.', price: 40000, stock: 70 },
-      { name: 'Wedang imun', image: '/assets/images/Wedang imun.jpg', description: 'Wedang herbal untuk meningkatkan daya tahan tubuh.', price: 32000, stock: 90 },
-      { name: 'Wedang jinten gula aren', image: '/assets/images/Wedang jinten gula aren.jpg', description: 'Wedang hangat dengan jinten dan gula aren alami.', price: 32000, stock: 90 },
-    ],
+    'Wedang Rempah': [
+  { 
+    name: 'Wedang Secang', 
+    image: '/assets/images/Wedang Secang.jpg', 
+    description: 'Minuman tradisional dengan kayu secang yang menyegarkan, membantu melancarkan peredaran darah dan meningkatkan stamina.', 
+    price: 20000, 
+    stock: 70 
+  },
+  { 
+    name: 'Wedang Jinten Gula Aren', 
+    image: '/assets/images/Wedang jinten gula aren.jpg', 
+    description: 'Wedang hangat perpaduan jinten dan gula aren alami, baik untuk pencernaan dan menjaga daya tahan tubuh.', 
+    price: 25000, 
+    stock: 90 
+  },
+  { 
+    name: 'Wedang Imun', 
+    image: '/assets/images/Wedang imun.jpg', 
+    description: 'Racikan herbal rempah pilihan untuk meningkatkan imunitas tubuh dan menjaga kesehatan harian.', 
+    price: 20000, 
+    stock: 90 
+  },
+  { 
+    name: 'Teh Rempah', 
+    image: '/assets/images/Teh rempah.jpg', 
+    description: 'Teh hangat dengan campuran rempah tradisional yang menenangkan dan kaya manfaat kesehatan.', 
+    price: 30000, 
+    stock: 70 
+  },
+  { 
+    name: 'STMJ Super Sugih Waras', 
+    image: '/assets/images/stmj.jpg', 
+    description: 'Susu, telur, madu, dan jahe khas Sugih Waras untuk energi ekstra dan kebugaran tubuh.', 
+    price: 15000, 
+    stock: 70 
+  },
+  { 
+    name: 'Beras Kencur Premium', 
+    image: '/assets/images/Beras kencur premium.jpg', 
+    description: 'Wedang herbal beras kencur khas Indonesia untuk mengembalikan stamina, mengurangi pegal, dan menyegarkan tubuh.', 
+    price: 10000, 
+    stock: 90 
+  },
+],
+
+'Wedang Kekinian': [
+  { 
+    name: 'Rosy Creamy Latte', 
+    image: '/assets/images/Rosy creamy latte.jpg', 
+    description: 'Latte rempah dengan sentuhan mawar, menghadirkan aroma lembut sekaligus menenangkan pikiran.', 
+    price: 15000, 
+    stock: 75 
+  },
+  { 
+    name: 'Wood Creamy Latte', 
+    image: '/assets/images/Wood creamy latte.jpg', 
+    description: 'Kombinasi creamy latte dengan aroma kayu manis alami, memberi rasa hangat dan menenangkan.', 
+    price: 15000, 
+    stock: 98 
+  },
+  { 
+    name: 'Turmeric Creamy Latte', 
+    image: '/assets/images/Turmeric creamy latte.jpg', 
+    description: 'Latte kunyit dengan cita rasa khas, kaya antioksidan untuk kesehatan pencernaan dan kulit.', 
+    price: 15000, 
+    stock: 104 
+  },
+  { 
+    name: 'Blue Butterfly Creamy Latte', 
+    image: '/assets/images/Blue butterfly creamy latte.jpg', 
+    description: 'Latte unik dengan bunga telang biru, kaya antioksidan untuk relaksasi dan menjaga imunitas.', 
+    price: 15000, 
+    stock: 65 
+  },
+],
+
+    
   };
 
   const filteredProducts = products[activeCategory] ? products[activeCategory].filter((product) =>
