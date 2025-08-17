@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion'; // Hapus useTransform
 import { FaQuoteLeft } from 'react-icons/fa';
 
 function Testimoni({ theme }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+  // Hapus: const { scrollYProgress } = useScroll();
+  // Hapus: const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
 
   const testimonials = [
     { name: 'Ani S.', text: 'Jamu ini bikin badan saya lebih segar, rasanya juga enak banget!', rating: 5 },

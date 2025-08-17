@@ -30,8 +30,7 @@ function ChatBot() {
         setQuickOptions(['Apa itu Jamu Sugih Waras?', 'Harga jamu', 'Hubungi kami']);
       }
     }
-  }, [isOpen, messages.length, username, showNameForm]);
-
+  }, [isOpen, messages.length, username, showNameForm, messages]);
   const handleSetUsername = (e) => {
     e.preventDefault();
     const newUsername = e.target.elements.name.value.trim();

@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 
 function Beranda({ theme, toggleTheme }) {
   const [typingText, setTypingText] = useState('');
-  const [currentImage, setCurrentImage] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
@@ -33,12 +32,15 @@ function Beranda({ theme, toggleTheme }) {
     return () => clearInterval(interval);
   }, [texts]);
 
+  // Hapus useEffect untuk currentImage karena tidak digunakan
+  /*
   useEffect(() => {
     const imageInterval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(imageInterval);
   }, [images.length]);
+  */
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -161,201 +163,187 @@ function Beranda({ theme, toggleTheme }) {
       </motion.section>
 
       <motion.section
-  className="py-16 px-6 max-w-6xl mx-auto relative z-10"
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true, amount: 0.3 }}
-  variants={sectionVariants}
->
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-    {/* Gambar */}
-    <motion.div
-      className="overflow-hidden rounded-lg shadow-lg"
-      variants={itemVariants}
-      whileHover={{ scale: 1.02 }}
-    >
-      <img
-        src="/assets/images/ibujualjamu.png"
-        alt="Rumah Rempah Sugih Waras"
-        className="w-full h-[300px] object-cover rounded-lg"
-      />
-    </motion.div>
-
-    {/* Teks */}
-    <motion.div variants={itemVariants}>
-      <h2
-        className={`text-4xl font-[Montserrat] font-bold mb-6 ${
-          theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'
-        }`}
+        className="py-16 px-6 max-w-6xl mx-auto relative z-10"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
       >
-        Tentang Kami
-      </h2>
-      <p
-        className={`text-lg leading-relaxed text-justify ${
-          theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-        }`}
-      >
-        Rumah Rempah Sugih Waras adalah UMKM yang berlokasi di Desa Kalisongo, Malang.
-        Kami berkomitmen menghadirkan jamu tradisional berkualitas tinggi dengan sentuhan inovasi modern.
-        Dengan memanfaatkan rempah pilihan dari petani lokal dan teknologi pengolahan terkini,
-        Sugih Waras menjaga cita rasa autentik sekaligus meningkatkan khasiat jamu untuk generasi masa kini.
-      </p>
-    </motion.div>
-  </div>
-</motion.section>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <motion.div
+            className="overflow-hidden rounded-lg shadow-lg"
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+          >
+            <img
+              src="/assets/images/ibujualjamu.png"
+              alt="Rumah Rempah Sugih Waras"
+              className="w-full h-[300px] object-cover rounded-lg"
+            />
+          </motion.div>
 
-
+          <motion.div variants={itemVariants}>
+            <h2
+              className={`text-4xl font-[Montserrat] font-bold mb-6 ${
+                theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'
+              }`}
+            >
+              Tentang Kami
+            </h2>
+            <p
+              className={`text-lg leading-relaxed text-justify ${
+                theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              }`}
+            >
+              Rumah Rempah Sugih Waras adalah UMKM yang berlokasi di Desa Kalisongo, Malang.
+              Kami berkomitmen menghadirkan jamu tradisional berkualitas tinggi dengan sentuhan inovasi modern.
+              Dengan memanfaatkan rempah pilihan dari petani lokal dan teknologi pengolahan terkini,
+              Sugih Waras menjaga cita rasa autentik sekaligus meningkatkan khasiat jamu untuk generasi masa kini.
+            </p>
+          </motion.div>
+        </div>
+      </motion.section>
 
       <motion.section
-  className="py-16 px-6 max-w-6xl mx-auto relative z-10"
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true, amount: 0.3 }}
-  variants={sectionVariants}
->
-  <motion.div
-    className={`w-full rounded-lg py-4 mb-12 ${
-      theme === 'dark' ? 'bg-[#1f2a37]' : 'bg-[#f1f5f4]'
-    }`}
-    variants={itemVariants}
-  >
-    <h2
-      className={`text-4xl font-[Montserrat] font-bold text-center ${
-        theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'
-      }`}
-    >
-      Mengapa Pilih Kami?
-    </h2>
-  </motion.div>
-
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-    {['Sehat Alami', 'Berkelanjutan', 'Rasa Autentik'].map((item, index) => (
-      <motion.div
-        key={index}
-        className="p-6 bg-white dark:bg-[#2a344a] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-        variants={itemVariants}
-        whileHover={{ scale: 1.05, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+        className="py-16 px-6 max-w-6xl mx-auto relative z-10"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
       >
-        <h3
-          className={`text-xl font-semibold mb-4 ${
-            theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'
-          }`}
-        >
-          {item}
-        </h3>
-        <p
-          className={`text-gray-600 dark:text-gray-300 ${
-            theme === 'dark' ? 'text-opacity-80' : ''
-          }`}
-        >
-          {item === 'Sehat Alami' && 'Jamu kami dari rempah organik untuk imunitas dan kesehatan.'}
-          {item === 'Berkelanjutan' && 'Mendukung petani lokal dan lingkungan hijau.'}
-          {item === 'Rasa Autentik' && 'Cita rasa tradisional dalam setiap kemasan.'}
-        </p>
-      </motion.div>
-    ))}
-  </div>
-</motion.section>
-
-
-<motion.section
-  className="py-16 px-6 max-w-6xl mx-auto relative z-10"
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true, amount: 0.3 }}
-  variants={sectionVariants}
->
-  {/* Judul */}
-  <motion.div
-    className={`rounded-xl py-4 px-6 mb-12 text-center ${
-      theme === 'dark' ? 'bg-[#1f2a37]' : 'bg-gray-100'
-    }`}
-    variants={itemVariants}
-  >
-    <h2
-      className={`text-4xl font-[Montserrat] font-bold ${
-        theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'
-      }`}
-    >
-      Informasi Menarik
-    </h2>
-  </motion.div>
-
-  <div className="relative">
-    {/* Garis Vertikal */}
-    <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gray-300 dark:bg-gray-600 transform -translate-x-1/2" />
-
-    <div className="space-y-12">
-      {[
-        {
-          title: 'Khasiat Rempah Lokal untuk Kesehatan',
-          img: '/assets/images/rempah.jpg',
-          desc: 'Rempah-rempah seperti jahe, kunyit, temulawak, serai, dan kayu manis yang digunakan Rumah Rempah Sugih Waras kaya akan antioksidan, antiinflamasi, dan vitamin. Khasiatnya mencakup peningkatan daya tahan tubuh, memperlancar peredaran darah, mengurangi peradangan, serta membantu pencernaan. Semua bahan diambil langsung dari petani lokal, memastikan kesegaran dan kualitasnya tetap terjaga.'
-        },
-        {
-          title: 'Tren Konsumsi Herbal di Era Modern',
-          img: '/assets/images/tren.jpg',
-          desc: 'Di tengah meningkatnya kesadaran hidup sehat, produk herbal kembali menjadi pilihan banyak orang, terutama generasi muda. Jamu Sugih Waras dikemas modern, praktis, dan higienis, sehingga cocok dinikmati di rumah maupun dibawa bepergian. Tren “back to nature” membuat minuman herbal menjadi bagian gaya hidup sehat masa kini, tidak hanya sekadar warisan tradisi.'
-        },
-        {
-          title: 'Kontribusi Jamu pada Ekonomi Lokal',
-          img: '/assets/images/kontribusi.jpg',
-          desc: 'Rumah Rempah Sugih Waras tidak hanya berfokus pada produksi jamu, tetapi juga pemberdayaan masyarakat Desa Kalisongo. Dengan peningkatan kapasitas produksi melalui inovasi teknologi, UMKM ini mampu menciptakan lapangan kerja baru, meningkatkan pendapatan keluarga, serta menghidupkan kembali potensi rempah lokal yang bernilai ekonomi tinggi.'
-        },
-      ].map((item, index) => (
         <motion.div
-          key={index}
-          className={`relative flex items-center w-full ${
-            index % 2 === 0 ? 'justify-start' : 'justify-end'
+          className={`w-full rounded-lg py-4 mb-12 ${
+            theme === 'dark' ? 'bg-[#1f2a37]' : 'bg-[#f1f5f4]'
           }`}
           variants={itemVariants}
         >
-          {/* Nomor */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 bg-[#22624a] text-white font-bold w-10 h-10 rounded-full flex items-center justify-center z-10">
-            {String(index + 1).padStart(2, '0')}
-          </div>
-
-          {/* Card */}
-          <div
-            className={`group relative w-5/12 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden ${
-              index % 2 === 0 ? 'mr-auto pr-6' : 'ml-auto pl-6'
+          <h2
+            className={`text-4xl font-[Montserrat] font-bold text-center ${
+              theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'
             }`}
           >
-            <div className="flex items-center gap-4 p-4">
-              <img
-                src={item.img}
-                alt={item.title}
-                className="w-20 h-20 object-cover rounded-md"
-              />
+            Mengapa Pilih Kami?
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {['Sehat Alami', 'Berkelanjutan', 'Rasa Autentik'].map((item, index) => (
+            <motion.div
+              key={index}
+              className="p-6 bg-white dark:bg-[#2a344a] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+              variants={itemVariants}
+              whileHover={{ scale: 1.05, boxShadow: '0 10px 20px rgba(0,0,0,0.1)' }}
+            >
               <h3
-                className={`text-lg font-semibold ${
+                className={`text-xl font-semibold mb-4 ${
                   theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'
                 }`}
               >
-                {item.title}
+                {item}
               </h3>
-            </div>
-
-            {/* Default (sebelum hover) */}
-            <div className="p-4 text-sm text-gray-500 dark:text-gray-300 group-hover:hidden">
-              Hover untuk detail!
-            </div>
-
-            {/* Detail (saat hover) */}
-            <div className="hidden group-hover:block p-4 transition-all duration-500">
-              <p className="text-sm text-justify text-gray-600 dark:text-gray-300">
-                {item.desc}
+              <p
+                className={`text-gray-600 dark:text-gray-300 ${
+                  theme === 'dark' ? 'text-opacity-80' : ''
+                }`}
+              >
+                {item === 'Sehat Alami' && 'Jamu kami dari rempah organik untuk imunitas dan kesehatan.'}
+                {item === 'Berkelanjutan' && 'Mendukung petani lokal dan lingkungan hijau.'}
+                {item === 'Rasa Autentik' && 'Cita rasa tradisional dalam setiap kemasan.'}
               </p>
-            </div>
-          </div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="py-16 px-6 max-w-6xl mx-auto relative z-10"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
+        <motion.div
+          className={`rounded-xl py-4 px-6 mb-12 text-center ${
+            theme === 'dark' ? 'bg-[#1f2a37]' : 'bg-gray-100'
+          }`}
+          variants={itemVariants}
+        >
+          <h2
+            className={`text-4xl font-[Montserrat] font-bold ${
+              theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'
+            }`}
+          >
+            Informasi Menarik
+          </h2>
         </motion.div>
-      ))}
-    </div>
-  </div>
-</motion.section>
 
+        <div className="relative">
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-gray-300 dark:bg-gray-600 transform -translate-x-1/2" />
 
+          <div className="space-y-12">
+            {[
+              {
+                title: 'Khasiat Rempah Lokal untuk Kesehatan',
+                img: '/assets/images/rempah.jpg',
+                desc: 'Rempah-rempah seperti jahe, kunyit, temulawak, serai, dan kayu manis yang digunakan Rumah Rempah Sugih Waras kaya akan antioksidan, antiinflamasi, dan vitamin. Khasiatnya mencakup peningkatan daya tahan tubuh, memperlancar peredaran darah, mengurangi peradangan, serta membantu pencernaan. Semua bahan diambil langsung dari petani lokal, memastikan kesegaran dan kualitasnya tetap terjaga.'
+              },
+              {
+                title: 'Tren Konsumsi Herbal di Era Modern',
+                img: '/assets/images/tren.jpg',
+                desc: 'Di tengah meningkatnya kesadaran hidup sehat, produk herbal kembali menjadi pilihan banyak orang, terutama generasi muda. Jamu Sugih Waras dikemas modern, praktis, dan higienis, sehingga cocok dinikmati di rumah maupun dibawa bepergian. Tren “back to nature” membuat minuman herbal menjadi bagian gaya hidup sehat masa kini, tidak hanya sekadar warisan tradisi.'
+              },
+              {
+                title: 'Kontribusi Jamu pada Ekonomi Lokal',
+                img: '/assets/images/kontribusi.jpg',
+                desc: 'Rumah Rempah Sugih Waras tidak hanya berfokus pada produksi jamu, tetapi juga pemberdayaan masyarakat Desa Kalisongo. Dengan peningkatan kapasitas produksi melalui inovasi teknologi, UMKM ini mampu menciptakan lapangan kerja baru, meningkatkan pendapatan keluarga, serta menghidupkan kembali potensi rempah lokal yang bernilai ekonomi tinggi.'
+              },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                className={`relative flex items-center w-full ${
+                  index % 2 === 0 ? 'justify-start' : 'justify-end'
+                }`}
+                variants={itemVariants}
+              >
+                <div className="absolute left-1/2 transform -translate-x-1/2 bg-[#22624a] text-white font-bold w-10 h-10 rounded-full flex items-center justify-center z-10">
+                  {String(index + 1).padStart(2, '0')}
+                </div>
 
+                <div
+                  className={`group relative w-5/12 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden ${
+                    index % 2 === 0 ? 'mr-auto pr-6' : 'ml-auto pl-6'
+                  }`}
+                >
+                  <div className="flex items-center gap-4 p-4">
+                    <img
+                      src={item.img}
+                      alt={item.title}
+                      className="w-20 h-20 object-cover rounded-md"
+                    />
+                    <h3
+                      className={`text-lg font-semibold ${
+                        theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'
+                      }`}
+                    >
+                      {item.title}
+                    </h3>
+                  </div>
+
+                  <div className="p-4 text-sm text-gray-500 dark:text-gray-300 group-hover:hidden">
+                    Hover untuk detail!
+                  </div>
+
+                  <div className="hidden group-hover:block p-4 transition-all duration-500">
+                    <p className="text-sm text-justify text-gray-600 dark:text-gray-300">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
 
       <motion.section
         className="py-16 px-6 max-w-6xl mx-auto relative z-10"
@@ -371,37 +359,36 @@ function Beranda({ theme, toggleTheme }) {
           Produk Terbaik Kami
         </motion.h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-  {images.map((img, index) => {
-    const titles = ['Teh rempah', 'Beras kencur premium', 'Wedang secang'];
-    const prices = [30000, 10000, 20000]; // harga sesuai urutan
+          {images.map((img, index) => {
+            const titles = ['Teh rempah', 'Beras kencur premium', 'Wedang secang'];
+            const prices = [30000, 10000, 20000]; // harga sesuai urutan
 
-    return (
-      <motion.div
-        key={index}
-        className="relative overflow-hidden rounded-lg shadow-lg"
-        variants={itemVariants}
-        whileHover={{ scale: 1.05 }}
-      >
-        <img
-          src={img}
-          alt={`Produk ${titles[index]}`}
-          className="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <motion.div
-          className="absolute bottom-4 left-4 text-white"
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          transition={{ delay: index * 0.1, duration: 0.5 }}
-        >
-          <h4 className="text-lg font-semibold">{titles[index]}</h4>
-          <p className="text-sm">Rp {prices[index].toLocaleString('id-ID')}</p>
-        </motion.div>
-      </motion.div>
-    );
-  })}
-</div>
-
+            return (
+              <motion.div
+                key={index}
+                className="relative overflow-hidden rounded-lg shadow-lg"
+                variants={itemVariants}
+                whileHover={{ scale: 1.05 }}
+              >
+                <img
+                  src={img}
+                  alt={`Produk ${titles[index]}`}
+                  className="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <motion.div
+                  className="absolute bottom-4 left-4 text-white"
+                  initial={{ y: 20, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                >
+                  <h4 className="text-lg font-semibold">{titles[index]}</h4>
+                  <p className="text-sm">Rp {prices[index].toLocaleString('id-ID')}</p>
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </div>
       </motion.section>
 
       <motion.section
