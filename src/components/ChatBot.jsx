@@ -10,11 +10,8 @@ function ChatBot() {
   const [username, setUsername] = useState(localStorage.getItem('chatbotUsername') || '');
   const [showNameForm, setShowNameForm] = useState(!username);
   const chatContainerRef = useRef(null);
-  const [quickOptions, setQuickOptions] = useState([
-    'Apa itu Jamu Sugih Waras?',
-    'Harga jamu',
-    'Hubungi kami',
-  ]);
+  const [quickOptions] = useState([]);
+
 
   useEffect(() => {
     if (chatContainerRef.current) {
