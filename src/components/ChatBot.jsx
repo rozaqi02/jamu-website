@@ -308,7 +308,7 @@ function ChatBot() {
           }}
           onClick={() => setIsOpen(true)}
         >
-          Hai, Sugih Waras Friend! Ada yang bisa kami bantu?
+          Hai! Ada yang bisa kami bantu?
           <div
             id="welcomeMessagesCross"
             style={{

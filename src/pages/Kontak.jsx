@@ -1,94 +1,137 @@
-import { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { FaEnvelope, FaWhatsapp, FaInstagram } from 'react-icons/fa';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { FaEnvelope, FaWhatsapp, FaLeaf } from "react-icons/fa";
 
 function Kontak({ theme }) {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.9]);
+  const [nama, setNama] = useState("");
+  const [email, setEmail] = useState("");
+  const [telepon, setTelepon] = useState("");
+  const [pesan, setPesan] = useState("");
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  const whatsappNumber = "+6285745135415";
+  const whatsappMessage = `Halo, saya ${nama} (${email}, ${telepon}):\nPesan: ${
+    pesan || "Saya ingin tahu lebih banyak tentang Jamu Sugih Waras!"
+  }`;
 
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const backgroundStyle = isMounted
-    ? { backgroundColor: theme === 'dark' ? '#1a1f2b' : 'white', transition: 'background-color 0.3s ease' }
-    : {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    window.open(
+      `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+        whatsappMessage
+      )}`,
+      "_blank"
+    );
+    setNama("");
+    setEmail("");
+    setTelepon("");
+    setPesan("");
+  };
 
   return (
     <div
-      className={`min-h-screen font-[Poppins] ${theme === 'dark' ? 'text-white' : 'text-gray-800'} overflow-hidden relative pt-16`}
-      style={backgroundStyle}
+      className={`min-h-screen ${
+        theme === "dark" ? "bg-[#1a1f2b] text-white" : "bg-white text-gray-800"
+      } py-16 relative pt-24 font-poppins`}
     >
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute w-64 h-64 bg-[#22624a]/20 rounded-full"
-          style={{
-            top: `${mousePosition.y - 150}px`,
-            left: `${mousePosition.x - 150}px`,
-            opacity: 0.5,
-            filter: 'blur(40px)',
-          }}
-          animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.3, 0.5] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </div>
       <motion.section
-        className="py-20 px-6 max-w-6xl mx-auto relative z-10"
-        style={{ scale }}
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
+        className="max-w-7xl mx-auto px-4"
       >
-        <motion.h2
-          className={`text-4xl font-[Montserrat] font-bold text-center mb-10 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`}
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
-          Hubungi Kami
-        </motion.h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-          <motion.a
-            href="mailto:info@sugihwaras.com"
-            className="p-8 bg-white dark:bg-[#2a344a] rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 flex flex-col items-center border-2 border-transparent hover:border-[#22624a] dark:hover:border-[#a3e4b7]"
-            whileHover={{ scale: 1.05, y: -5 }}
-            whileTap={{ scale: 0.95 }}
+        <div className="flex flex-col md:flex-row gap-12 justify-center">
+          {/* Formulir Kontak (Kiri) */}
+          <motion.div
+            className="w-full md:w-1/2 lg:w-4/12 bg-[#0a3d2f] p-6 rounded-2xl shadow-lg text-white"
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <FaEnvelope className={`text-4xl mb-6 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
-            <p className="text-center text-lg font-medium">info@sugihwaras.com</p>
-          </motion.a>
-          <motion.a
-            href="https://wa.me/6285745135415"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-8 bg-white dark:bg-[#2a344a] rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 flex flex-col items-center border-2 border-transparent hover:border-[#22624a] dark:hover:border-[#a3e4b7]"
-            whileHover={{ scale: 1.05, y: -5 }}
-            whileTap={{ scale: 0.95 }}
+            <h2 className="text-2xl font-bold mb-6">Hubungi Kami</h2>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block text-sm font-medium mb-2">Nama</label>
+                <input
+                  type="text"
+                  value={nama}
+                  onChange={(e) => setNama(e.target.value)}
+                  className="w-full p-3 rounded-lg bg-transparent border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  required
+                  placeholder="Masukkan nama Anda"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-3 rounded-lg bg-transparent border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  required
+                  placeholder="Masukkan email Anda"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Telepon</label>
+                <input
+                  type="tel"
+                  value={telepon}
+                  onChange={(e) => setTelepon(e.target.value)}
+                  className="w-full p-3 rounded-lg bg-transparent border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  placeholder="Masukkan nomor telepon Anda"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Pesan</label>
+                <textarea
+                  value={pesan}
+                  onChange={(e) => setPesan(e.target.value)}
+                  className="w-full p-3 rounded-lg bg-transparent border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 h-28"
+                  placeholder="Tulis pesan Anda..."
+                />
+              </div>
+              <motion.button
+                type="submit"
+                className="w-full bg-green-400 text-[#0a3d2f] py-3 rounded-lg font-semibold hover:bg-green-300 transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Kirim Pesan
+              </motion.button>
+            </form>
+            <p className="mt-4 text-xs text-gray-300">
+              Dengan menghubungi kami, Anda menyetujui{" "}
+              <a href="#" className="underline text-green-400">
+                Kebijakan Privasi
+              </a>
+            </p>
+          </motion.div>
+
+          {/* Informasi Kanan */}
+          <motion.div
+            className="w-full md:w-1/2 lg:w-7/12 p-6 flex flex-col justify-center"
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <FaWhatsapp className={`text-4xl mb-6 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
-            <p className="text-center text-lg font-medium">+6285745135415</p>
-          </motion.a>
-          <motion.a
-            href="https://www.instagram.com/rumahrempahsugihwaras/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-8 bg-white dark:bg-[#2a344a] rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 flex flex-col items-center border-2 border-transparent hover:border-[#22624a] dark:hover:border-[#a3e4b7]"
-            whileHover={{ scale: 1.05, y: -5 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FaInstagram className={`text-4xl mb-6 ${theme === 'dark' ? 'text-[#a3e4b7]' : 'text-[#22624a]'}`} />
-            <p className="text-center text-lg font-medium">@rumahrempahsugihwaras</p>
-          </motion.a>
+            <h3 className="text-3xl font-bold mb-6 text-[#0a3d2f]">
+              Tingkatkan Kesehatan Anda dengan <br /> Jamu Sugih Waras 🌿
+            </h3>
+            <ul className="space-y-4 text-gray-700">
+              <li className="flex items-start space-x-3">
+                <FaLeaf className="text-green-600 mt-1" />
+                <p>Konsultasi langsung dengan tim kami untuk menemukan jamu yang cocok.</p>
+              </li>
+              <li className="flex items-start space-x-3">
+                <FaLeaf className="text-green-600 mt-1" />
+                <p>Paket harga ramah sesuai kebutuhan kesehatan Anda.</p>
+              </li>
+              <li className="flex items-start space-x-3">
+                <FaLeaf className="text-green-600 mt-1" />
+                <p>Dapatkan manfaat maksimal dari ramuan herbal alami.</p>
+              </li>
+            </ul>
+          </motion.div>
         </div>
       </motion.section>
     </div>

@@ -4,7 +4,7 @@ import Home from './pages/Beranda';
 import Produk from './pages/Produk';
 import Testimoni from './pages/Testimoni';
 import Kontak from './pages/Kontak';
-import Donasi from './pages/Donasi'; // Asumsikan ada, jika tidak hapus
+import Donasi from './pages/FAQ';
 import Navbar from './components/Navbar';
 import ChatBot from './components/ChatBot';
 import Footer from './components/Footer';
