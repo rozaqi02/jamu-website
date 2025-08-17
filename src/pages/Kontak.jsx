@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FaEnvelope, FaWhatsapp, FaLeaf } from "react-icons/fa";
+import { FaLeaf } from "react-icons/fa";
 
 function Kontak({ theme }) {
   const [nama, setNama] = useState("");
@@ -101,7 +101,7 @@ function Kontak({ theme }) {
             </form>
             <p className="mt-4 text-xs text-gray-300">
               Dengan menghubungi kami, Anda menyetujui{" "}
-              <a href="#" className="underline text-green-400">
+              <a href="/privacy-policy" className="underline text-green-400">
                 Kebijakan Privasi
               </a>
             </p>
@@ -120,7 +120,10 @@ function Kontak({ theme }) {
             <ul className="space-y-4 text-gray-700">
               <li className="flex items-start space-x-3">
                 <FaLeaf className="text-green-600 mt-1" />
-                <p>Konsultasi langsung dengan tim kami untuk menemukan jamu yang cocok.</p>
+                <p>
+                  Konsultasi langsung dengan tim kami untuk menemukan jamu yang
+                  cocok.
+                </p>
               </li>
               <li className="flex items-start space-x-3">
                 <FaLeaf className="text-green-600 mt-1" />
