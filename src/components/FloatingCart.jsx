@@ -1,68 +1,130 @@
-import { useCart } from '../context/CartContext';
-import { useNavigate } from 'react-router-dom';
+// src/components/FloatingCart.jsx
+import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function FloatingCart() {
-  const { items, count, total, updateQty, remove, setOpen, isOpen } = useCart();
+  const { items, total, updateQty, remove, setOpen, isOpen } = useCart();
   const nav = useNavigate();
 
   return (
-    <>
-      {/* FAB */}
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-5 right-5 z-50 rounded-full px-4 py-3 shadow-lg bg-[#22624a] text-white hover:bg-[#14532d] transition"
-      >
-        Keranjang ({count})
-      </button>
-
-      {/* Drawer sederhana */}
+    <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50" onClick={() => setOpen(false)}>
-          <div className="absolute inset-0 bg-black/40" />
-          <div
-            className="absolute right-0 top-0 h-full w-full max-w-md bg-white dark:bg-gray-900 shadow-xl p-4 overflow-y-auto"
-            onClick={(e)=>e.stopPropagation()}
+        <motion.div
+          className="fixed inset-0 z-50 flex"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          {/* Overlay */}
+          <motion.div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setOpen(false)}
+          />
+
+          {/* Drawer */}
+          <motion.div
+            className="relative ml-auto h-full w-full max-w-md bg-white dark:bg-[#1a1f2b] shadow-2xl flex flex-col rounded-l-xl"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 120, damping: 18 }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-semibold">Keranjang</h3>
-              <button onClick={() => setOpen(false)} className="px-2 py-1 rounded bg-gray-200 dark:bg-gray-800">Tutup</button>
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                Keranjang
+              </h3>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setOpen(false)}
+                className="px-3 py-1.5 text-sm rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 transition"
+              >
+                Tutup ✕
+              </motion.button>
             </div>
 
-            {!items.length && <div className="opacity-70">Belum ada item.</div>}
-
-            {items.map(it => (
-              <div key={it.id} className="flex items-center gap-3 py-2 border-b border-gray-200 dark:border-gray-700">
-                {it.image && <img src={it.image} alt={it.name} className="w-14 h-14 object-cover rounded" />}
-                <div className="flex-1">
-                  <div className="font-medium">{it.name}</div>
-                  <div className="text-sm opacity-70">Rp {Number(it.price).toLocaleString('id-ID')}</div>
-                  <div className="mt-1 flex items-center gap-2">
-                    <input
-                      type="number" min="1" value={it.qty}
-                      onChange={e=>updateQty(it.id, e.target.value)}
-                      className="w-16 rounded border px-2 py-1 bg-transparent"
-                    />
-                    <button onClick={()=>remove(it.id)} className="text-red-600 text-sm">Hapus</button>
-                  </div>
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+              {!items.length && (
+                <div className="text-center text-sm text-gray-500 dark:text-gray-400 py-10">
+                  Belum ada item di keranjang.
                 </div>
-              </div>
-            ))}
+              )}
 
-            <div className="mt-4 flex items-center justify-between font-semibold">
-              <span>Total</span>
-              <span>Rp {total.toLocaleString('id-ID')}</span>
+              {items.map((it) => (
+                <motion.div
+                  key={it.id}
+                  className="flex items-center gap-4 p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/60"
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {it.image && (
+                    <img
+                      src={it.image}
+                      alt={it.name}
+                      className="w-16 h-16 object-cover rounded-md"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-gray-800 dark:text-gray-100 truncate">
+                      {it.name}
+                    </div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      Rp {Number(it.price).toLocaleString("id-ID")}
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <input
+                        type="number"
+                        min="1"
+                        value={it.qty}
+                        onChange={(e) => updateQty(it.id, e.target.value)}
+                        className="w-16 rounded-md border border-gray-300 dark:border-gray-600 px-2 py-1 text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 outline-none"
+                      />
+                      <motion.button
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => remove(it.id)}
+                        className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                      >
+                        Hapus
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
 
-            <button
-              disabled={!items.length}
-              onClick={()=>{ setOpen(false); nav('/checkout'); }}
-              className="mt-3 w-full rounded-full px-5 py-2 bg-[#22624a] text-white hover:bg-[#14532d] transition disabled:opacity-50"
-            >
-              Checkout
-            </button>
-          </div>
-        </div>
+            {/* Footer */}
+            <div className="px-5 py-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-medium text-gray-800 dark:text-gray-200">
+                  Total
+                </span>
+                <span className="text-lg font-bold text-green-600 dark:text-green-400">
+                  Rp {total.toLocaleString("id-ID")}
+                </span>
+              </div>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                disabled={!items.length}
+                onClick={() => {
+                  setOpen(false);
+                  nav("/checkout");
+                }}
+                className="w-full rounded-full px-5 py-3 text-white font-semibold bg-green-600 hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+              >
+                Checkout
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 }

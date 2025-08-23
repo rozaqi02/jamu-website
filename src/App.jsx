@@ -1,30 +1,31 @@
 // src/App.jsx
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import NProgress from 'nprogress';
-import 'nprogress/nprogress.css';
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
-// Cart (global)
-import { CartProvider } from './context/CartContext';
-import FloatingCart from './components/FloatingCart';
+// Context (global)
+import { CartProvider } from "./context/CartContext";
+import { AuthProvider } from "./context/AuthContext"; // ✅ tambahin ini
+import FloatingCart from "./components/FloatingCart";
 
 // Pages
-import Home from './pages/Beranda';
-import Produk from './pages/Produk';
-import Testimoni from './pages/Testimoni';
-import Kontak from './pages/Kontak';
-import Donasi from './pages/FAQ';
-import Checkout from './pages/Checkout';
-import Purchase from './pages/Purchase';
-import AdminLogin from './pages/AdminLogin';
-import Admin from './pages/Admin';
+import Home from "./pages/Beranda";
+import Produk from "./pages/Produk";
+import Testimoni from "./pages/Testimoni";
+import Kontak from "./pages/Kontak";
+import Donasi from "./pages/FAQ";
+import Checkout from "./pages/Checkout";
+import Purchase from "./pages/Purchase";
+import AdminLogin from "./pages/AdminLogin";
+import Admin from "./pages/Admin";
 
 // Components
-import Navbar from './components/Navbar';
-import ChatBot from './components/ChatBot';
-import Footer from './components/Footer';
-import ProtectedRoute from './components/ProtectedRoute'; // ⬅️ NEW
+import Navbar from "./components/Navbar";
+import ChatBot from "./components/ChatBot";
+import Footer from "./components/Footer";
+import ProtectedRoute from "./components/ProtectedRoute"; // ⬅️ NEW
 
 // Progress + scroll top tiap pindah route
 function ScrollToTop() {
@@ -47,7 +48,7 @@ function PageTransition({ children }) {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
-      transition={{ duration: 0.4, ease: 'easeInOut' }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
     >
       {children}
     </motion.div>
@@ -159,8 +160,10 @@ function AppChrome({ theme, toggleTheme }) {
   const path = location.pathname;
 
   // halaman yang pakai "layout bersih"
-  const cleanRoutes = ['/checkout', '/pay', '/admin', '/admin/login'];
-  const isClean = cleanRoutes.some((p) => path === p || path.startsWith('/admin'));
+  const cleanRoutes = ["/checkout", "/pay", "/admin", "/admin/login"];
+  const isClean = cleanRoutes.some(
+    (p) => path === p || path.startsWith("/admin")
+  );
 
   return (
     <>
@@ -177,20 +180,20 @@ function AppChrome({ theme, toggleTheme }) {
 }
 
 function App() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
   const toggleTheme = () =>
-    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
   // Apply theme ke <html> (sinkron dengan index.css)
   useEffect(() => {
-    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.remove("light", "dark");
     document.documentElement.classList.add(theme);
   }, [theme]);
 
   // Styling NProgress
   useEffect(() => {
     NProgress.configure({ showSpinner: false });
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.innerHTML = `
       #nprogress { pointer-events: none; }
       #nprogress .bar {
@@ -211,7 +214,9 @@ function App() {
   return (
     <Router>
       <CartProvider>
-        <AppChrome theme={theme} toggleTheme={toggleTheme} />
+        <AuthProvider> {/* ✅ Bungkus AuthProvider disini */}
+          <AppChrome theme={theme} toggleTheme={toggleTheme} />
+        </AuthProvider>
       </CartProvider>
     </Router>
   );
