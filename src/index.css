@@ -43,6 +43,7 @@ html {
   background-color: var(--bg-color);
   color: var(--text-color);
   scroll-behavior: smooth; /* smooth scroll */
+  font-size: 14px;
 }
 
 body {

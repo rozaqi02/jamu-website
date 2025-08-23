@@ -1,6 +1,9 @@
+// src/pages/Produk.jsx
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaSearch, FaShoppingCart } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import { supabase } from "../lib/supabaseClient";
+import ProductCard from "../components/ProductCard";
 
 function Produk({ theme }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -8,121 +11,80 @@ function Produk({ theme }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [quantity, setQuantity] = useState(1);
-  const [loadedImages, setLoadedImages] = useState({}); // tracking gambar yang sudah load
+  const [dataByCat, setDataByCat] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  const products = {
-    "Wedang Rempah": [
-      {
-        name: "Wedang Secang",
-        image: "/assets/images/Wedang Secang.jpg",
-        description:
-          "Minuman tradisional dengan kayu secang yang menyegarkan, membantu melancarkan peredaran darah dan meningkatkan stamina.",
-        price: 20000,
-        stock: 70,
-      },
-      {
-        name: "Wedang Jinten Gula Aren",
-        image: "/assets/images/Wedang jinten gula aren.jpg",
-        description:
-          "Wedang hangat perpaduan jinten dan gula aren alami, baik untuk pencernaan dan menjaga daya tahan tubuh.",
-        price: 25000,
-        stock: 90,
-      },
-      {
-        name: "Wedang Imun",
-        image: "/assets/images/Wedang imun.jpg",
-        description:
-          "Racikan herbal rempah pilihan untuk meningkatkan imunitas tubuh dan menjaga kesehatan harian.",
-        price: 20000,
-        stock: 90,
-      },
-      {
-        name: "Teh Rempah",
-        image: "/assets/images/Teh rempah.jpg",
-        description:
-          "Teh hangat dengan campuran rempah tradisional yang menenangkan dan kaya manfaat kesehatan.",
-        price: 30000,
-        stock: 70,
-      },
-      {
-        name: "STMJ Super Sugih Waras",
-        image: "/assets/images/stmj.jpg",
-        description:
-          "Susu, telur, madu, dan jahe khas Sugih Waras untuk energi ekstra dan kebugaran tubuh.",
-        price: 15000,
-        stock: 70,
-      },
-      {
-        name: "Beras Kencur Premium",
-        image: "/assets/images/Beras kencur premium.jpg",
-        description:
-          "Wedang herbal beras kencur khas Indonesia untuk mengembalikan stamina, mengurangi pegal, dan menyegarkan tubuh.",
-        price: 10000,
-        stock: 90,
-      },
-    ],
-    "Wedang Kekinian": [
-      {
-        name: "Rosy Creamy Latte",
-        image: "/assets/images/Rosy creamy latte.jpg",
-        description:
-          "Latte rempah dengan sentuhan mawar, menghadirkan aroma lembut sekaligus menenangkan pikiran.",
-        price: 15000,
-        stock: 75,
-      },
-      {
-        name: "Wood Creamy Latte",
-        image: "/assets/images/Wood creamy latte.jpg",
-        description:
-          "Kombinasi creamy latte dengan aroma kayu manis alami, memberi rasa hangat dan menenangkan.",
-        price: 15000,
-        stock: 98,
-      },
-      {
-        name: "Turmeric Creamy Latte",
-        image: "/assets/images/Turmeric creamy latte.jpg",
-        description:
-          "Latte kunyit dengan cita rasa khas, kaya antioksidan untuk kesehatan pencernaan dan kulit.",
-        price: 15000,
-        stock: 104,
-      },
-      {
-        name: "Blue Butterfly Creamy Latte",
-        image: "/assets/images/Blue butterfly creamy latte.jpg",
-        description:
-          "Latte unik dengan bunga telang biru, kaya antioksidan untuk relaksasi dan menjaga imunitas.",
-        price: 15000,
-        stock: 65,
-      },
-    ],
-  };
+  const toNum = (v) => Number(v ?? 0);
 
-  const filteredProducts = products[activeCategory]
-    ? products[activeCategory].filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    : [];
-
-  // Mouse effect
+  // Ambil produk dari Supabase & kelompokkan per kategori
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+    let mounted = true;
+    (async () => {
+      setLoading(true);
+
+      // ⬇️ DEBUG: panggilan ke Supabase + console.log hasilnya
+      const { data, error } = await supabase
+        .from("products")
+        .select("id,name,price,stock,category,description,image_url")
+        .order("name", { ascending: true });
+
+      // 👉 INI LOG YANG KAMU MINTA
+      console.log("Supabase products:", {
+        error,
+        rows: data?.length,
+        sample: data?.[0],
+      });
+
+      if (error) {
+        console.error("Supabase error saat ambil products:", error);
+        setLoading(false);
+        return;
+      }
+      if (!mounted) return;
+
+      const grouped = (data || []).reduce((acc, p) => {
+        const cat = p?.category ?? "Tanpa Kategori";
+        (acc[cat] = acc[cat] || []).push(p);
+        return acc;
+      }, {});
+      setDataByCat(grouped);
+
+      const cats = Object.keys(grouped);
+      if (cats.length && !grouped[activeCategory]) setActiveCategory(cats[0]);
+
+      setLoading(false);
+    })();
+
+    return () => {
+      mounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Mouse parallax blur
+  useEffect(() => {
+    const handleMouseMove = (e) =>
+      setMousePosition({ x: e.clientX, y: e.clientY });
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  // Transisi background mount
   const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
+  useEffect(() => setIsMounted(true), []);
   const backgroundStyle = isMounted
     ? {
         backgroundColor: theme === "dark" ? "#1a1f2b" : "white",
         transition: "background-color 0.3s ease",
       }
     : {};
+
+  const products = dataByCat;
+  const filteredProducts = products[activeCategory]
+    ? products[activeCategory].filter((p) =>
+        (p?.name || "").toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   return (
     <div
@@ -131,7 +93,7 @@ function Produk({ theme }) {
       } overflow-hidden relative pt-16`}
       style={backgroundStyle}
     >
-      {/* Efek background blur */}
+      {/* Efek background blur mengikuti mouse */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute w-64 h-64 bg-[#22624a]/20 rounded-full"
@@ -185,6 +147,9 @@ function Produk({ theme }) {
 
         {/* Kategori */}
         <div className="flex justify-center mb-10 space-x-4 flex-wrap">
+          {Object.keys(products).length === 0 && (
+            <span className="text-sm opacity-70">Memuat kategori…</span>
+          )}
           {Object.keys(products).map((category) => (
             <motion.button
               key={category}
@@ -217,69 +182,40 @@ function Produk({ theme }) {
             },
           }}
         >
-          {filteredProducts.map((product, index) => (
-            <motion.div
-              key={index}
-              className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#2a344a] shadow-lg hover:shadow-xl transition-all duration-300"
-              variants={{
-                hidden: { opacity: 0, y: 40 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              whileHover={{ scale: 1.02 }}
-              onClick={() => {
-                setSelectedProduct(product);
-                setQuantity(1);
-              }}
-            >
-              <div className="relative h-64">
-                {!loadedImages[product.image] && (
-                  <div className="absolute inset-0 bg-gray-200 dark:bg-gray-700 animate-pulse rounded-t-2xl" />
-                )}
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className={`w-full h-full object-cover transition-transform duration-300 hover:scale-105 ${
-                    !loadedImages[product.image] ? "opacity-0" : "opacity-100"
-                  }`}
-                  loading="lazy"
-                  onLoad={() =>
-                    setLoadedImages((prev) => ({ ...prev, [product.image]: true }))
-                  }
+          {loading && (
+            <>
+              {[...Array(6)].map((_, i) => (
+                <div
+                  key={`skeleton-${i}`}
+                  className="h-96 rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              </div>
-              <div className="p-4">
-                <h3
-                  className={`text-xl font-[Montserrat] font-bold mb-2 ${
-                    theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
-                  }`}
-                >
-                  {product.name}
-                </h3>
-                <p
-                  className={`text-sm ${
-                    theme === "dark" ? "text-gray-300" : "text-gray-600"
-                  }`}
-                >
-                  {product.description.substring(0, 50)}...
-                </p>
-                <p
-                  className={`text-lg font-semibold mt-2 ${
-                    theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
-                  }`}
-                >
-                  Rp {product.price.toLocaleString("id-ID")}
-                </p>
-                <motion.button
-                  className="mt-4 w-full flex items-center justify-center gap-2 bg-[#22624a] text-white py-2 rounded-full hover:bg-[#14532d] transition-all"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <FaShoppingCart /> Lihat Detail
-                </motion.button>
-              </div>
-            </motion.div>
-          ))}
+              ))}
+            </>
+          )}
+
+          {!loading && filteredProducts.length === 0 && (
+            <div className="col-span-full text-center opacity-70">
+              Tidak ada produk pada kategori ini.
+            </div>
+          )}
+
+          {!loading &&
+            filteredProducts.map((p) => (
+              <ProductCard
+                key={p.id}
+                id={p.id}
+                name={p.name}
+                image={p.image_url}
+                description={p.description}
+                price={toNum(p.price)}
+                stock={p.stock}
+                theme={theme}
+                onViewDetail={() => {
+                  setSelectedProduct(p);
+                  setQuantity(1);
+                }}
+              />
+            ))}
         </motion.div>
 
         {/* Modal detail produk */}
@@ -308,7 +244,7 @@ function Produk({ theme }) {
                 <div className="flex flex-col md:flex-row gap-8">
                   <div className="md:w-1/2">
                     <img
-                      src={selectedProduct.image}
+                      src={selectedProduct.image_url}
                       alt={selectedProduct.name}
                       className="w-full h-80 object-cover rounded-xl shadow-lg"
                       loading="lazy"
@@ -334,7 +270,7 @@ function Produk({ theme }) {
                         theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
                       }`}
                     >
-                      Rp {selectedProduct.price.toLocaleString("id-ID")}
+                      Rp {toNum(selectedProduct.price).toLocaleString("id-ID")}
                     </p>
                     <p
                       className={`text-md ${
@@ -350,7 +286,7 @@ function Produk({ theme }) {
                         max={selectedProduct.stock}
                         value={quantity}
                         onChange={(e) => {
-                          let val = parseInt(e.target.value);
+                          let val = parseInt(e.target.value, 10);
                           if (isNaN(val) || val < 1) val = 1;
                           if (val > selectedProduct.stock)
                             val = selectedProduct.stock;
@@ -362,27 +298,24 @@ function Produk({ theme }) {
                             : "bg-gray-100 border-gray-300 text-gray-800"
                         } focus:outline-none focus:ring-2 focus:ring-[#22624a] dark:focus:ring-[#a3e4b7]`}
                       />
-                      <motion.button
-                        onClick={() => {
-                          const total = selectedProduct.price * quantity;
-                          const whatsappMessage = `Halo, saya ingin membeli:\n- ${selectedProduct.name} x ${quantity} (Rp ${selectedProduct.price.toLocaleString(
+                      <motion.a
+                        href={`https://wa.me/6285745135415?text=${encodeURIComponent(
+                          `Halo, saya ingin membeli:\n- ${selectedProduct.name} x ${quantity} (Rp ${toNum(
+                            selectedProduct.price
+                          ).toLocaleString("id-ID")})\nTotal: Rp ${(
+                            toNum(selectedProduct.price) * quantity
+                          ).toLocaleString(
                             "id-ID"
-                          )})\nTotal: Rp ${total.toLocaleString(
-                            "id-ID"
-                          )}\nSilakan proses pesanannya!`;
-                          window.open(
-                            `https://wa.me/6285745135415?text=${encodeURIComponent(
-                              whatsappMessage
-                            )}`,
-                            "_blank"
-                          );
-                        }}
+                          )}\nSilakan proses pesanannya!`
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
                         className="bg-[#22624a] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#14532d] transition-all"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        Pesan Sekarang
-                      </motion.button>
+                        Pesan via WhatsApp
+                      </motion.a>
                     </div>
                   </div>
                 </div>

@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+  functions = "netlify/functions"
+
+# SPA redirect untuk react-router
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

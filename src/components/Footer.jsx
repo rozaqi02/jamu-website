@@ -98,7 +98,7 @@ function Footer({ theme }) {
           >
             <div className="flex items-center justify-center md:justify-start gap-3 mb-3">
               <img
-                src="/assets/images/jamu.png"
+                src="/assets/images/logo-atas.png"
                 alt="Logo Jamu Sugih Waras"
                 className="w-10 h-10 object-contain"
               />

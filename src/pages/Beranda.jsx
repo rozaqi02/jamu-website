@@ -277,9 +277,9 @@ function Beranda({ theme }) {
                 </div>
 
                 <div
-                  className={`relative w-full md:w-5/12 bg-white dark:bg-[#2a344a] rounded-xl shadow-lg overflow-hidden p-4 ${
-                    index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
-                  }`}
+                  className={`relative w-full md:w-5/12 rounded-xl shadow-lg overflow-hidden p-4 ${
+                    theme === "dark" ? "bg-[#1e293b] text-gray-200" : "bg-white text-gray-700"
+                  } ${index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"}`}
                 >
                   <div className="flex items-center gap-4 mb-3">
                     <img
@@ -296,7 +296,11 @@ function Beranda({ theme }) {
                       {item.title}
                     </h3>
                   </div>
-                  <p className="text-sm text-justify text-gray-600 dark:text-gray-300">
+                  <p
+                    className={`text-sm text-justify ${
+                      theme === "dark" ? "text-gray-200" : "text-gray-600"
+                    }`}
+                  >
                     {item.desc}
                   </p>
                 </div>
