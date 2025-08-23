@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { FaArrowRight } from "react-icons/fa";
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+// import { useAuth } from "../context/AuthContext";
 
 function Beranda({ theme }) {
   const [typingText, setTypingText] = useState("");
