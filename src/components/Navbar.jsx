@@ -21,9 +21,12 @@ function Navbar({ theme, toggleTheme }) {
     { name: "Kontak", path: "/kontak" },
   ];
 
-  // Kalau admin, tambahin Orderan & Kelola Produk
   const navLinks = isAdmin
-    ? [...baseLinks, { name: "Orderan", path: "/orders" }, { name: "Kelola Produk", path: "/admin" }]
+    ? [
+        ...baseLinks,
+        { name: "Orderan", path: "/orders" },
+        { name: "Kelola Produk", path: "/admin" },
+      ]
     : baseLinks;
 
   const handleNavClick = (path) => {
@@ -32,11 +35,16 @@ function Navbar({ theme, toggleTheme }) {
   };
 
   const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => { setIsMounted(true); }, []);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const backgroundStyle = isMounted
     ? {
-        backgroundColor: theme === "dark" ? "rgba(26, 31, 43, 0.95)" : "rgba(255, 255, 255, 0.95)",
+        backgroundColor:
+          theme === "dark"
+            ? "rgba(26, 31, 43, 0.95)"
+            : "rgba(255, 255, 255, 0.95)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         transition: "background-color 0.5s ease, color 0.5s ease",
@@ -63,8 +71,14 @@ function Navbar({ theme, toggleTheme }) {
             whileTap={{ scale: 0.95 }}
             onClick={() => handleNavClick("/")}
           >
-            <motion.img src="/assets/images/jamu.png" alt="Sugih Waras Logo" className="h-8 w-auto" />
-            <span className="text-lg font-semibold tracking-wide">Jamu Sugih Waras</span>
+            <motion.img
+              src="/assets/images/jamu.png"
+              alt="Sugih Waras Logo"
+              className="h-8 w-auto"
+            />
+            <span className="text-lg font-semibold tracking-wide">
+              Jamu Sugih Waras
+            </span>
           </motion.div>
 
           {/* Menu Desktop */}
@@ -73,7 +87,10 @@ function Navbar({ theme, toggleTheme }) {
               <motion.a
                 key={link.name}
                 href={link.path}
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(link.path);
+                }}
                 className={`text-sm font-medium relative pb-1 ${
                   isActive(link.path)
                     ? "text-green-600 after:content-[''] after:absolute after:w-full after:h-[2px] after:bg-green-600 after:left-0 after:bottom-0"
@@ -85,7 +102,6 @@ function Navbar({ theme, toggleTheme }) {
               </motion.a>
             ))}
 
-            {/* Kalau bukan admin → kasih tombol login */}
             {!isAdmin && (
               <motion.button
                 onClick={() => handleNavClick("/admin/login")}
@@ -122,7 +138,11 @@ function Navbar({ theme, toggleTheme }) {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 12 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 12,
+                  }}
                   className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-red-500 text-white font-semibold shadow"
                 >
                   {count}
@@ -143,6 +163,32 @@ function Navbar({ theme, toggleTheme }) {
             >
               {theme === "light" ? <FaMoon size={18} /> : <FaSun size={18} />}
             </motion.button>
+
+            {/* Hamburger (mobile only) */}
+            <motion.button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden p-2 rounded-md focus:outline-none transition-colors duration-500"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div className="space-y-1">
+                <span
+                  className={`block h-0.5 w-5 bg-current transform transition duration-300 ${
+                    isOpen ? "rotate-45 translate-y-1.5" : ""
+                  }`}
+                />
+                <span
+                  className={`block h-0.5 w-5 bg-current transition duration-300 ${
+                    isOpen ? "opacity-0" : ""
+                  }`}
+                />
+                <span
+                  className={`block h-0.5 w-5 bg-current transform transition duration-300 ${
+                    isOpen ? "-rotate-45 -translate-y-1.5" : ""
+                  }`}
+                />
+              </div>
+            </motion.button>
           </div>
         </div>
 
@@ -159,7 +205,10 @@ function Navbar({ theme, toggleTheme }) {
                 <motion.a
                   key={link.name}
                   href={link.path}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(link.path);
+                  }}
                   className={`block px-4 py-2 text-sm font-medium rounded-md ${
                     isActive(link.path)
                       ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300"
@@ -171,10 +220,12 @@ function Navbar({ theme, toggleTheme }) {
                 </motion.a>
               ))}
 
-              {/* Kalau bukan admin → tombol login di mobile */}
               {!isAdmin && (
                 <button
-                  onClick={() => { handleNavClick("/admin/login"); setIsOpen(false); }}
+                  onClick={() => {
+                    handleNavClick("/admin/login");
+                    setIsOpen(false);
+                  }}
                   className="w-full rounded-full px-3 py-2 bg-green-600 text-white hover:bg-green-700 transition"
                 >
                   Admin
