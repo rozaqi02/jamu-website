@@ -10,7 +10,7 @@ function Beranda({ theme }) {
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 15]);
-  const { isAdmin, adminEmail } = useAuth();
+  // const { isAdmin, adminEmail } = useAuth();
 
   const texts = useMemo(() => ["DAPATKAN", "RASAKAN"], []);
 
