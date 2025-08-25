@@ -65,7 +65,7 @@ function Navbar({ theme, toggleTheme }) {
             onClick={() => handleNavClick("/")}
           >
             <motion.img src="/assets/images/jamu.png" alt="Logo" className="h-8 w-auto" />
-            <span className="text-lg font-semibold tracking-wide text-[#15803d]">
+            <span className="text-lg font-semibold tracking-wide text-[#16a34a]">
               {isAdmin && isHome ? "Selamat Datang, Admin!" : "Jamu Sugih Waras"}
             </span>
           </motion.div>
