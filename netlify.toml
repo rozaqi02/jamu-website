@@ -1,10 +1,11 @@
 [build]
   command = "npm run build"
-  publish = "build"
-  functions = "netlify/functions"
+  publish = "dist"
 
-# SPA redirect untuk react-router
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Set Node modern (samakan dengan lokal)
+[build.environment]
+  NODE_VERSION = "20"
+
+# (Opsional) set env Vite di sini juga, atau di UI Netlify (Site → Settings → Environment)
+# VITE_SUPABASE_URL = "https://xxxx.supabase.co"
+# VITE_SUPABASE_ANON_KEY = "xxxx"
