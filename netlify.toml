@@ -1,11 +1,9 @@
 [build]
   command = "npm run build"
-  publish = "dist"
+  publish = "build"   # <-- CRA output ke 'build', bukan 'dist'
 
-# Set Node modern (samakan dengan lokal)
 [build.environment]
   NODE_VERSION = "20"
-
-# (Opsional) set env Vite di sini juga, atau di UI Netlify (Site → Settings → Environment)
-# VITE_SUPABASE_URL = "https://xxxx.supabase.co"
-# VITE_SUPABASE_ANON_KEY = "xxxx"
+  # Pilihan darurat jika masih ada lint warning:
+  # CI = "false"
+  # DISABLE_ESLINT_PLUGIN = "true"

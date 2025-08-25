@@ -1,5 +1,5 @@
 // src/pages/Orders.jsx
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSort, FaSortUp, FaSortDown, FaSearch } from "react-icons/fa";
@@ -19,21 +19,19 @@ export default function Orders() {
   // draft status (disimpan saat klik Perbarui)
   const [draftMap, setDraftMap] = useState({});
 
-  const [preview, setPreview] = useState({ open: false, urls: [], index: 0, orderNumber: "" });
+  const [preview, setPreview] = useState({
+    open: false,
+    urls: [],
+    index: 0,
+    orderNumber: "",
+  });
 
-  useEffect(() => { loadOrders(); }, []);
-
-  useEffect(() => {
-    const t = setTimeout(() => loadOrders(), 300);
-    return () => clearTimeout(t);
-  }, [q, dateRange, statusFilter, sortBy, sortDir]);
-
-  function rangeToISO() {
+  const rangeToISO = useCallback(() => {
     const now = new Date();
     const start = new Date();
     const end = new Date();
-    start.setHours(0,0,0,0);
-    end.setHours(23,59,59,999);
+    start.setHours(0, 0, 0, 0);
+    end.setHours(23, 59, 59, 999);
 
     if (dateRange === "today") {
       // tetap hari ini
@@ -48,9 +46,9 @@ export default function Orders() {
       return null;
     }
     return { gte: start.toISOString(), lte: end.toISOString() };
-  }
+  }, [dateRange]);
 
-  async function loadOrders() {
+  const loadOrders = useCallback(async () => {
     setLoading(true);
     let query = supabase
       .from("orders")
@@ -68,7 +66,9 @@ export default function Orders() {
 
     const needle = q.trim();
     if (needle) {
-      query = query.or(`order_number.ilike.%${needle}%,customer_name.ilike.%${needle}%`);
+      query = query.or(
+        `order_number.ilike.%${needle}%,customer_name.ilike.%${needle}%`
+      );
     }
     if (statusFilter !== "all") {
       query = query.eq("status", statusFilter);
@@ -86,14 +86,27 @@ export default function Orders() {
     } else {
       setOrders(data || []);
       const nextDraft = {};
-      (data || []).forEach((o) => { nextDraft[o.id] = o.status; });
+      (data || []).forEach((o) => {
+        nextDraft[o.id] = o.status;
+      });
       setDraftMap(nextDraft);
     }
     setLoading(false);
-  }
+  }, [q, statusFilter, sortBy, sortDir, rangeToISO]);
+
+  // Satu effect dengan debounce — aman untuk ESLint
+  useEffect(() => {
+    const t = setTimeout(() => {
+      loadOrders();
+    }, 300);
+    return () => clearTimeout(t);
+  }, [loadOrders]);
 
   const totalCount = useMemo(() => orders.length, [orders]);
-  const confirmedCount = useMemo(() => orders.filter((o) => o.status === "confirmed").length, [orders]);
+  const confirmedCount = useMemo(
+    () => orders.filter((o) => o.status === "confirmed").length,
+    [orders]
+  );
   const pendingCount = totalCount - confirmedCount;
 
   async function saveStatus(id) {
@@ -101,16 +114,19 @@ export default function Orders() {
     if (!["pending", "confirmed"].includes(next)) return;
     setSavingId(id);
 
-    const payload = next === "confirmed"
-      ? { status: next, paid_at: new Date().toISOString() }
-      : { status: next, paid_at: null };
+    const payload =
+      next === "confirmed"
+        ? { status: next, paid_at: new Date().toISOString() }
+        : { status: next, paid_at: null };
 
     const { error } = await supabase.from("orders").update(payload).eq("id", id);
     if (error) {
       console.error("Update status error:", error);
       alert(error.message || "Gagal memperbarui status.");
     } else {
-      setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, ...payload } : o)));
+      setOrders((prev) =>
+        prev.map((o) => (o.id === id ? { ...o, ...payload } : o))
+      );
     }
     setSavingId(null);
   }
@@ -120,12 +136,19 @@ export default function Orders() {
     setPreview({ open: true, urls, index: startIdx, orderNumber });
   };
   const closePreview = () => setPreview((p) => ({ ...p, open: false }));
-  const prevImg = () => setPreview((p) => ({ ...p, index: (p.index - 1 + p.urls.length) % p.urls.length }));
-  const nextImg = () => setPreview((p) => ({ ...p, index: (p.index + 1) % p.urls.length }));
+  const prevImg = () =>
+    setPreview((p) => ({ ...p, index: (p.index - 1 + p.urls.length) % p.urls.length }));
+  const nextImg = () =>
+    setPreview((p) => ({ ...p, index: (p.index + 1) % p.urls.length }));
 
   const headerSortIcon = (col) =>
-    sortBy !== col ? <FaSort className="inline ml-1 opacity-60" /> :
-    sortDir === "asc" ? <FaSortUp className="inline ml-1" /> : <FaSortDown className="inline ml-1" />;
+    sortBy !== col ? (
+      <FaSort className="inline ml-1 opacity-60" />
+    ) : sortDir === "asc" ? (
+      <FaSortUp className="inline ml-1" />
+    ) : (
+      <FaSortDown className="inline ml-1" />
+    );
 
   const toggleSort = (col) => {
     if (sortBy !== col) {
@@ -162,7 +185,7 @@ export default function Orders() {
         </div>
       </div>
 
-      {/* Toolbar filter (hapus 2 dropdown sort) */}
+      {/* Toolbar filter (tanpa dropdown sort kolom & ASC/DESC di kanan) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
         <div className="relative">
           <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -202,40 +225,73 @@ export default function Orders() {
           <table className="min-w-full text-sm">
             <thead className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100">
               <tr className="text-left">
-                <th className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer" onClick={() => toggleSort("order_number")}>
+                <th
+                  className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer"
+                  onClick={() => toggleSort("order_number")}
+                >
                   No. Order {headerSortIcon("order_number")}
                 </th>
-                <th className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer" onClick={() => toggleSort("created_at")}>
+                <th
+                  className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer"
+                  onClick={() => toggleSort("created_at")}
+                >
                   Waktu {headerSortIcon("created_at")}
                 </th>
-                <th className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer" onClick={() => toggleSort("customer_name")}>
+                <th
+                  className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer"
+                  onClick={() => toggleSort("customer_name")}
+                >
                   Customer {headerSortIcon("customer_name")}
                 </th>
-                <th className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer" onClick={() => toggleSort("total_amount")}>
+                <th
+                  className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer"
+                  onClick={() => toggleSort("total_amount")}
+                >
                   Total {headerSortIcon("total_amount")}
                 </th>
-                <th className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer" onClick={() => toggleSort("status")}>
+                <th
+                  className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer"
+                  onClick={() => toggleSort("status")}
+                >
                   Status {headerSortIcon("status")}
                 </th>
-                <th className="px-3 py-2 border-b dark:border-gray-700">Bukti Bayar</th>
-                <th className="px-3 py-2 border-b dark:border-gray-700">Perbarui</th>
+                <th className="px-3 py-2 border-b dark:border-gray-700">
+                  Bukti Bayar
+                </th>
+                <th className="px-3 py-2 border-b dark:border-gray-700">
+                  Perbarui
+                </th>
               </tr>
             </thead>
             <tbody className="text-gray-800 dark:text-gray-100">
               {orders.map((o) => {
-                const urls = (o.payment_proofs || []).map((p) => p.proof_url).filter(Boolean);
+                const urls = (o.payment_proofs || [])
+                  .map((p) => p.proof_url)
+                  .filter(Boolean);
                 const draft = draftMap[o.id] ?? o.status;
                 const changed = draft !== o.status;
 
                 return (
                   <tr key={o.id} className="align-top">
-                    <td className="px-3 py-2 border-b dark:border-gray-800 font-mono text-xs md:text-sm">{o.order_number}</td>
+                    <td className="px-3 py-2 border-b dark:border-gray-800 font-mono text-xs md:text-sm">
+                      {o.order_number}
+                    </td>
                     <td className="px-3 py-2 border-b dark:border-gray-800 text-xs">
-                      <div>{o.created_at ? new Date(o.created_at).toLocaleString("id-ID") : "-"}</div>
-                      {o.paid_at && <div className="text-[11px] opacity-70">Paid: {new Date(o.paid_at).toLocaleString("id-ID")}</div>}
+                      <div>
+                        {o.created_at
+                          ? new Date(o.created_at).toLocaleString("id-ID")
+                          : "-"}
+                      </div>
+                      {o.paid_at && (
+                        <div className="text-[11px] opacity-70">
+                          Paid: {new Date(o.paid_at).toLocaleString("id-ID")}
+                        </div>
+                      )}
                     </td>
                     <td className="px-3 py-2 border-b dark:border-gray-800">
-                      <div className="font-medium">{o.customer_name || "-"}</div>
+                      <div className="font-medium">
+                        {o.customer_name || "-"}
+                      </div>
                       <div className="opacity-70">{o.customer_email || "-"}</div>
                     </td>
                     <td className="px-3 py-2 border-b dark:border-gray-800">
@@ -249,7 +305,9 @@ export default function Orders() {
                             : "border-yellow-300"
                         }`}
                         value={draft}
-                        onChange={(e) => setDraftMap((m) => ({ ...m, [o.id]: e.target.value }))}
+                        onChange={(e) =>
+                          setDraftMap((m) => ({ ...m, [o.id]: e.target.value }))
+                        }
                       >
                         <option value="pending">pending</option>
                         <option value="confirmed">confirmed</option>
@@ -270,7 +328,12 @@ export default function Orders() {
                               className="block w-16 h-16 rounded overflow-hidden border border-gray-200 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                               title="Klik untuk preview"
                             >
-                              <img src={u} alt={`Proof ${idx + 1}`} className="w-full h-full object-cover" loading="lazy" />
+                              <img
+                                src={u}
+                                alt={`Proof ${idx + 1}`}
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                              />
                             </button>
                           ))}
                           {urls.length > 3 && (
@@ -321,7 +384,10 @@ export default function Orders() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closePreview} />
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={closePreview}
+            />
             <motion.div
               className="relative z-10 max-w-3xl w-[92%] bg-white dark:bg-gray-900 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700"
               initial={{ scale: 0.95, opacity: 0 }}
@@ -330,7 +396,8 @@ export default function Orders() {
             >
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                 <div className="text-sm font-semibold">
-                  Bukti Pembayaran • {preview.orderNumber} • {preview.index + 1}/{preview.urls.length}
+                  Bukti Pembayaran • {preview.orderNumber} • {preview.index + 1}/
+                  {preview.urls.length}
                 </div>
                 <button
                   onClick={closePreview}
@@ -340,7 +407,11 @@ export default function Orders() {
                 </button>
               </div>
               <div className="relative p-3 md:p-4">
-                <img src={preview.urls[preview.index]} alt="Payment Proof" className="max-h-[70vh] w-full object-contain rounded" />
+                <img
+                  src={preview.urls[preview.index]}
+                  alt="Payment Proof"
+                  className="max-h-[70vh] w-full object-contain rounded"
+                />
                 {preview.urls.length > 1 && (
                   <>
                     <button

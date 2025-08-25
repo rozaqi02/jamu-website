@@ -14,13 +14,6 @@ function ChatBot() {
   const [showNameForm, setShowNameForm] = useState(!username);
   const chatContainerRef = useRef(null);
 
-  const quickOptions = [
-    "Daftar harga",
-    "Varian produk",
-    "Cara order",
-    "Hubungi admin",
-  ];
-
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -55,13 +48,6 @@ function ChatBot() {
     }
   };
 
-  const handleQuickOption = (option) => {
-    setInput(option);
-    setTimeout(() => {
-      sendMessage({ preventDefault: () => {} });
-    }, 120);
-  };
-
   const generateResponse = (inputText) => {
     const lower = inputText.toLowerCase().trim();
     const userName = username || "Teman";
@@ -92,23 +78,23 @@ function ChatBot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-30 font-[Poppins]">{/* z-30 ⬅️ di bawah cart (z-50) */}
+    <div className="fixed bottom-6 right-6 z-30 font-[Poppins]">
       {/* Welcome Bubble */}
       {showWelcomeMessage && !isOpen && (
         <div
           style={{
-            backgroundColor: 'white',
-            color: 'black',
-            borderRadius: '10px',
-            padding: '14px',
-            fontSize: '13px',
-            position: 'fixed',
-            bottom: '85px',
-            right: '20px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-            cursor: 'pointer',
-            maxWidth: '260px',
-            lineHeight: '1.4',
+            backgroundColor: "white",
+            color: "black",
+            borderRadius: "10px",
+            padding: "14px",
+            fontSize: "13px",
+            position: "fixed",
+            bottom: "85px",
+            right: "20px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+            cursor: "pointer",
+            maxWidth: "260px",
+            lineHeight: "1.4",
           }}
           onClick={() => setIsOpen(true)}
         >
@@ -147,6 +133,7 @@ function ChatBot() {
                 onClick={() => setIsOpen(false)}
                 whileHover={{ scale: 1.2, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
+                aria-label="Tutup"
               >
                 <FaTimes />
               </motion.button>
@@ -203,28 +190,30 @@ function ChatBot() {
               <div className="p-3 border-t border-gray-200 dark:border-gray-700">
                 {/* Quick Options */}
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {["Daftar harga","Varian produk","Cara order","Hubungi admin"].map((option, i) => (
-                    <motion.button
-                      key={i}
-                      onClick={() => {
-                        setInput(option);
-                        setTimeout(() => {
-                          const evt = { preventDefault: () => {} };
-                          // kirim
+                  {["Daftar harga", "Varian produk", "Cara order", "Hubungi admin"].map(
+                    (option, i) => (
+                      <motion.button
+                        key={i}
+                        onClick={() => {
                           const userMessage = { text: option, sender: "user" };
                           setMessages((prev) => [...prev, userMessage]);
-                          const botResponse = { text: generateResponse(option), sender: "bot" };
-                          setTimeout(() => setMessages((prev) => [...prev, botResponse]), 300);
-                          setInput("");
-                        }, 100);
-                      }}
-                      className="bg-[#22624a] text-white px-3 py-1.5 rounded-full text-xs hover:bg-[#14532d] transition-all"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {option}
-                    </motion.button>
-                  ))}
+                          const botResponse = {
+                            text: generateResponse(option),
+                            sender: "bot",
+                          };
+                          setTimeout(
+                            () => setMessages((prev) => [...prev, botResponse]),
+                            300
+                          );
+                        }}
+                        className="bg-[#22624a] text-white px-3 py-1.5 rounded-full text-xs hover:bg-[#14532d] transition-all"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {option}
+                      </motion.button>
+                    )
+                  )}
                 </div>
 
                 {/* Input Chat */}
@@ -261,6 +250,7 @@ function ChatBot() {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
+              aria-label="Buka Chat"
             />
           </motion.div>
         )}

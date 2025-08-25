@@ -1,5 +1,5 @@
 // src/pages/Produk.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -18,10 +18,11 @@ function Produk({ theme }) {
   const [quantity, setQuantity] = useState(1);
   const [dataByCat, setDataByCat] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   const toNum = (v) => Number(v ?? 0);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase
       .from("products")
@@ -46,22 +47,27 @@ function Produk({ theme }) {
     if (cats.length && !grouped[activeCategory]) setActiveCategory(cats[0]);
 
     setLoading(false);
-  };
+  }, [activeCategory]);
+
+  // initial + theme mount transition
+  useEffect(() => setIsMounted(true), []);
 
   useEffect(() => {
     fetchProducts();
-  }, []); // eslint-disable-line
+  }, [fetchProducts]);
 
   useEffect(() => {
     const onFocus = () => fetchProducts();
     window.addEventListener("focus", onFocus);
     return () => window.removeEventListener("focus", onFocus);
-  }, []);
+  }, [fetchProducts]);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange(fetchProducts);
+    const { data: sub } = supabase.auth.onAuthStateChange(async () => {
+      await fetchProducts();
+    });
     return () => sub?.subscription?.unsubscribe?.();
-  }, []);
+  }, [fetchProducts]);
 
   useEffect(() => {
     const handle = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
@@ -69,8 +75,6 @@ function Produk({ theme }) {
     return () => window.removeEventListener("mousemove", handle);
   }, []);
 
-  const [isMounted, setIsMounted] = useState(false);
-  useEffect(() => setIsMounted(true), []);
   const backgroundStyle = isMounted
     ? {
         backgroundColor: theme === "dark" ? "#1a1f2b" : "#ffffff",
@@ -112,7 +116,7 @@ function Produk({ theme }) {
       } overflow-hidden relative pt-16`}
       style={backgroundStyle}
     >
-      {/* efek blur halus mengikuti mouse */}
+      {/* efek blur mengikuti mouse */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute w-64 h-64 bg-[#22624a]/20 rounded-full"
@@ -164,7 +168,9 @@ function Produk({ theme }) {
 
         {/* Kategori */}
         <div className="flex justify-center mb-10 gap-3 flex-wrap">
-          {loading && <span className="text-sm opacity-70">Memuat kategori…</span>}
+          {loading && (
+            <span className="text-sm opacity-70">Memuat kategori…</span>
+          )}
           {!loading && Object.keys(products).length === 0 && (
             <span className="text-sm opacity-70">Belum ada produk.</span>
           )}
@@ -206,11 +212,13 @@ function Produk({ theme }) {
               />
             ))}
 
-          {!loading && filteredProducts.length === 0 && Object.keys(products).length > 0 && (
-            <div className="col-span-full text-center opacity-70">
-              Tidak ada produk pada kategori ini.
-            </div>
-          )}
+          {!loading &&
+            filteredProducts.length === 0 &&
+            Object.keys(products).length > 0 && (
+              <div className="col-span-full text-center opacity-70">
+                Tidak ada produk pada kategori ini.
+              </div>
+            )}
 
           {!loading &&
             filteredProducts.map((p) => (
@@ -240,12 +248,10 @@ function Produk({ theme }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              {/* BACKGROUND BLUR (meniru KelolaProduk) */}
               <div
                 className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                 onClick={() => setSelectedProduct(null)}
               />
-              {/* CARD ala KelolaProduk */}
               <motion.div
                 className="relative z-10 w-[92%] max-w-3xl rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden"
                 initial={{ scale: 0.96, opacity: 0 }}
@@ -285,7 +291,8 @@ function Produk({ theme }) {
 
                     <div className="flex items-center gap-3">
                       <div className="text-xl font-semibold text-emerald-700 dark:text-emerald-300">
-                        Rp {toNum(selectedProduct.price).toLocaleString("id-ID")}
+                        Rp{" "}
+                        {toNum(selectedProduct.price).toLocaleString("id-ID")}
                       </div>
                       <div className="text-sm text-gray-600 dark:text-gray-400">
                         Stok: {selectedProduct.stock}
