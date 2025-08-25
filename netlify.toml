@@ -1,9 +1,12 @@
 [build]
   command = "npm run build"
-  publish = "build"   # <-- CRA output ke 'build', bukan 'dist'
+  publish = "build"
 
 [build.environment]
   NODE_VERSION = "20"
-  # Pilihan darurat jika masih ada lint warning:
-  # CI = "false"
-  # DISABLE_ESLINT_PLUGIN = "true"
+
+# ⬇️ fallback SPA (BrowserRouter)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
