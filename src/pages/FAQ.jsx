@@ -79,7 +79,7 @@ function FAQ({ theme }) {
       } relative pt-20`}
       style={{
         backgroundColor: theme === "dark" ? "#1a1f2b" : "#f9fafb",
-        transition: "background-color 0.3s ease",
+        transition: "background-color 0.5s ease",
       }}
     >
       {/* Glow background mengikuti mouse */}

@@ -7,7 +7,7 @@ import { useCart } from '../context/CartContext';
 function ProductCard({ id, name, image, description, price, stock, theme, onViewDetail }) {
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
-  const { add, setOpen } = useCart();
+  const { add } = useCart(); // ⬅️ tidak pakai setOpen lagi
 
   const handleQuantityChange = (e) => {
     let val = parseInt(e.target.value, 10);
@@ -19,13 +19,14 @@ function ProductCard({ id, name, image, description, price, stock, theme, onView
   const goCheckout = (e) => {
     e.stopPropagation();
     const qty = quantity || 1;
-    navigate(`/checkout?pid=${id}&qty=${qty}`); // mode 1-produk masih didukung
+    navigate(`/checkout?pid=${id}&qty=${qty}`);
   };
 
   const addToCart = (e) => {
     e.stopPropagation();
     add({ id, name, price, image }, quantity);
-    setOpen(true); // buka drawer biar user lihat masuk
+    // ⬇️ tidak auto-buka cart
+    // (kalau mau kasih feedback kecil, bisa pakai toast/snackbar di sini)
   };
 
   return (

@@ -17,6 +17,11 @@
   --text-color: #333;
   --bg-color: #ffffff;
   --section-bg: #f9f9f9;
+
+  /* Global container tuning (agar konten sedikit menepi) */
+  --site-max-width: 84rem; /* 1344px: lebih lebar dari max-w-6xl default */
+  --site-page-px: 1rem;    /* 16px padding kiri-kanan */
+
   transition: background-color 0.5s ease, color 0.5s ease;
 }
 
@@ -25,7 +30,7 @@ html.dark {
   --bg-color: #1a1f2b;
   --text-color: #ffffff;
   --section-bg: #2a344a;
-  --yumsert-green: #a3e4b7;
+  --yumsert-green: #a3e4b7; /* hijau untuk brand saat dark */
 }
 
 /* Light Mode */
@@ -42,7 +47,7 @@ html.light {
 html {
   background-color: var(--bg-color);
   color: var(--text-color);
-  scroll-behavior: smooth; /* smooth scroll */
+  scroll-behavior: smooth;
   font-size: 14px;
 }
 
@@ -60,26 +65,35 @@ body {
 }
 
 /* ======================
+   🌿 Global container (dipakai di Navbar, bisa dipakai di page lain)
+   ====================== */
+.site-container {
+  max-width: var(--site-max-width);
+  margin-inline: auto;
+  padding-inline: var(--site-page-px);
+}
+
+/* Override beberapa utility Tailwind untuk efek global menepi
+   (AMAN karena kita hanya memperlebar lebar maksimum & mengecilkan padding) */
+.max-w-6xl { max-width: var(--site-max-width) !important; } /* sebelumnya 72rem */
+.max-w-7xl { max-width: calc(var(--site-max-width) + 4rem) !important; } /* beri ruang ekstra halaman 7xl */
+.max-w-5xl { max-width: calc(var(--site-max-width) - 4rem) !important; } /* tetap proporsional */
+
+/* Kecilkan padding horizontal global dari px-6 (24px) -> 16–20px */
+.px-6 { padding-left: var(--site-page-px) !important; padding-right: var(--site-page-px) !important; }
+@media (min-width: 1024px) {
+  :root { --site-page-px: 1.25rem; } /* 20px di layar besar */
+}
+
+/* ======================
    🌿 Typography Helpers
    ====================== */
-.font-playfair {
-  font-family: 'Playfair Display', serif;
-}
-.font-poppins {
-  font-family: 'Poppins', sans-serif;
-}
-.font-anton {
-  font-family: 'Anton', sans-serif;
-}
-.text-yumsert-green {
-  color: var(--yumsert-green);
-}
-.text-yumsert-brown {
-  color: var(--yumsert-brown);
-}
-.bg-yumsert-brown {
-  background-color: var(--yumsert-brown);
-}
+.font-playfair { font-family: 'Playfair Display', serif; }
+.font-poppins { font-family: 'Poppins', sans-serif; }
+.font-anton { font-family: 'Anton', sans-serif; }
+.text-yumsert-green { color: var(--yumsert-green); }
+.text-yumsert-brown { color: var(--yumsert-brown); }
+.bg-yumsert-brown { background-color: var(--yumsert-brown); }
 
 /* ======================
    🌿 Background Animations
@@ -87,10 +101,8 @@ body {
 body::before {
   content: '';
   position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
   background: radial-gradient(circle, rgba(34, 98, 74, 0.1) 0%, transparent 70%);
   animation: rotate 20s linear infinite;
   z-index: -1;
@@ -100,10 +112,7 @@ body::before {
 body::after {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   pointer-events: none;
   background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="10" fill="%2322624a" opacity="0.3"/></svg>') repeat;
   animation: moveParticles 20s linear infinite;
@@ -111,14 +120,8 @@ body::after {
   will-change: transform, opacity;
 }
 
-@keyframes moveParticles {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
-}
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+@keyframes moveParticles { 0% { transform: translate(0,0); } 100% { transform: translate(50px,50px); } }
+@keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* ======================
    🌿 Buttons
@@ -132,7 +135,6 @@ button, a.button {
   opacity: 1;
   transition: all 0.3s ease;
 }
-
 button:hover, a.button:hover {
   background-color: var(--yumsert-brown);
   transform: scale(1.03);
@@ -142,100 +144,34 @@ button:hover, a.button:hover {
 /* ======================
    🌿 Animations
    ====================== */
-.sticker {
-  position: absolute;
-  opacity: 0.5;
-  pointer-events: none;
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-  animation: float 6s infinite ease-in-out;
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-}
+.sticker { position: absolute; opacity: 0.5; pointer-events: none; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); animation: float 6s infinite ease-in-out; }
+@keyframes float { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-20px);} }
 
 /* Marquee */
-@keyframes marquee-left {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-}
-@keyframes marquee-right {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(0); }
-}
-.marquee-container {
-  overflow: hidden;
-  white-space: nowrap;
-}
-.marquee-content-left {
-  display: inline-flex;
-  animation: marquee-left 60s linear infinite;
-}
-.marquee-content-right {
-  display: inline-flex;
-  animation: marquee-right 60s linear infinite;
-}
-.marquee-item {
-  margin-right: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.marquee-item img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-bottom: 0.5rem;
-  border: 2px solid var(--yumsert-green);
-}
+@keyframes marquee-left { 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
+@keyframes marquee-right { 0%{transform:translateX(-100%);} 100%{transform:translateX(0);} }
+.marquee-container { overflow: hidden; white-space: nowrap; }
+.marquee-content-left { display: inline-flex; animation: marquee-left 60s linear infinite; }
+.marquee-content-right { display: inline-flex; animation: marquee-right 60s linear infinite; }
+.marquee-item { margin-right: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.marquee-item img { width: 40px; height: 40px; border-radius: 50%; margin-bottom: 0.5rem; border: 2px solid var(--yumsert-green); }
 
 /* Gen-Z Animations */
-@keyframes spin-slow {
-  to { transform: rotate(360deg); }
-}
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-.animate-bounce {
-  animation: bounce 2s infinite;
-}
-.animate-spin-slow {
-  animation: spin-slow 10s linear infinite;
-}
+@keyframes spin-slow { to { transform: rotate(360deg);} }
+@keyframes bounce { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-10px);} }
+.animate-bounce { animation: bounce 2s infinite; }
+.animate-spin-slow { animation: spin-slow 10s linear infinite; }
 
 /* Typing Effect */
-.typing-effect {
-  display: inline-block;
-  border-right: 2px solid var(--yumsert-green);
-  animation: blink-caret 0.75s step-end infinite;
-  padding-right: 4px;
-}
-@keyframes blink-caret {
-  from, to { border-color: transparent; }
-  50% { border-color: var(--yumsert-green); }
-}
+.typing-effect { display: inline-block; border-right: 2px solid var(--yumsert-green); animation: blink-caret 0.75s step-end infinite; padding-right: 4px; }
+@keyframes blink-caret { from,to{ border-color: transparent;} 50%{ border-color: var(--yumsert-green);} }
 
 /* ======================
    🌿 Responsiveness
    ====================== */
 @media (max-width: 640px) {
-  .title-home {
-    font-size: 1.8rem !important;
-    line-height: 2.2rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    text-wrap: balance;
-  }
-  .marquee-item {
-    margin-right: 1rem;
-  }
-  footer {
-    text-align: center;
-  }
-  nav a {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
+  .title-home { font-size: 1.8rem !important; line-height: 2.2rem; padding-left: 1rem; padding-right: 1rem; text-wrap: balance; }
+  .marquee-item { margin-right: 1rem; }
+  footer { text-align: center; }
+  nav a { font-size: 0.9rem; padding: 0.5rem; }
 }

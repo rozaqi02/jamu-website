@@ -2,10 +2,15 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSearch } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
+import { useCart } from "../context/CartContext";
 import ProductCard from "../components/ProductCard";
 
 function Produk({ theme }) {
+  const navigate = useNavigate();
+  const { add: addToCart, setOpen: openCart } = useCart?.() || {};
+
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("Wedang Rempah");
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -16,66 +21,60 @@ function Produk({ theme }) {
 
   const toNum = (v) => Number(v ?? 0);
 
-  // Ambil produk dari Supabase & kelompokkan per kategori
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      setLoading(true);
+  const fetchProducts = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from("products")
+      .select("id,name,price,stock,category,description,image_url")
+      .order("name", { ascending: true });
 
-      // ⬇️ DEBUG: panggilan ke Supabase + console.log hasilnya
-      const { data, error } = await supabase
-        .from("products")
-        .select("id,name,price,stock,category,description,image_url")
-        .order("name", { ascending: true });
-
-      // 👉 INI LOG YANG KAMU MINTA
-      console.log("Supabase products:", {
-        error,
-        rows: data?.length,
-        sample: data?.[0],
-      });
-
-      if (error) {
-        console.error("Supabase error saat ambil products:", error);
-        setLoading(false);
-        return;
-      }
-      if (!mounted) return;
-
-      const grouped = (data || []).reduce((acc, p) => {
-        const cat = p?.category ?? "Tanpa Kategori";
-        (acc[cat] = acc[cat] || []).push(p);
-        return acc;
-      }, {});
-      setDataByCat(grouped);
-
-      const cats = Object.keys(grouped);
-      if (cats.length && !grouped[activeCategory]) setActiveCategory(cats[0]);
-
+    if (error) {
+      console.error("Supabase error:", error);
+      setDataByCat({});
       setLoading(false);
-    })();
+      return;
+    }
 
-    return () => {
-      mounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const grouped = (data || []).reduce((acc, p) => {
+      const cat = p?.category ?? "Tanpa Kategori";
+      (acc[cat] = acc[cat] || []).push(p);
+      return acc;
+    }, {});
+    setDataByCat(grouped);
 
-  // Mouse parallax blur
+    const cats = Object.keys(grouped);
+    if (cats.length && !grouped[activeCategory]) setActiveCategory(cats[0]);
+
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const handleMouseMove = (e) =>
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    fetchProducts();
+  }, []); // eslint-disable-line
+
+  useEffect(() => {
+    const onFocus = () => fetchProducts();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
   }, []);
 
-  // Transisi background mount
+  useEffect(() => {
+    const { data: sub } = supabase.auth.onAuthStateChange(fetchProducts);
+    return () => sub?.subscription?.unsubscribe?.();
+  }, []);
+
+  useEffect(() => {
+    const handle = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
+    window.addEventListener("mousemove", handle);
+    return () => window.removeEventListener("mousemove", handle);
+  }, []);
+
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => setIsMounted(true), []);
   const backgroundStyle = isMounted
     ? {
-        backgroundColor: theme === "dark" ? "#1a1f2b" : "white",
-        transition: "background-color 0.3s ease",
+        backgroundColor: theme === "dark" ? "#1a1f2b" : "#ffffff",
+        transition: "background-color 0.5s ease",
       }
     : {};
 
@@ -86,6 +85,26 @@ function Produk({ theme }) {
       )
     : [];
 
+  const handleAddToCart = () => {
+    if (!selectedProduct) return;
+    addToCart?.({
+      id: selectedProduct.id,
+      name: selectedProduct.name,
+      price: toNum(selectedProduct.price),
+      qty: quantity,
+      image: selectedProduct.image_url,
+    });
+    openCart?.(true);
+  };
+
+  const handleBuyNow = () => {
+    if (!selectedProduct) return;
+    const pid = selectedProduct.id;
+    const qty = quantity;
+    setSelectedProduct(null);
+    navigate(`/checkout?pid=${pid}&qty=${qty}`);
+  };
+
   return (
     <div
       className={`min-h-screen font-[Poppins] ${
@@ -93,17 +112,16 @@ function Produk({ theme }) {
       } overflow-hidden relative pt-16`}
       style={backgroundStyle}
     >
-      {/* Efek background blur mengikuti mouse */}
+      {/* efek blur halus mengikuti mouse */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute w-64 h-64 bg-[#22624a]/20 rounded-full"
           style={{
             top: `${mousePosition.y - 150}px`,
             left: `${mousePosition.x - 150}px`,
-            opacity: 0.5,
             filter: "blur(40px)",
           }}
-          animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.3, 0.5] }}
+          animate={{ scale: [1, 1.1, 1], opacity: [0.45, 0.25, 0.45] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
@@ -114,7 +132,6 @@ function Produk({ theme }) {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Judul */}
         <motion.h2
           className={`text-4xl font-[Montserrat] font-bold text-center mb-10 ${
             theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
@@ -138,7 +155,7 @@ function Produk({ theme }) {
               } focus:outline-none focus:ring-2 focus:ring-[#22624a] dark:focus:ring-[#a3e4b7]`}
             />
             <FaSearch
-              className={`absolute right-4 top-1/2 transform -translate-y-1/2 ${
+              className={`absolute right-4 top-1/2 -translate-y-1/2 ${
                 theme === "dark" ? "text-gray-400" : "text-gray-500"
               }`}
             />
@@ -146,54 +163,50 @@ function Produk({ theme }) {
         </div>
 
         {/* Kategori */}
-        <div className="flex justify-center mb-10 space-x-4 flex-wrap">
-          {Object.keys(products).length === 0 && (
-            <span className="text-sm opacity-70">Memuat kategori…</span>
+        <div className="flex justify-center mb-10 gap-3 flex-wrap">
+          {loading && <span className="text-sm opacity-70">Memuat kategori…</span>}
+          {!loading && Object.keys(products).length === 0 && (
+            <span className="text-sm opacity-70">Belum ada produk.</span>
           )}
-          {Object.keys(products).map((category) => (
-            <motion.button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              className={`px-6 py-3 rounded-full font-semibold transition-all ${
-                activeCategory === category
-                  ? "bg-[#22624a] text-white"
-                  : theme === "dark"
-                  ? "bg-gray-700 text-white hover:bg-gray-600"
-                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {category}
-            </motion.button>
-          ))}
+          {!loading &&
+            Object.keys(products).map((category) => (
+              <motion.button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`px-6 py-3 rounded-full font-semibold transition-all ${
+                  activeCategory === category
+                    ? "bg-[#22624a] text-white"
+                    : theme === "dark"
+                    ? "bg-gray-700 text-white hover:bg-gray-600"
+                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {category}
+              </motion.button>
+            ))}
         </div>
 
-        {/* Produk grid */}
+        {/* Grid produk */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           initial="hidden"
           animate="visible"
           variants={{
             hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: { staggerChildren: 0.1 },
-            },
+            visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
           }}
         >
-          {loading && (
-            <>
-              {[...Array(6)].map((_, i) => (
-                <div
-                  key={`skeleton-${i}`}
-                  className="h-96 rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse"
-                />
-              ))}
-            </>
-          )}
+          {loading &&
+            Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={`skeleton-${i}`}
+                className="h-96 rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse"
+              />
+            ))}
 
-          {!loading && filteredProducts.length === 0 && (
+          {!loading && filteredProducts.length === 0 && Object.keys(products).length > 0 && (
             <div className="col-span-full text-center opacity-70">
               Tidak ada produk pada kategori ini.
             </div>
@@ -218,104 +231,101 @@ function Produk({ theme }) {
             ))}
         </motion.div>
 
-        {/* Modal detail produk */}
+        {/* Modal ala KelolaProduk: overlay blur + card simple */}
         <AnimatePresence>
           {selectedProduct && (
             <motion.div
-              className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+              className="fixed inset-0 z-[60] flex items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
+              {/* BACKGROUND BLUR (meniru KelolaProduk) */}
+              <div
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                onClick={() => setSelectedProduct(null)}
+              />
+              {/* CARD ala KelolaProduk */}
               <motion.div
-                className={`bg-white dark:bg-[#2a344a] p-8 rounded-2xl max-w-3xl w-full mx-4 relative shadow-2xl border ${
-                  theme === "dark" ? "border-gray-700" : "border-gray-200"
-                }`}
-                initial={{ scale: 0.9, opacity: 0 }}
+                className="relative z-10 w-[92%] max-w-3xl rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden"
+                initial={{ scale: 0.96, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
+                exit={{ scale: 0.96, opacity: 0 }}
               >
-                <button
-                  onClick={() => setSelectedProduct(null)}
-                  className="absolute top-4 right-4 text-white bg-[#22624a] p-2 rounded-full hover:bg-[#14532d] transition-all"
-                >
-                  ×
-                </button>
-                <div className="flex flex-col md:flex-row gap-8">
+                <div className="px-5 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                  <h3 className="font-semibold text-lg text-gray-900 dark:text-gray-100">
+                    {selectedProduct.name}
+                  </h3>
+                  <button
+                    onClick={() => setSelectedProduct(null)}
+                    className="rounded-full px-3 py-1 text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700"
+                  >
+                    Tutup ✕
+                  </button>
+                </div>
+
+                <div className="p-5 flex flex-col md:flex-row gap-6">
                   <div className="md:w-1/2">
-                    <img
-                      src={selectedProduct.image_url}
-                      alt={selectedProduct.name}
-                      className="w-full h-80 object-cover rounded-xl shadow-lg"
-                      loading="lazy"
-                    />
+                    <div className="h-72 w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800">
+                      {selectedProduct.image_url ? (
+                        <img
+                          src={selectedProduct.image_url}
+                          alt={selectedProduct.name}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : null}
+                    </div>
                   </div>
-                  <div className="md:w-1/2 space-y-4">
-                    <h3
-                      className={`text-3xl font-[Montserrat] font-bold ${
-                        theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
-                      }`}
-                    >
-                      {selectedProduct.name}
-                    </h3>
-                    <p
-                      className={`text-lg ${
-                        theme === "dark" ? "text-gray-300" : "text-gray-600"
-                      }`}
-                    >
-                      {selectedProduct.description}
+
+                  <div className="md:w-1/2 space-y-3">
+                    <p className="text-sm text-gray-700 dark:text-gray-300">
+                      {selectedProduct.description || "Tanpa deskripsi."}
                     </p>
-                    <p
-                      className={`text-xl font-semibold ${
-                        theme === "dark" ? "text-[#a3e4b7]" : "text-[#22624a]"
-                      }`}
-                    >
-                      Rp {toNum(selectedProduct.price).toLocaleString("id-ID")}
-                    </p>
-                    <p
-                      className={`text-md ${
-                        theme === "dark" ? "text-gray-400" : "text-gray-500"
-                      }`}
-                    >
-                      Stok Tersedia: {selectedProduct.stock} unit
-                    </p>
-                    <div className="flex items-center gap-4">
+
+                    <div className="flex items-center gap-3">
+                      <div className="text-xl font-semibold text-emerald-700 dark:text-emerald-300">
+                        Rp {toNum(selectedProduct.price).toLocaleString("id-ID")}
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Stok: {selectedProduct.stock}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
                       <input
                         type="number"
                         min="1"
                         max={selectedProduct.stock}
                         value={quantity}
                         onChange={(e) => {
-                          let val = parseInt(e.target.value, 10);
-                          if (isNaN(val) || val < 1) val = 1;
-                          if (val > selectedProduct.stock)
-                            val = selectedProduct.stock;
-                          setQuantity(val);
+                          let v = parseInt(e.target.value, 10);
+                          if (isNaN(v) || v < 1) v = 1;
+                          if (v > selectedProduct.stock) v = selectedProduct.stock;
+                          setQuantity(v);
                         }}
-                        className={`w-20 px-3 py-2 rounded-full border ${
-                          theme === "dark"
-                            ? "bg-[#344e41] border-gray-600 text-white"
-                            : "bg-gray-100 border-gray-300 text-gray-800"
-                        } focus:outline-none focus:ring-2 focus:ring-[#22624a] dark:focus:ring-[#a3e4b7]`}
+                        className="w-24 px-3 py-2 rounded-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 text-gray-800 dark:text-gray-100 text-center focus:ring-2 focus:ring-emerald-500 outline-none"
                       />
-                      <motion.a
-                        href={`https://wa.me/6285745135415?text=${encodeURIComponent(
-                          `Halo, saya ingin membeli:\n- ${selectedProduct.name} x ${quantity} (Rp ${toNum(
-                            selectedProduct.price
-                          ).toLocaleString("id-ID")})\nTotal: Rp ${(
-                            toNum(selectedProduct.price) * quantity
-                          ).toLocaleString(
-                            "id-ID"
-                          )}\nSilakan proses pesanannya!`
-                        )}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="bg-[#22624a] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#14532d] transition-all"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+
+                      <motion.button
+                        onClick={handleAddToCart}
+                        className="rounded-full px-4 py-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        disabled={selectedProduct.stock <= 0}
                       >
-                        Pesan via WhatsApp
-                      </motion.a>
+                        Masukkan Keranjang
+                      </motion.button>
+
+                      <motion.button
+                        onClick={handleBuyNow}
+                        className="rounded-full px-4 py-2 text-sm bg-[#22624a] hover:bg-[#14532d] text-white"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        disabled={selectedProduct.stock <= 0}
+                      >
+                        Beli
+                      </motion.button>
                     </div>
                   </div>
                 </div>

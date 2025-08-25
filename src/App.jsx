@@ -1,13 +1,13 @@
 // src/App.jsx
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
 
-// Context (global)
+// Context
 import { CartProvider } from "./context/CartContext";
-import { AuthProvider } from "./context/AuthContext"; // ✅ tambahin ini
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import FloatingCart from "./components/FloatingCart";
 
 // Pages
@@ -19,25 +19,24 @@ import Donasi from "./pages/FAQ";
 import Checkout from "./pages/Checkout";
 import Purchase from "./pages/Purchase";
 import AdminLogin from "./pages/AdminLogin";
-import Admin from "./pages/Admin";
+import KelolaProduk from "./pages/KelolaProduk"; // renamed
+import Orders from "./pages/Orders";
 
 // Components
 import Navbar from "./components/Navbar";
 import ChatBot from "./components/ChatBot";
 import Footer from "./components/Footer";
-import ProtectedRoute from "./components/ProtectedRoute"; // ⬅️ NEW
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Progress + scroll top tiap pindah route
 function ScrollToTop() {
   const { pathname } = useLocation();
-
   useEffect(() => {
     NProgress.start();
     window.scrollTo(0, 0);
     const timer = setTimeout(() => NProgress.done(), 500);
     return () => clearTimeout(timer);
   }, [pathname]);
-
   return null;
 }
 
@@ -55,6 +54,22 @@ function PageTransition({ children }) {
   );
 }
 
+/** BlockAdmin: larang admin mengakses halaman pembelian/produk */
+function BlockAdmin({ children }) {
+  const { isAdmin, loadingAuth } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loadingAuth && isAdmin) {
+      navigate("/", { replace: true });
+    }
+  }, [isAdmin, loadingAuth, navigate]);
+
+  if (loadingAuth) return <div className="pt-24 text-center">Memeriksa akses…</div>;
+  if (isAdmin) return null;
+  return children;
+}
+
 function AnimatedRoutes({ theme, toggleTheme }) {
   const location = useLocation();
 
@@ -69,14 +84,19 @@ function AnimatedRoutes({ theme, toggleTheme }) {
             </PageTransition>
           }
         />
+
+        {/* Produk diblok untuk admin */}
         <Route
           path="/produk"
           element={
-            <PageTransition>
-              <Produk theme={theme} toggleTheme={toggleTheme} />
-            </PageTransition>
+            <BlockAdmin>
+              <PageTransition>
+                <Produk theme={theme} toggleTheme={toggleTheme} />
+              </PageTransition>
+            </BlockAdmin>
           }
         />
+
         <Route
           path="/testimoni"
           element={
@@ -102,35 +122,41 @@ function AnimatedRoutes({ theme, toggleTheme }) {
           }
         />
 
-        {/* Checkout */}
+        {/* Checkout diblok admin */}
         <Route
           path="/checkout"
           element={
-            <PageTransition>
-              <Checkout />
-            </PageTransition>
+            <BlockAdmin>
+              <PageTransition>
+                <Checkout />
+              </PageTransition>
+            </BlockAdmin>
           }
         />
 
-        {/* Halaman pembayaran */}
+        {/* Halaman pembayaran diblok admin */}
         <Route
           path="/pay"
           element={
-            <PageTransition>
-              <Purchase />
-            </PageTransition>
+            <BlockAdmin>
+              <PageTransition>
+                <Purchase />
+              </PageTransition>
+            </BlockAdmin>
           }
         />
         <Route
           path="/purchase/:orderNumber"
           element={
-            <PageTransition>
-              <Purchase />
-            </PageTransition>
+            <BlockAdmin>
+              <PageTransition>
+                <Purchase />
+              </PageTransition>
+            </BlockAdmin>
           }
         />
 
-        {/* Admin area */}
+        {/* Login admin */}
         <Route
           path="/admin/login"
           element={
@@ -139,12 +165,26 @@ function AnimatedRoutes({ theme, toggleTheme }) {
             </PageTransition>
           }
         />
+
+        {/* Kelola Produk (admin only) */}
         <Route
           path="/admin"
           element={
             <ProtectedRoute requireAdmin>
               <PageTransition>
-                <Admin />
+                <KelolaProduk />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Orderan admin */}
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute requireAdmin>
+              <PageTransition>
+                <Orders />
               </PageTransition>
             </ProtectedRoute>
           }
@@ -154,16 +194,14 @@ function AnimatedRoutes({ theme, toggleTheme }) {
   );
 }
 
-// Komponen yang tahu pathname → untuk sembunyikan Footer/Cart/ChatBot di halaman tertentu
+// Chrome/layout
 function AppChrome({ theme, toggleTheme }) {
   const location = useLocation();
   const path = location.pathname;
 
-  // halaman yang pakai "layout bersih"
-  const cleanRoutes = ["/checkout", "/pay", "/admin", "/admin/login"];
-  const isClean = cleanRoutes.some(
-    (p) => path === p || path.startsWith("/admin")
-  );
+  // Footer dibuang hanya di halaman-halaman ini (bukan di /admin)
+  const cleanRoutes = ["/checkout", "/pay", "/admin/login"];
+  const isClean = cleanRoutes.some((p) => path === p || path.startsWith("/admin/login"));
 
   return (
     <>
@@ -172,7 +210,7 @@ function AppChrome({ theme, toggleTheme }) {
         <Navbar theme={theme} toggleTheme={toggleTheme} />
         <AnimatedRoutes theme={theme} toggleTheme={toggleTheme} />
         {!isClean && <Footer theme={theme} />}
-        {!isClean && <FloatingCart />} {/* tombol + drawer keranjang */}
+        {!isClean && <FloatingCart />}
         {!isClean && <ChatBot theme={theme} />}
       </div>
     </>
@@ -184,13 +222,11 @@ function App() {
   const toggleTheme = () =>
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
 
-  // Apply theme ke <html> (sinkron dengan index.css)
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark");
     document.documentElement.classList.add(theme);
   }, [theme]);
 
-  // Styling NProgress
   useEffect(() => {
     NProgress.configure({ showSpinner: false });
     const style = document.createElement("style");
@@ -214,7 +250,7 @@ function App() {
   return (
     <Router>
       <CartProvider>
-        <AuthProvider> {/* ✅ Bungkus AuthProvider disini */}
+        <AuthProvider>
           <AppChrome theme={theme} toggleTheme={toggleTheme} />
         </AuthProvider>
       </CartProvider>

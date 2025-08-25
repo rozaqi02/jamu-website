@@ -55,7 +55,7 @@ function Testimoni({ theme }) {
   const backgroundStyle = isMounted
     ? {
         backgroundColor: theme === "dark" ? "#1a1f2b" : "white",
-        transition: "background-color 0.3s ease",
+        transition: "background-color 0.5s ease",
       }
     : {};
 
@@ -122,7 +122,7 @@ function Testimoni({ theme }) {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.7, ease: "easeInOut" }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
             >
               {testimonials
                 .slice(currentPage * 3, currentPage * 3 + 3)

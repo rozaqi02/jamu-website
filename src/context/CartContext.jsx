@@ -26,9 +26,12 @@ export function CartProvider({ children }) {
       return [...prev, { id: product.id, name: product.name, price: Number(product.price||0), image: product.image, qty }];
     });
   };
+
   const updateQty = (id, qty) => {
-    setItems(prev => prev.map(i => i.id === id ? { ...i, qty: Math.max(1, Math.min(Number(qty)||1, 999)) } : i));
+    const q = Math.max(1, Math.min(Number(qty)||1, 999));
+    setItems(prev => prev.map(i => i.id === id ? { ...i, qty: q } : i));
   };
+
   const remove = (id) => setItems(prev => prev.filter(i => i.id !== id));
   const clear = () => setItems([]);
 

@@ -80,7 +80,7 @@ function Beranda({ theme }) {
   const backgroundStyle = isMounted
     ? {
         backgroundColor: theme === "dark" ? "#1a1f2b" : "white",
-        transition: "background-color 0.3s ease",
+        transition: "background-color 0.5s ease",
       }
     : {};
 

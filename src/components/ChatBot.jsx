@@ -21,7 +21,6 @@ function ChatBot() {
     "Hubungi admin",
   ];
 
-  // scroll otomatis ke bawah
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop =
@@ -93,8 +92,8 @@ function ChatBot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-[Poppins]">
-      {/* Welcome Bubble (tetap sama) */}
+    <div className="fixed bottom-6 right-6 z-30 font-[Poppins]">{/* z-30 ⬅️ di bawah cart (z-50) */}
+      {/* Welcome Bubble */}
       {showWelcomeMessage && !isOpen && (
         <div
           style={{
@@ -204,10 +203,21 @@ function ChatBot() {
               <div className="p-3 border-t border-gray-200 dark:border-gray-700">
                 {/* Quick Options */}
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {quickOptions.map((option, index) => (
+                  {["Daftar harga","Varian produk","Cara order","Hubungi admin"].map((option, i) => (
                     <motion.button
-                      key={index}
-                      onClick={() => handleQuickOption(option)}
+                      key={i}
+                      onClick={() => {
+                        setInput(option);
+                        setTimeout(() => {
+                          const evt = { preventDefault: () => {} };
+                          // kirim
+                          const userMessage = { text: option, sender: "user" };
+                          setMessages((prev) => [...prev, userMessage]);
+                          const botResponse = { text: generateResponse(option), sender: "bot" };
+                          setTimeout(() => setMessages((prev) => [...prev, botResponse]), 300);
+                          setInput("");
+                        }, 100);
+                      }}
                       className="bg-[#22624a] text-white px-3 py-1.5 rounded-full text-xs hover:bg-[#14532d] transition-all"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -239,7 +249,6 @@ function ChatBot() {
             )}
           </motion.div>
         ) : (
-          // Floating Icon (tetap sama)
           <motion.div className="relative">
             <motion.button
               className="rounded-full shadow-lg w-12 h-12 md:w-14 md:h-14"

@@ -1,11 +1,31 @@
-// src/components/FloatingCart.jsx
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 
 export default function FloatingCart() {
   const { items, total, updateQty, remove, setOpen, isOpen } = useCart();
   const nav = useNavigate();
+  const [qtyDraft, setQtyDraft] = useState({}); // { [id]: 'string' }
+
+  const onChangeQty = (id, raw) => {
+    // izinkan kosong & hanya digit (maks 3)
+    if (raw === "" || /^[0-9]{0,3}$/.test(raw)) {
+      setQtyDraft((d) => ({ ...d, [id]: raw }));
+    }
+  };
+
+  const commitQty = (id) => {
+    setQtyDraft((d) => {
+      const raw = d[id];
+      let n = parseInt(raw ?? "", 10);
+      if (isNaN(n) || n < 1) n = 1;
+      if (n > 999) n = 999;
+      updateQty(id, n);
+      const { [id]: _, ...rest } = d;
+      return rest;
+    });
+  };
 
   return (
     <AnimatePresence>
@@ -57,46 +77,58 @@ export default function FloatingCart() {
                 </div>
               )}
 
-              {items.map((it) => (
-                <motion.div
-                  key={it.id}
-                  className="flex items-center gap-4 p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/60"
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {it.image && (
-                    <img
-                      src={it.image}
-                      alt={it.name}
-                      className="w-16 h-16 object-cover rounded-md"
-                    />
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-800 dark:text-gray-100 truncate">
-                      {it.name}
-                    </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Rp {Number(it.price).toLocaleString("id-ID")}
-                    </div>
-                    <div className="mt-2 flex items-center gap-2">
-                      <input
-                        type="number"
-                        min="1"
-                        value={it.qty}
-                        onChange={(e) => updateQty(it.id, e.target.value)}
-                        className="w-16 rounded-md border border-gray-300 dark:border-gray-600 px-2 py-1 text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 outline-none"
+              {items.map((it) => {
+                const displayVal = Object.prototype.hasOwnProperty.call(qtyDraft, it.id)
+                  ? qtyDraft[it.id]
+                  : String(it.qty);
+
+                return (
+                  <motion.div
+                    key={it.id}
+                    className="flex items-center gap-4 p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/60"
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {it.image && (
+                      <img
+                        src={it.image}
+                        alt={it.name}
+                        className="w-16 h-16 object-cover rounded-md"
                       />
-                      <motion.button
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => remove(it.id)}
-                        className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                      >
-                        Hapus
-                      </motion.button>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-gray-800 dark:text-gray-100 truncate">
+                        {it.name}
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Rp {Number(it.price).toLocaleString("id-ID")}
+                      </div>
+                      <div className="mt-2 flex items-center gap-2">
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          value={displayVal}
+                          onChange={(e) => onChangeQty(it.id, e.target.value)}
+                          onBlur={() => commitQty(it.id)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.currentTarget.blur();
+                            }
+                          }}
+                          className="w-16 rounded-md border border-gray-300 dark:border-gray-600 px-2 py-1 text-sm bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-green-500 outline-none"
+                        />
+                        <motion.button
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => remove(it.id)}
+                          className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        >
+                          Hapus
+                        </motion.button>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
 
             {/* Footer */}
