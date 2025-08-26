@@ -49,15 +49,38 @@ export default function Purchase() {
     })();
   }, [orderNumber]);
 
-  // handle pilih file + preview
+  // pilih file + validasi cepat + preview
   function handleFileChange(e) {
-    const f = e.target.files?.[0];
-    setFile(f || null);
-    if (f) {
-      setPreview(URL.createObjectURL(f));
-    } else {
+    const f = e.target.files?.[0] || null;
+
+    // reset pesan
+    setMessage("");
+    setIsError(false);
+
+    if (!f) {
+      setFile(null);
       setPreview(null);
+      return;
     }
+
+    if (!/^image\/(png|jpeg)$/.test(f.type)) {
+      setMessage("❌ Format harus PNG atau JPG.");
+      setIsError(true);
+      setFile(null);
+      setPreview(null);
+      return;
+    }
+
+    if (f.size > 5 * 1024 * 1024) {
+      setMessage("❌ Ukuran file maksimal 5MB.");
+      setIsError(true);
+      setFile(null);
+      setPreview(null);
+      return;
+    }
+
+    setFile(f);
+    setPreview(URL.createObjectURL(f));
   }
 
   // submit upload
@@ -67,6 +90,8 @@ export default function Purchase() {
     setIsError(false);
 
     if (!order) return;
+
+    // double guard
     if (!file) {
       setMessage("❌ Silakan pilih gambar bukti transfer (PNG/JPG).");
       setIsError(true);
@@ -160,6 +185,9 @@ export default function Purchase() {
     );
   }
 
+  // tombol hanya aktif bila ada file valid & bukan state lain
+  const canSubmit = !!file && !sending && !alreadyUploaded;
+
   return (
     <div className="max-w-2xl mx-auto pt-24 px-4 pb-16">
       <h1 className="text-2xl font-bold mb-6 text-center">
@@ -175,7 +203,7 @@ export default function Purchase() {
           </div>
           <div className="flex justify-between text-sm mb-2">
             <span className="font-medium">Total Pembayaran</span>
-            <span className="text-lg font-semibold text-green-700">
+            <span className="text-lg font-semibold text-green-700 dark:text-emerald-300">
               Rp {Number(order.total_amount || 0).toLocaleString("id-ID")}
             </span>
           </div>
@@ -199,7 +227,7 @@ export default function Purchase() {
         )}
 
         {!alreadyUploaded ? (
-          <form onSubmit={onSubmit} className="space-y-4">
+          <form onSubmit={onSubmit} className="space-y-4" noValidate>
             {/* File input */}
             <div>
               <label className="block text-sm font-medium mb-1">
@@ -209,7 +237,6 @@ export default function Purchase() {
                 type="file"
                 accept="image/png,image/jpeg"
                 onChange={handleFileChange}
-                required
                 className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-[#22624a] file:text-white hover:file:bg-[#14532d] cursor-pointer"
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -232,8 +259,15 @@ export default function Purchase() {
             {/* Submit */}
             <button
               type="submit"
-              disabled={sending || alreadyUploaded}
-              className="w-full rounded-full px-5 py-2 bg-[#22624a] text-white font-medium hover:bg-[#14532d] transition disabled:opacity-60"
+              disabled={!canSubmit}
+              aria-disabled={!canSubmit}
+              title={!file ? "Pilih file bukti transfer dahulu" : undefined}
+              className={`w-full rounded-full px-5 py-2 font-medium transition
+                ${
+                  canSubmit
+                    ? "bg-[#22624a] text-white hover:bg-[#14532d]"
+                    : "bg-gray-300 text-gray-600 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed"
+                }`}
             >
               {sending ? "Mengirim…" : "Kirim Bukti Pembayaran"}
             </button>

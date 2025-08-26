@@ -2,12 +2,16 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaSort, FaSortUp, FaSortDown, FaSearch } from "react-icons/fa";
+import { FaSort, FaSortUp, FaSortDown, FaSearch, FaTrash } from "react-icons/fa";
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState(null);
+
+  // Hapus order (state)
+  const [confirmDel, setConfirmDel] = useState({ open: false, order: null });
+  const [deletingId, setDeletingId] = useState(null);
 
   // filter/sort
   const [q, setQ] = useState("");
@@ -159,6 +163,55 @@ export default function Orders() {
     }
   };
 
+  // --------- Hapus Order (Opsi A: CASCADE di DB) ----------
+  // Ekstrak key file dari public URL storage
+  const extractStoragePath = (url) => {
+    // Contoh: https://xxxx.supabase.co/storage/v1/object/public/proofs/ORD-123/filename.png
+    const m = url?.match(/\/object\/public\/proofs\/(.+)$/);
+    return m ? m[1] : null; // => "ORD-123/filename.png"
+  };
+
+  async function performDelete(order) {
+    setDeletingId(order.id);
+    try {
+      // (Opsional) Hapus file di storage supaya tidak jadi orphan
+      const paths =
+        (order.payment_proofs || [])
+          .map((p) => extractStoragePath(p.proof_url))
+          .filter(Boolean);
+
+      if (paths.length) {
+        const { error: rmErr } = await supabase.storage.from("proofs").remove(paths);
+        if (rmErr) {
+          // Tidak fatal — baris DB tetap kita hapus
+          console.warn("Gagal menghapus sebagian file storage:", rmErr.message);
+        }
+      }
+
+      // Hapus order (payment_proofs akan ikut terhapus oleh ON DELETE CASCADE)
+      const { error: delOrderErr } = await supabase
+        .from("orders")
+        .delete()
+        .eq("id", order.id);
+      if (delOrderErr) throw delOrderErr;
+
+      // Update UI
+      setOrders((prev) => prev.filter((o) => o.id !== order.id));
+      setDraftMap((prev) => {
+        const next = { ...prev };
+        delete next[order.id];
+        return next;
+      });
+    } catch (e) {
+      console.error("Delete order error:", e);
+      alert(e.message || "Gagal menghapus order.");
+    } finally {
+      setDeletingId(null);
+      setConfirmDel({ open: false, order: null });
+    }
+  }
+  // -------------------------------------------------------
+
   return (
     <div className="max-w-6xl mx-auto pt-28 px-4 pb-28">
       {/* Header */}
@@ -185,7 +238,7 @@ export default function Orders() {
         </div>
       </div>
 
-      {/* Toolbar filter (tanpa dropdown sort kolom & ASC/DESC di kanan) */}
+      {/* Toolbar filter */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
         <div className="relative">
           <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -255,12 +308,9 @@ export default function Orders() {
                 >
                   Status {headerSortIcon("status")}
                 </th>
-                <th className="px-3 py-2 border-b dark:border-gray-700">
-                  Bukti Bayar
-                </th>
-                <th className="px-3 py-2 border-b dark:border-gray-700">
-                  Perbarui
-                </th>
+                <th className="px-3 py-2 border-b dark:border-gray-700">Bukti Bayar</th>
+                <th className="px-3 py-2 border-b dark:border-gray-700">Perbarui</th>
+                <th className="px-3 py-2 border-b dark:border-gray-700">Aksi</th>
               </tr>
             </thead>
             <tbody className="text-gray-800 dark:text-gray-100">
@@ -300,9 +350,7 @@ export default function Orders() {
                     <td className="px-3 py-2 border-b dark:border-gray-800">
                       <select
                         className={`rounded-md px-2 py-1 border text-sm bg-white dark:bg-gray-900 dark:border-gray-700 text-gray-800 dark:text-gray-100 ${
-                          draft === "confirmed"
-                            ? "border-green-300"
-                            : "border-yellow-300"
+                          draft === "confirmed" ? "border-green-300" : "border-yellow-300"
                         }`}
                         value={draft}
                         onChange={(e) =>
@@ -359,13 +407,24 @@ export default function Orders() {
                         {savingId === o.id ? "Menyimpan…" : "Perbarui"}
                       </button>
                     </td>
+                    <td className="px-3 py-2 border-b dark:border-gray-800">
+                      <button
+                        onClick={() => setConfirmDel({ open: true, order: o })}
+                        disabled={deletingId === o.id}
+                        className="rounded-full px-3 py-1.5 text-sm bg-red-600 hover:bg-red-700 text-white disabled:opacity-60 flex items-center gap-2"
+                        title="Hapus order"
+                      >
+                        <FaTrash />
+                        {deletingId === o.id ? "Menghapus…" : "Hapus"}
+                      </button>
+                    </td>
                   </tr>
                 );
               })}
 
               {!orders.length && (
                 <tr>
-                  <td colSpan="7" className="text-center py-6 opacity-70">
+                  <td colSpan="8" className="text-center py-6 opacity-70">
                     Belum ada orderan.
                   </td>
                 </tr>
@@ -396,8 +455,7 @@ export default function Orders() {
             >
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                 <div className="text-sm font-semibold">
-                  Bukti Pembayaran • {preview.orderNumber} • {preview.index + 1}/
-                  {preview.urls.length}
+                  Bukti Pembayaran • {preview.orderNumber} • {preview.index + 1}/{preview.urls.length}
                 </div>
                 <button
                   onClick={closePreview}
@@ -430,6 +488,51 @@ export default function Orders() {
                     </button>
                   </>
                 )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal Konfirmasi Hapus */}
+      <AnimatePresence>
+        {confirmDel.open && (
+          <motion.div
+            className="fixed inset-0 z-[70] flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => (deletingId ? null : setConfirmDel({ open: false, order: null }))} // jangan bisa ditutup saat deleting
+            />
+            <motion.div
+              className="relative z-10 w-[92%] max-w-md rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5"
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+            >
+              <h3 className="text-lg font-semibold mb-2">Hapus Order?</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                Order <span className="font-mono">{confirmDel.order?.order_number}</span> akan dihapus permanen. Bukti pembayaran terkait juga akan terhapus (cascade).
+              </p>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setConfirmDel({ open: false, order: null })}
+                  disabled={!!deletingId}
+                  className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 disabled:opacity-60"
+                >
+                  Batal
+                </button>
+                <button
+                  onClick={() => performDelete(confirmDel.order)}
+                  disabled={!!deletingId}
+                  className="px-4 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white disabled:opacity-60 flex items-center gap-2"
+                >
+                  <FaTrash />
+                  {deletingId ? "Menghapus…" : "Hapus"}
+                </button>
               </div>
             </motion.div>
           </motion.div>
