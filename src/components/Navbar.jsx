@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSun, FaMoon, FaShoppingCart } from "react-icons/fa";
@@ -50,9 +49,7 @@ function Navbar({ theme, toggleTheme }) {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 shadow-sm font-[Poppins] ${
-        theme === "dark" ? "text-white" : "text-gray-800"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 shadow-sm font-[Poppins] ${theme === "dark" ? "text-white" : "text-gray-800"} transition-colors duration-500 ease-in-out`}
       style={backgroundStyle}
     >
       <div className="site-container py-3 relative">
@@ -65,12 +62,13 @@ function Navbar({ theme, toggleTheme }) {
             onClick={() => handleNavClick("/")}
           >
             <motion.img src="/assets/images/jamu.png" alt="Logo" className="h-8 w-auto" />
-            <span className="text-lg font-semibold tracking-wide text-[#16a34a]">
+            {/* Sembunyikan teks brand di mobile: tampil mulai md */}
+            <span className="hidden md:inline text-lg font-semibold tracking-wide text-[#16a34a]">
               {isAdmin && isHome ? "Selamat Datang, Admin!" : "Jamu Sugih Waras"}
             </span>
           </motion.div>
 
-          {/* Menu Desktop (hanya links) */}
+          {/* Menu Desktop */}
           <div className="hidden md:flex items-center space-x-6 absolute left-1/2 -translate-x-1/2">
             {navLinks.map((link) => (
               <motion.a
@@ -89,12 +87,12 @@ function Navbar({ theme, toggleTheme }) {
             ))}
           </div>
 
-          {/* Right controls: Cart, Theme, lalu Admin/Logout */}
+          {/* Right controls */}
           <div className="flex items-center gap-3">
             {!isAdmin && (
               <motion.button
                 onClick={() => setOpen(true)}
-                className={`relative p-2 rounded-full shadow-sm ${
+                className={`relative p-2 rounded-full shadow-sm transition-colors duration-500 ${
                   theme === "light" ? "bg-white text-gray-700 hover:bg-gray-100" : "bg-[#0f1624] text-gray-100 hover:bg-[#1b2333]"
                 }`}
                 whileHover={{ scale: 1.1 }}

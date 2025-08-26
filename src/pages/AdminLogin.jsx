@@ -168,7 +168,7 @@ export default function AdminLogin() {
                   type="button"
                   aria-label={showPass ? "Sembunyikan password" : "Tampilkan password"}
                   onClick={() => setShowPass((s) => !s)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
                   {showPass ? <FiEyeOff /> : <FiEye />}
                 </button>
@@ -189,7 +189,7 @@ export default function AdminLogin() {
 
               <button
                 type="button"
-                className="text-xs text-emerald-700 hover:text-emerald-800 dark:text-emerald-300 dark:hover:text-emerald-200 underline underline-offset-2 decoration-dotted"
+                className=""
                 onClick={() => alert("Hubungi owner untuk reset password.")}
               >
                 Lupa password?

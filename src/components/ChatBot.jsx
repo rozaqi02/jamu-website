@@ -98,7 +98,7 @@ function ChatBot() {
           }}
           onClick={() => setIsOpen(true)}
         >
-          Hai! Ada yang bisa kami bantu?
+          Ada Pertanyaan?
           <div
             className="absolute -top-2 -right-2 bg-gray-200 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold cursor-pointer"
             onClick={(e) => {
