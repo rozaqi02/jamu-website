@@ -55,7 +55,7 @@ body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, var(--bg-color) 0%, var(--section-bg) 100%);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.5s ease, color 0.5s ease; /* 0.5s mulus */
   overflow-x: hidden;
   position: relative;
   color: var(--text-color);
@@ -167,6 +167,34 @@ button:hover, a.button:hover {
 @keyframes blink-caret { from,to{ border-color: transparent;} 50%{ border-color: var(--yumsert-green);} }
 
 /* ======================
+   🌿 Headline gradient stabil (untuk hero)
+   ====================== */
+:root {
+  --headline-grad-light: linear-gradient(90deg, #1a1f2b 0%, #22624a 40%, #1a1f2b 80%);
+  --headline-grad-dark:  linear-gradient(90deg, #ffffff 0%, #a3e4b7 40%, #ffffff 80%);
+  --headline-gradient: var(--headline-grad-light);
+}
+html.dark { --headline-gradient: var(--headline-grad-dark); }
+
+.headline-shimmer {
+  background: var(--headline-gradient);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+  transition: background 0.5s ease;
+}
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .headline-shimmer { animation: none; }
+}
+
+/* ======================
    🌿 Responsiveness
    ====================== */
 @media (max-width: 640px) {
@@ -174,4 +202,7 @@ button:hover, a.button:hover {
   .marquee-item { margin-right: 1rem; }
   footer { text-align: center; }
   nav a { font-size: 0.9rem; padding: 0.5rem; }
+
+  /* Matikan animasi background berat di mobile → hemat GPU */
+  body::before, body::after { display: none; }
 }
