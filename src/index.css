@@ -136,7 +136,7 @@ button, a.button {
   transition: all 0.3s ease;
 }
 button:hover, a.button:hover {
-  background-color: var(--yumsert-brown);
+  background-color: #14532d;   /* ✅ hijau gelap */
   transform: scale(1.03);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
