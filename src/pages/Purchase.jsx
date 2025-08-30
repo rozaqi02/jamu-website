@@ -1,3 +1,4 @@
+// src/pages/Purchase.jsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
@@ -18,6 +19,9 @@ export default function Purchase() {
   const [isError, setIsError] = useState(false);
   const [alreadyUploaded, setAlreadyUploaded] = useState(false);
 
+  // digunakan untuk reset ulang <input type="file"> setelah sukses
+  const [fileInputKey, setFileInputKey] = useState(0);
+
   // load order + cek bukti
   useEffect(() => {
     (async () => {
@@ -35,6 +39,7 @@ export default function Purchase() {
       }
       setOrder(orderData);
 
+      // cek apakah sudah pernah upload
       const { data: proofData } = await supabase
         .from("payment_proofs")
         .select("id, proof_url")
@@ -83,20 +88,29 @@ export default function Purchase() {
     setPreview(URL.createObjectURL(f));
   }
 
+  // tombol hanya aktif bila ada file valid, tidak sedang kirim, dan belum pernah upload
+  const canSubmit = !!file && !sending && !alreadyUploaded && !!order;
+
   // submit upload
   async function onSubmit(e) {
     e.preventDefault();
+
+    // 🚫 pagar betis paling depan — kalau tak boleh submit, jangan lanjut
+    if (!canSubmit) {
+      if (!file) {
+        setMessage("❌ Silakan pilih gambar bukti transfer (PNG/JPG) terlebih dahulu.");
+        setIsError(true);
+      } else if (alreadyUploaded) {
+        setMessage("ℹ️ Bukti pembayaran untuk order ini sudah ada.");
+        setIsError(true);
+      }
+      return;
+    }
+
     setMessage("");
     setIsError(false);
 
-    if (!order) return;
-
-    // double guard
-    if (!file) {
-      setMessage("❌ Silakan pilih gambar bukti transfer (PNG/JPG).");
-      setIsError(true);
-      return;
-    }
+    // validasi ekstra (defensive)
     if (!/^image\/(png|jpeg)$/.test(file.type)) {
       setMessage("❌ Format harus PNG atau JPG.");
       setIsError(true);
@@ -110,6 +124,20 @@ export default function Purchase() {
 
     setSending(true);
     try {
+      // 🔐 safety: cek lagi ke DB sebelum insert (hindari duplikat)
+      const { data: existing } = await supabase
+        .from("payment_proofs")
+        .select("id")
+        .eq("order_id", order.id)
+        .maybeSingle();
+
+      if (existing) {
+        setAlreadyUploaded(true);
+        setMessage("ℹ️ Bukti pembayaran sudah ada. Tidak perlu kirim ulang.");
+        setIsError(false);
+        return;
+      }
+
       const cleanName = file.name.replace(/\s+/g, "_").toLowerCase();
       const path = `${order.order_number}/${Date.now()}-${cleanName}`;
 
@@ -124,7 +152,6 @@ export default function Purchase() {
       if (upErr) {
         setMessage(upErr.message || "❌ Gagal upload bukti (storage).");
         setIsError(true);
-        setSending(false);
         return;
       }
 
@@ -133,7 +160,6 @@ export default function Purchase() {
       if (!url) {
         setMessage("❌ Gagal membuat URL bukti.");
         setIsError(true);
-        setSending(false);
         return;
       }
 
@@ -151,17 +177,16 @@ export default function Purchase() {
             "⚠️ Upload berhasil, tapi gagal menyimpan metadata bukti."
         );
         setIsError(true);
-        setSending(false);
         return;
       }
 
-      setMessage(
-        "✅ Bukti pembayaran sudah terkirim. Admin akan memeriksa sesegera mungkin."
-      );
+      setMessage("✅ Bukti pembayaran sudah terkirim. Admin akan memeriksa sesegera mungkin.");
       setIsError(false);
       setAlreadyUploaded(true);
       setPreview(null);
       setFile(null);
+      // reset input file agar required bekerja lagi untuk kiriman berikutnya
+      setFileInputKey((k) => k + 1);
     } catch (err) {
       setMessage("❌ Terjadi kesalahan jaringan.");
       setIsError(true);
@@ -185,14 +210,9 @@ export default function Purchase() {
     );
   }
 
-  // tombol hanya aktif bila ada file valid & bukan state lain
-  const canSubmit = !!file && !sending && !alreadyUploaded;
-
   return (
     <div className="max-w-2xl mx-auto pt-24 px-4 pb-16">
-      <h1 className="text-2xl font-bold mb-6 text-center">
-        Konfirmasi Pembayaran
-      </h1>
+      <h1 className="text-2xl font-bold mb-6 text-center">Konfirmasi Pembayaran</h1>
 
       <div className="rounded-xl shadow-lg p-6 bg-white dark:bg-gray-900">
         {/* Order Summary */}
@@ -230,18 +250,20 @@ export default function Purchase() {
           <form onSubmit={onSubmit} className="space-y-4" noValidate>
             {/* File input */}
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label htmlFor="proof-file" className="block text-sm font-medium mb-1">
                 Upload bukti transfer
               </label>
               <input
+                key={fileInputKey}
+                id="proof-file"
+                name="proof-file"
                 type="file"
                 accept="image/png,image/jpeg"
+                required
                 onChange={handleFileChange}
                 className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-medium file:bg-[#22624a] file:text-white hover:file:bg-[#14532d] cursor-pointer"
               />
-              <p className="text-xs text-gray-500 mt-1">
-                Format PNG/JPG, maksimal 5MB.
-              </p>
+              <p className="text-xs text-gray-500 mt-1">Format PNG/JPG, maksimal 5MB.</p>
             </div>
 
             {/* Preview */}
@@ -266,7 +288,7 @@ export default function Purchase() {
                 ${
                   canSubmit
                     ? "bg-[#22624a] text-white hover:bg-[#14532d]"
-                    : "bg-gray-300 text-gray-600 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed"
+                    : "bg-gray-300 text-gray-600 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed pointer-events-none select-none"
                 }`}
             >
               {sending ? "Mengirim…" : "Kirim Bukti Pembayaran"}
