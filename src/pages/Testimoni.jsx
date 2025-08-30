@@ -62,19 +62,18 @@ function Testimoni({ theme }) {
       my.set(clamp(y * 2, -1, 1));
     };
 
-    // device tilt (iOS/Android) — tidak semua browser mengizinkan
+    // device tilt (iOS/Android)
     let tiltHandler;
     if (isMobile && typeof window !== "undefined" && "DeviceOrientationEvent" in window) {
       tiltHandler = (ev) => {
-        const gx = (ev.gamma || 0) / 30;   // -90..90 → ~-3..3 → clamp
-        const by = (ev.beta || 0) / 45;    // -180..180 → ~-4..4
+        const gx = (ev.gamma || 0) / 30;
+        const by = (ev.beta || 0) / 45;
         mx.set(clamp(gx, -1, 1));
         my.set(clamp(by, -1, 1));
       };
       window.addEventListener("deviceorientation", tiltHandler, true);
     }
 
-    // pointer hanya di desktop
     if (!isMobile) el.addEventListener("mousemove", onMove);
 
     return () => {
@@ -86,8 +85,6 @@ function Testimoni({ theme }) {
   // layer parallax (3 lapis)
   const l1x = useTransform(smx, (v) => v * -30);
   const l1y = useTransform(smy, (v) => v * -24);
-  const l2x = useTransform(smx, (v) => v * 20);
-  const l2y = useTransform(smy, (v) => v * 18);
   const l3x = useTransform(smx, (v) => v * -12);
   const l3y = useTransform(smy, (v) => v * 10);
 
@@ -160,9 +157,9 @@ function Testimoni({ theme }) {
       className={`min-h-screen pt-24 font-poppins ${theme === "dark" ? "text-white" : "text-gray-800"}`}
       style={{ transition: smooth, backgroundColor: theme === "dark" ? "#111826" : "#ffffff" }}
     >
-      {/* ===== HERO with Parallax (Efek #1, #2, #8) ===== */}
+      {/* ===== HERO with Parallax ===== */}
       <section ref={heroRef} className="relative overflow-hidden">
-        {/* Layer 1: big gradient blob */}
+        {/* Layer 1 */}
         <motion.div
           style={{ x: l1x, y: l1y }}
           className="pointer-events-none absolute -top-32 -left-24 w-[620px] h-[620px] rounded-full blur-3xl opacity-25"
@@ -179,7 +176,7 @@ function Testimoni({ theme }) {
           />
         </motion.div>
 
-        {/* Layer 2: dots glow follows pointer */}
+        {/* Layer 2: aura */}
         {!prefersReducedMotion && (
           <motion.div
             className="pointer-events-none absolute w-[420px] h-[420px] rounded-full blur-2xl opacity-25"
@@ -197,7 +194,7 @@ function Testimoni({ theme }) {
           />
         )}
 
-        {/* Layer 3: subtle ring */}
+        {/* Layer 3 */}
         <motion.div
           style={{ x: l3x, y: l3y }}
           className="pointer-events-none absolute -bottom-20 -right-32 w-[560px] h-[560px] rounded-full blur-3xl opacity-20"
@@ -218,15 +215,15 @@ function Testimoni({ theme }) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7 text-center lg:text-left">
               <motion.h1
-  className="headline-shimmer font-playfair font-extrabold text-[2.1rem] md:text-5xl leading-[1.15]"
-  initial={{ opacity: 0, y: 16 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.6 }}
-  style={{ animation: prefersReducedMotion ? "none" : undefined }}
->
-  Cerita Nyata Pelanggan
-  <br /> Jamu Sugih Waras
-</motion.h1>
+                className="headline-shimmer font-playfair font-extrabold text-[2.1rem] md:text-5xl leading-[1.15]"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                style={{ animation: prefersReducedMotion ? "none" : undefined }}
+              >
+                Cerita Nyata Pelanggan
+                <br /> Jamu Sugih Waras
+              </motion.h1>
 
               <style>{`@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}`}</style>
 
@@ -248,7 +245,7 @@ function Testimoni({ theme }) {
               </div>
             </div>
 
-            {/* Magnetic CTA (Efek #8) */}
+            {/* CTA */}
             <motion.div
               className="lg:col-span-5 flex justify-center lg:justify-end"
               whileHover={{ scale: prefersReducedMotion ? 1 : 1.03 }}
@@ -282,7 +279,7 @@ function Testimoni({ theme }) {
         </div>
       </section>
 
-      {/* ===== MARQUEE micro quotes (Efek #9) ===== */}
+      {/* ===== MARQUEE micro quotes ===== */}
       <section className="py-4 overflow-hidden">
         <div className="site-container">
           <div className="marquee-container">
@@ -300,7 +297,7 @@ function Testimoni({ theme }) {
         </div>
       </section>
 
-      {/* ===== STRIP PARALLAX (Efek #3) ===== */}
+      {/* ===== STRIP PARALLAX ===== */}
       <section ref={stripRef} className="relative py-16 overflow-hidden">
         <motion.div style={{ y: stripY }} className="absolute inset-0 -z-10">
           <img
@@ -324,7 +321,7 @@ function Testimoni({ theme }) {
         </div>
       </section>
 
-      {/* ===== CAROUSEL Testimoni (Efek #4, #5, #6, #7) ===== */}
+      {/* ===== CAROUSEL Testimoni ===== */}
       <section ref={inViewRef} className="site-container pb-20">
         {/* pager */}
         <div className="flex items-center justify-between mb-3">
@@ -374,7 +371,7 @@ function Testimoni({ theme }) {
   );
 }
 
-/* ====== KOMONEN: Card Testimoni (Efek #4 tilt via parent) ====== */
+/* ====== KOMONEN: Card Testimoni ====== */
 function TestimonialCard({ t, theme }) {
   const smooth = "background-color .5s ease, color .5s ease, border-color .5s ease, box-shadow .5s ease";
   return (
@@ -406,7 +403,7 @@ function TestimonialCard({ t, theme }) {
   );
 }
 
-/* ====== KOMONEN: Tilt 3D (Efek #4) ====== */
+/* ====== KOMONEN: Tilt 3D ====== */
 function TiltCard({ children, theme }) {
   const isMobile = useIsMobile(768);
   const prefersReducedMotion = useReducedMotion();
@@ -433,7 +430,7 @@ function TiltCard({ children, theme }) {
       el.addEventListener("mouseleave", reset);
     }
 
-    // fallback mobile: sedikit tilt saat scroll
+    // fallback mobile
     let scrollCb;
     if (isMobile) {
       scrollCb = () => {
