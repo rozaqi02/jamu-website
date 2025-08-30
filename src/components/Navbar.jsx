@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaSun, FaMoon, FaShoppingCart } from "react-icons/fa";
+import { FaSun, FaMoon, FaShoppingCart, FaTimes, FaChevronRight } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
@@ -9,6 +9,7 @@ function Navbar({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const closeBtnRef = useRef(null);
   const { count, setOpen } = useCart();
   const { isAdmin, logoutAdmin } = useAuth();
 
@@ -47,6 +48,19 @@ function Navbar({ theme, toggleTheme }) {
   const doLogout = async () => { await logoutAdmin(); };
   const isHome = location.pathname === "/";
 
+  // Lock scroll + ESC
+  useEffect(() => {
+    if (!isOpen) return;
+    document.body.style.overflow = "hidden";
+    closeBtnRef.current?.focus();
+    const onKey = (e) => e.key === "Escape" && setIsOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [isOpen]);
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 shadow-sm font-[Poppins] ${theme === "dark" ? "text-white" : "text-gray-800"} transition-colors duration-500 ease-in-out`}
@@ -62,10 +76,17 @@ function Navbar({ theme, toggleTheme }) {
             onClick={() => handleNavClick("/")}
           >
             <motion.img src="/assets/images/jamu.png" alt="Logo" className="h-8 w-auto" />
-            {/* Sembunyikan teks brand di mobile: tampil mulai md */}
-            <span className="hidden md:inline text-lg font-semibold tracking-wide text-[#16a34a]">
-              {isAdmin && isHome ? "Selamat Datang, Admin!" : "Jamu Sugih Waras"}
-            </span>
+            {/* Brand desktop */}
+            <div className="hidden md:flex flex-col leading-tight">
+              <motion.span className="brand-mark text-xl md:text-2xl" layout>
+                Jamu <span className="brand-swash">Sugih</span> Waras
+              </motion.span>
+              {isAdmin && isHome && (
+                <span className="text-[11px] md:text-xs font-medium opacity-75 mt-0.5">
+                  Selamat Datang, Admin!
+                </span>
+              )}
+            </div>
           </motion.div>
 
           {/* Menu Desktop */}
@@ -97,6 +118,7 @@ function Navbar({ theme, toggleTheme }) {
                 }`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.85, rotate: -10 }}
+                aria-label="Buka keranjang"
               >
                 <FaShoppingCart size={18} />
                 {count > 0 && (
@@ -121,14 +143,16 @@ function Navbar({ theme, toggleTheme }) {
               }`}
               whileHover={{ rotate: 20, scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
+              aria-label="Ganti tema"
             >
               {theme === "light" ? <FaMoon size={18} /> : <FaSun size={18} />}
             </motion.button>
 
+            {/* Hide Admin/Logout on mobile */}
             {!isAdmin ? (
               <motion.button
                 onClick={() => handleNavClick("/admin/login")}
-                className="px-3 py-1.5 rounded-full text-sm bg-green-600 text-white hover:bg-green-700"
+                className="hidden md:inline-flex px-3 py-1.5 rounded-full text-sm bg-green-600 text-white hover:bg-green-700"
                 whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.97 }}
               >
@@ -136,8 +160,8 @@ function Navbar({ theme, toggleTheme }) {
               </motion.button>
             ) : (
               <motion.button
-                onClick={doLogout}
-                className="px-3 py-1.5 rounded-full text-sm bg-red-600 text-white hover:bg-red-700"
+                onClick={async () => { await doLogout(); }}
+                className="hidden md:inline-flex px-3 py-1.5 rounded-full text-sm bg-red-600 text-white hover:bg-red-700"
                 whileHover={{ y: -1 }}
                 whileTap={{ scale: 0.97 }}
               >
@@ -145,66 +169,135 @@ function Navbar({ theme, toggleTheme }) {
               </motion.button>
             )}
 
-            {/* Hamburger (mobile only) */}
+            {/* Hamburger: 3 garis; hitam saat light, putih saat dark */}
             <motion.button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-md focus:outline-none"
-              whileHover={{ scale: 1.1 }}
+              onClick={() => setIsOpen(true)}
+              className={`md:hidden p-2 rounded-none focus:outline-none bg-transparent hover:bg-transparent shadow-none ${theme === "light" ? "text-black" : "text-white"}`}
+              whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
+              aria-label="Buka menu"
+              aria-expanded={isOpen}
+              aria-controls="mobile-drawer"
             >
-              <div className="space-y-1">
-                <span className={`block h-0.5 w-5 bg-current transform transition ${isOpen ? "rotate-45 translate-y-1.5" : ""}`} />
-                <span className={`block h-0.5 w-5 bg-current transition ${isOpen ? "opacity-0" : ""}`} />
-                <span className={`block h-0.5 w-5 bg-current transform transition ${isOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
+              <div className="space-y-1.5">
+                <span className="block h-0.5 w-6 bg-current" />
+                <span className="block h-0.5 w-6 bg-current" />
+                <span className="block h-0.5 w-6 bg-current" />
               </div>
             </motion.button>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              className="md:hidden mt-3 py-3 space-y-2 rounded-lg shadow-md bg-white/95 dark:bg-[#0f1624]/80 backdrop-blur-md"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-            >
-              {navLinks.map((link) => (
-                <motion.a
-                  key={link.name}
-                  href={link.path}
-                  onClick={(e) => { e.preventDefault(); handleNavClick(link.path); }}
-                  className={`block px-4 py-2 text-sm font-medium rounded-md ${
-                    isActive(link.path)
-                      ? "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300"
-                      : "hover:bg-gray-100 dark:hover:bg-white/10"
-                  } ${isAdmin && link.path === "/produk" ? "pointer-events-none opacity-40" : ""}`}
-                  whileHover={{ x: 5 }}
-                >
-                  {link.name}
-                </motion.a>
-              ))}
-
-              {!isAdmin ? (
-                <button
-                  onClick={() => { handleNavClick("/admin/login"); setIsOpen(false); }}
-                  className="w-full rounded-full px-3 py-2 bg-green-600 text-white hover:bg-green-700 transition"
-                >
-                  Admin
-                </button>
-              ) : (
-                <button
-                  onClick={doLogout}
-                  className="w-full rounded-full px-3 py-2 bg-red-600 text-white hover:bg-red-700 transition"
-                >
-                  Logout
-                </button>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
+
+      {/* ===== Mobile Drawer Sidebar (hitam–putih, lega) ===== */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            {/* Overlay: blur seluruh background */}
+            <motion.div
+              key="overlay"
+              className="fixed inset-0 bg-black/50 backdrop-blur-md backdrop-saturate-150 md:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+            />
+
+            {/* Drawer */}
+            <motion.aside
+              key="drawer"
+              id="mobile-drawer"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
+              className={`drawer-neutral fixed top-0 right-0 h-[100dvh] w-[88%] sm:w-[380px] md:hidden bg-white dark:bg-[#0f1624] shadow-xl flex flex-col ${theme === "light" ? "text-black" : "text-white"}`}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "tween", duration: 0.28 }}
+            >
+              {/* Header drawer */}
+              <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-black/10 dark:border-white/10">
+                <div className="flex items-center gap-3">
+                  <img src="/assets/images/jamu.png" alt="Logo" className="h-8 w-auto" />
+                  <div className="flex flex-col leading-tight">
+                    <span className="brand-mark text-lg">
+                      Jamu <span className="brand-swash">Sugih</span> Waras
+                    </span>
+                    {isAdmin && isHome && (
+                      <span className="text-[11px] opacity-75 mt-0.5">Admin mode</span>
+                    )}
+                  </div>
+                </div>
+                <button
+                  ref={closeBtnRef}
+                  onClick={() => setIsOpen(false)}
+                  className="p-2 rounded-md hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-black/20 dark:focus:ring-white/30"
+                  aria-label="Tutup menu"
+                >
+                  <FaTimes size={18} />
+                </button>
+              </div>
+
+              {/* Konten drawer */}
+              <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-3 space-y-1.5">
+                {navLinks.map((link) => {
+                  const disabled = isAdmin && link.path === "/produk";
+                  const active = isActive(link.path);
+                  return (
+                    <button
+                      key={link.name}
+                      onClick={() => !disabled && handleNavClick(link.path)}
+                      className={[
+                        "w-full flex items-center justify-between rounded-xl px-4 py-3.5 text-base transition text-left bg-transparent",
+                        disabled
+                          ? "opacity-40 cursor-not-allowed"
+                          : active
+                          ? // aktif: tebal + underline + warna eksplisit
+                            "font-semibold underline underline-offset-4 decoration-2 text-black dark:text-white"
+                          : // non-aktif: warna teks eksplisit (bukan opacity)
+                            "text-black/80 hover:text-black dark:text-white/80 dark:hover:text-white"
+                      ].join(" ")}
+                      aria-current={active ? "page" : undefined}
+                    >
+                      <span>{link.name}</span>
+                      <FaChevronRight className={`ml-2 ${active ? "opacity-80" : "opacity-40"} ${theme === "light" ? "text-black" : "text-white"}`} />
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Footer drawer: actions (netral) */}
+              <div className="px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2 border-t border-black/10 dark:border-white/10 space-y-2">
+                <div className="flex gap-2">
+                  <button
+                    onClick={toggleTheme}
+                    className="flex-1 px-3 py-2 rounded-lg bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/90 transition"
+                  >
+                    {theme === "light" ? "Mode Gelap" : "Mode Terang"}
+                  </button>
+
+                  {!isAdmin ? (
+                    <button
+                      onClick={() => handleNavClick("/admin/login")}
+                      className="flex-1 px-3 py-2 rounded-lg bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/90 transition"
+                    >
+                      Admin
+                    </button>
+                  ) : (
+                    <button
+                      onClick={async () => { await doLogout(); setIsOpen(false); }}
+                      className="flex-1 px-3 py-2 rounded-lg bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/90 transition"
+                    >
+                      Logout
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

@@ -249,7 +249,7 @@ function App() {
 
   return (
     <Router>
-      <CartProvider>
+      <CartProvider>  
         <AuthProvider>
           <AppChrome theme={theme} toggleTheme={toggleTheme} />
         </AuthProvider>
