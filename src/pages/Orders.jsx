@@ -1,5 +1,5 @@
 // src/pages/Orders.jsx
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaSort, FaSortUp, FaSortDown, FaSearch, FaTrash } from "react-icons/fa";
@@ -23,11 +23,27 @@ export default function Orders() {
   // draft status (disimpan saat klik Perbarui)
   const [draftMap, setDraftMap] = useState({});
 
+  // preview bukti bayar
   const [preview, setPreview] = useState({
     open: false,
     urls: [],
     index: 0,
     orderNumber: "",
+  });
+
+  // refs untuk anchor bubble alamat
+  const addrRefs = useRef({});
+
+  // bubble alamat
+  const [addrBubble, setAddrBubble] = useState({
+    open: false,
+    anchorId: null,
+    text: "",
+    top: 0,
+    left: 0,
+    width: 360,
+    arrowLeft: 24,
+    placement: "bottom", // "top" | "bottom"
   });
 
   const rangeToISO = useCallback(() => {
@@ -207,7 +223,7 @@ export default function Orders() {
     }
   }
 
-  // Helper format alamat ringkas
+  // Helper format alamat ringkas & full
   function fmtAddress(a) {
     if (!a || typeof a !== "object") return "-";
     const core = [
@@ -223,6 +239,87 @@ export default function Orders() {
     const extra = [a.patokan, a.catatan].filter(Boolean).join(" • ");
     return extra ? `${core} — ${extra}` : core || "-";
   }
+
+  // Hitung & buka bubble alamat
+  const showAddrBubble = useCallback((order) => {
+    const el = addrRefs.current[order.id];
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const vw = window.innerWidth || document.documentElement.clientWidth;
+    const width = Math.min(420, vw - 24); // 12px margin kiri/kanan
+    const centerX = rect.left + rect.width / 2;
+
+    let left = Math.max(12, Math.min(centerX - width / 2, vw - width - 12));
+    const bubbleCenterX = centerX - left;
+    const arrowLeft = Math.max(12, Math.min(bubbleCenterX, width - 12));
+
+    const preferTop = rect.top >= 180; // ada ruang
+    const placement = preferTop ? "top" : "bottom";
+    const top = preferTop ? rect.top - 12 : rect.bottom + 12;
+
+    setAddrBubble({
+      open: true,
+      anchorId: order.id,
+      text: fmtAddress(order.shipping_address),
+      top,
+      left,
+      width,
+      arrowLeft,
+      placement,
+    });
+  }, []);
+
+  // Re-posisi bubble saat scroll/resize
+  useEffect(() => {
+    if (!addrBubble.open) return;
+
+    const recalc = () => {
+      const order = orders.find((x) => x.id === addrBubble.anchorId);
+      if (!order) {
+        setAddrBubble((s) => ({ ...s, open: false }));
+        return;
+      }
+      const el = addrRefs.current[order.id];
+      if (!el) {
+        setAddrBubble((s) => ({ ...s, open: false }));
+        return;
+      }
+      const rect = el.getBoundingClientRect();
+      const vw = window.innerWidth || document.documentElement.clientWidth;
+      const width = Math.min(420, vw - 24);
+      const centerX = rect.left + rect.width / 2;
+
+      let left = Math.max(12, Math.min(centerX - width / 2, vw - width - 12));
+      const bubbleCenterX = centerX - left;
+      const arrowLeft = Math.max(12, Math.min(bubbleCenterX, width - 12));
+
+      const preferTop = rect.top >= 180;
+      const placement = preferTop ? "top" : "bottom";
+      const top = preferTop ? rect.top - 12 : rect.bottom + 12;
+
+      setAddrBubble((s) => ({
+        ...s,
+        top,
+        left,
+        width,
+        arrowLeft,
+        placement,
+      }));
+    };
+
+    const onKey = (e) => e.key === "Escape" && setAddrBubble((s) => ({ ...s, open: false }));
+
+    window.addEventListener("resize", recalc);
+    window.addEventListener("scroll", recalc, true);
+    document.addEventListener("keydown", onKey);
+
+    return () => {
+      window.removeEventListener("resize", recalc);
+      window.removeEventListener("scroll", recalc, true);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [addrBubble.open, addrBubble.anchorId, orders]);
 
   return (
     <div className="max-w-6xl mx-auto pt-28 px-4 pb-28">
@@ -364,10 +461,23 @@ export default function Orders() {
                       <div className="opacity-70">{o.customer_email || "-"}</div>
                     </td>
 
+                    {/* Alamat + tombol Lihat */}
                     <td className="px-3 py-2 border-b dark:border-gray-800 max-w-[280px]">
-                      <div className="line-clamp-3">{addrText}</div>
+                      <div ref={(el) => (addrRefs.current[o.id] = el)}>
+                        <div className="line-clamp-3">{addrText}</div>
+                        <button
+                          type="button"
+                          onClick={() => showAddrBubble(o)}
+                          className="mt-1 inline-flex items-center gap-1 text-[11px] px-2 py-1 rounded-full border border-black text-black bg-white hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black"
+                          style={{ boxShadow: "none" }}
+                          title="Lihat alamat lengkap"
+                        >
+                          Lihat
+                        </button>
+                      </div>
                     </td>
 
+                    {/* Pesanan */}
                     <td className="px-3 py-2 border-b dark:border-gray-800 max-w-[280px]">
                       <div className="line-clamp-3">{itemsText || "-"}</div>
                     </td>
@@ -513,6 +623,62 @@ export default function Orders() {
                     </button>
                   </>
                 )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Bubble Alamat (popover) */}
+      <AnimatePresence>
+        {addrBubble.open && (
+          <motion.div
+            className="fixed inset-0 z-[65]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setAddrBubble((s) => ({ ...s, open: false }))}
+          >
+            {/* overlay transparan agar klik-luar menutup */}
+            <div className="absolute inset-0" />
+
+            {/* bubble */}
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              initial={{
+                opacity: 0,
+                y: addrBubble.placement === "top" ? -8 : 8,
+                scale: 0.98,
+              }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{
+                opacity: 0,
+                y: addrBubble.placement === "top" ? -8 : 8,
+                scale: 0.98,
+              }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              style={{
+                position: "absolute",
+                top: addrBubble.top,
+                left: addrBubble.left,
+                width: addrBubble.width,
+                transform:
+                  addrBubble.placement === "top" ? "translateY(-100%)" : "none",
+              }}
+              className="rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-4 text-sm"
+            >
+              <div className="font-semibold mb-1">Alamat Lengkap</div>
+              <div className="whitespace-pre-line leading-relaxed">
+                {addrBubble.text}
+              </div>
+
+              {/* panah */}
+              <div
+                className={`absolute ${addrBubble.placement === "top" ? "bottom-[-9px]" : "top-[-9px]"}`}
+                style={{ left: addrBubble.arrowLeft - 9, width: 18, height: 18 }}
+                aria-hidden
+              >
+                <div className="w-4 h-4 mx-auto rotate-45 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700" />
               </div>
             </motion.div>
           </motion.div>

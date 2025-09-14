@@ -49,7 +49,8 @@ export default function AdminLogin() {
 
       loginAsAdmin(email);
       setOk("Login berhasil. Mengalihkan…");
-      navigate("/admin", { replace: true });
+      // Arahkan ke Home, bukan ke Kelola Produk
+      navigate("/", { replace: true });
     } catch (e2) {
       setErr(e2.message || "Gagal login");
     } finally {
@@ -77,9 +78,9 @@ export default function AdminLogin() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.35 }}
       >
-        {/* Kartu login — tanpa logo, tone profesional */}
+        {/* Kartu login */}
         <div className="rounded-2xl shadow-xl border border-gray-200/70 dark:border-gray-800/70 bg-white/90 dark:bg-gray-900/80 backdrop-blur-md transition-colors duration-500 overflow-hidden">
-          {/* Heading ringkas */}
+          {/* Heading */}
           <div className="px-6 py-5 bg-gradient-to-r from-emerald-600 to-green-700 text-white">
             <h1 className="text-lg font-semibold tracking-wide">Admin Login</h1>
             <p className="text-[11px] opacity-90">Masuk untuk mengelola pesanan & produk</p>

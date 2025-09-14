@@ -46,7 +46,6 @@ function Navbar({ theme, toggleTheme }) {
 
   const isActive = (p) => location.pathname === p || (p !== "/" && location.pathname.startsWith(p));
   const doLogout = async () => { await logoutAdmin(); };
-  const isHome = location.pathname === "/";
 
   // Lock scroll + ESC
   useEffect(() => {
@@ -81,7 +80,7 @@ function Navbar({ theme, toggleTheme }) {
               <motion.span className="brand-mark text-xl md:text-2xl" layout>
                 Jamu <span className="brand-swash">Sugih</span> Waras
               </motion.span>
-              {isAdmin && isHome && (
+              {isAdmin && (
                 <span className="text-[11px] md:text-xs font-medium opacity-75 mt-0.5">
                   Selamat Datang, Admin!
                 </span>
@@ -169,7 +168,7 @@ function Navbar({ theme, toggleTheme }) {
               </motion.button>
             )}
 
-            {/* Hamburger: 3 garis; hitam saat light, putih saat dark */}
+            {/* Hamburger */}
             <motion.button
               onClick={() => setIsOpen(true)}
               className={`md:hidden p-2 rounded-none focus:outline-none bg-transparent hover:bg-transparent shadow-none ${theme === "light" ? "text-black" : "text-white"}`}
@@ -189,11 +188,10 @@ function Navbar({ theme, toggleTheme }) {
         </div>
       </div>
 
-      {/* ===== Mobile Drawer Sidebar (hitam–putih, lega) ===== */}
+      {/* ===== Mobile Drawer Sidebar ===== */}
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Overlay: blur seluruh background */}
             <motion.div
               key="overlay"
               className="fixed inset-0 bg-black/50 backdrop-blur-md backdrop-saturate-150 md:hidden"
@@ -203,7 +201,6 @@ function Navbar({ theme, toggleTheme }) {
               onClick={() => setIsOpen(false)}
             />
 
-            {/* Drawer */}
             <motion.aside
               key="drawer"
               id="mobile-drawer"
@@ -224,8 +221,8 @@ function Navbar({ theme, toggleTheme }) {
                     <span className="brand-mark text-lg">
                       Jamu <span className="brand-swash">Sugih</span> Waras
                     </span>
-                    {isAdmin && isHome && (
-                      <span className="text-[11px] opacity-75 mt-0.5">Admin mode</span>
+                    {isAdmin && (
+                      <span className="text-[11px] opacity-75 mt-0.5">Selamat Datang, Admin!</span>
                     )}
                   </div>
                 </div>
@@ -253,10 +250,8 @@ function Navbar({ theme, toggleTheme }) {
                         disabled
                           ? "opacity-40 cursor-not-allowed"
                           : active
-                          ? // aktif: tebal + underline + warna eksplisit
-                            "font-semibold underline underline-offset-4 decoration-2 text-black dark:text-white"
-                          : // non-aktif: warna teks eksplisit (bukan opacity)
-                            "text-black/80 hover:text-black dark:text-white/80 dark:hover:text-white"
+                          ? "font-semibold underline underline-offset-4 decoration-2 text-black dark:text-white"
+                          : "text-black/80 hover:text-black dark:text-white/80 dark:hover:text-white"
                       ].join(" ")}
                       aria-current={active ? "page" : undefined}
                     >
@@ -267,7 +262,7 @@ function Navbar({ theme, toggleTheme }) {
                 })}
               </div>
 
-              {/* Footer drawer: actions (netral) */}
+              {/* Footer drawer */}
               <div className="px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2 border-t border-black/10 dark:border-white/10 space-y-2">
                 <div className="flex gap-2">
                   <button
