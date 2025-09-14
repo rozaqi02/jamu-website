@@ -65,7 +65,9 @@ export default function Orders() {
         status,
         paid_at,
         created_at,
-        payment_proofs:payment_proofs ( id, proof_url, uploaded_at, original_name )
+        shipping_address,
+        payment_proofs:payment_proofs ( id, proof_url, uploaded_at, original_name ),
+        order_items:order_items ( product_name, qty, price )
       `);
 
     const needle = q.trim();
@@ -98,7 +100,7 @@ export default function Orders() {
     setLoading(false);
   }, [q, statusFilter, sortBy, sortDir, rangeToISO]);
 
-  // Satu effect dengan debounce — aman untuk ESLint
+  // Debounce load
   useEffect(() => {
     const t = setTimeout(() => {
       loadOrders();
@@ -163,18 +165,15 @@ export default function Orders() {
     }
   };
 
-  // --------- Hapus Order (Opsi A: CASCADE di DB) ----------
   // Ekstrak key file dari public URL storage
   const extractStoragePath = (url) => {
-    // Contoh: https://xxxx.supabase.co/storage/v1/object/public/proofs/ORD-123/filename.png
     const m = url?.match(/\/object\/public\/proofs\/(.+)$/);
-    return m ? m[1] : null; // => "ORD-123/filename.png"
+    return m ? m[1] : null;
   };
 
   async function performDelete(order) {
     setDeletingId(order.id);
     try {
-      // (Opsional) Hapus file di storage supaya tidak jadi orphan
       const paths =
         (order.payment_proofs || [])
           .map((p) => extractStoragePath(p.proof_url))
@@ -183,19 +182,16 @@ export default function Orders() {
       if (paths.length) {
         const { error: rmErr } = await supabase.storage.from("proofs").remove(paths);
         if (rmErr) {
-          // Tidak fatal — baris DB tetap kita hapus
           console.warn("Gagal menghapus sebagian file storage:", rmErr.message);
         }
       }
 
-      // Hapus order (payment_proofs akan ikut terhapus oleh ON DELETE CASCADE)
       const { error: delOrderErr } = await supabase
         .from("orders")
         .delete()
         .eq("id", order.id);
       if (delOrderErr) throw delOrderErr;
 
-      // Update UI
       setOrders((prev) => prev.filter((o) => o.id !== order.id));
       setDraftMap((prev) => {
         const next = { ...prev };
@@ -210,7 +206,23 @@ export default function Orders() {
       setConfirmDel({ open: false, order: null });
     }
   }
-  // -------------------------------------------------------
+
+  // Helper format alamat ringkas
+  function fmtAddress(a) {
+    if (!a || typeof a !== "object") return "-";
+    const core = [
+      a.line1,
+      a.kelurahan,
+      a.kecamatan,
+      a.kota,
+      a.provinsi,
+      a.kode_pos,
+    ]
+      .filter(Boolean)
+      .join(", ");
+    const extra = [a.patokan, a.catatan].filter(Boolean).join(" • ");
+    return extra ? `${core} — ${extra}` : core || "-";
+  }
 
   return (
     <div className="max-w-6xl mx-auto pt-28 px-4 pb-28">
@@ -239,8 +251,8 @@ export default function Orders() {
       </div>
 
       {/* Toolbar filter */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
-        <div className="relative">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-5">
+        <div className="relative md:col-span-2">
           <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             value={q}
@@ -296,6 +308,8 @@ export default function Orders() {
                 >
                   Customer {headerSortIcon("customer_name")}
                 </th>
+                <th className="px-3 py-2 border-b dark:border-gray-700">Alamat</th>
+                <th className="px-3 py-2 border-b dark:border-gray-700">Pesanan</th>
                 <th
                   className="px-3 py-2 border-b dark:border-gray-700 cursor-pointer"
                   onClick={() => toggleSort("total_amount")}
@@ -321,6 +335,11 @@ export default function Orders() {
                 const draft = draftMap[o.id] ?? o.status;
                 const changed = draft !== o.status;
 
+                const addrText = fmtAddress(o.shipping_address);
+                const itemsText = (o.order_items || [])
+                  .map((it) => `${it.product_name} ×${it.qty}`)
+                  .join(", ");
+
                 return (
                   <tr key={o.id} className="align-top">
                     <td className="px-3 py-2 border-b dark:border-gray-800 font-mono text-xs md:text-sm">
@@ -344,6 +363,15 @@ export default function Orders() {
                       </div>
                       <div className="opacity-70">{o.customer_email || "-"}</div>
                     </td>
+
+                    <td className="px-3 py-2 border-b dark:border-gray-800 max-w-[280px]">
+                      <div className="line-clamp-3">{addrText}</div>
+                    </td>
+
+                    <td className="px-3 py-2 border-b dark:border-gray-800 max-w-[280px]">
+                      <div className="line-clamp-3">{itemsText || "-"}</div>
+                    </td>
+
                     <td className="px-3 py-2 border-b dark:border-gray-800">
                       Rp {Number(o.total_amount || 0).toLocaleString("id-ID")}
                     </td>
@@ -424,7 +452,7 @@ export default function Orders() {
 
               {!orders.length && (
                 <tr>
-                  <td colSpan="8" className="text-center py-6 opacity-70">
+                  <td colSpan="10" className="text-center py-6 opacity-70">
                     Belum ada orderan.
                   </td>
                 </tr>
@@ -443,10 +471,7 @@ export default function Orders() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={closePreview}
-            />
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closePreview} />
             <motion.div
               className="relative z-10 max-w-3xl w-[92%] bg-white dark:bg-gray-900 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700"
               initial={{ scale: 0.95, opacity: 0 }}
@@ -505,7 +530,7 @@ export default function Orders() {
           >
             <div
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => (deletingId ? null : setConfirmDel({ open: false, order: null }))} // jangan bisa ditutup saat deleting
+              onClick={() => (deletingId ? null : setConfirmDel({ open: false, order: null }))} // jangan ditutup saat deleting
             />
             <motion.div
               className="relative z-10 w-[92%] max-w-md rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5"

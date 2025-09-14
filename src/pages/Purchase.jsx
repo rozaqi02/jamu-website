@@ -1,5 +1,5 @@
 // src/pages/Purchase.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabaseClient";
 
@@ -21,6 +21,12 @@ export default function Purchase() {
 
   // digunakan untuk reset ulang <input type="file"> setelah sukses
   const [fileInputKey, setFileInputKey] = useState(0);
+
+  // Link WhatsApp admin (prefilled message)
+  const waLink = useMemo(() => {
+    const text = `Halo Admin, saya sudah mengirim bukti pembayaran untuk order ${order?.order_number}. Mohon dicek ya. Terima kasih!`;
+    return `https://wa.me/6285745135415?text=${encodeURIComponent(text)}`;
+  }, [order?.order_number]);
 
   // load order + cek bukti
   useEffect(() => {
@@ -95,7 +101,6 @@ export default function Purchase() {
   async function onSubmit(e) {
     e.preventDefault();
 
-    // 🚫 pagar betis paling depan — kalau tak boleh submit, jangan lanjut
     if (!canSubmit) {
       if (!file) {
         setMessage("❌ Silakan pilih gambar bukti transfer (PNG/JPG) terlebih dahulu.");
@@ -124,7 +129,7 @@ export default function Purchase() {
 
     setSending(true);
     try {
-      // 🔐 safety: cek lagi ke DB sebelum insert (hindari duplikat)
+      // cek lagi ke DB sebelum insert (hindari duplikat)
       const { data: existing } = await supabase
         .from("payment_proofs")
         .select("id")
@@ -173,8 +178,7 @@ export default function Purchase() {
 
       if (insErr) {
         setMessage(
-          insErr.message ||
-            "⚠️ Upload berhasil, tapi gagal menyimpan metadata bukti."
+          insErr.message || "⚠️ Upload berhasil, tapi gagal menyimpan metadata bukti."
         );
         setIsError(true);
         return;
@@ -185,7 +189,6 @@ export default function Purchase() {
       setAlreadyUploaded(true);
       setPreview(null);
       setFile(null);
-      // reset input file agar required bekerja lagi untuk kiriman berikutnya
       setFileInputKey((k) => k + 1);
     } catch (err) {
       setMessage("❌ Terjadi kesalahan jaringan.");
@@ -270,11 +273,7 @@ export default function Purchase() {
             {preview && (
               <div className="mt-3">
                 <p className="text-xs font-medium mb-2">Preview:</p>
-                <img
-                  src={preview}
-                  alt="Preview bukti transfer"
-                  className="max-h-64 rounded-md border"
-                />
+                <img src={preview} alt="Preview bukti transfer" className="max-h-64 rounded-md border" />
               </div>
             )}
 
@@ -295,7 +294,15 @@ export default function Purchase() {
             </button>
           </form>
         ) : (
-          <div className="mt-6 text-center">
+          <div className="mt-6 flex items-center justify-center gap-3">
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full px-6 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition"
+            >
+              Hubungi Admin
+            </a>
             <button
               onClick={() => navigate("/")}
               className="rounded-full px-6 py-2 bg-[#22624a] text-white font-medium hover:bg-[#14532d] transition"
