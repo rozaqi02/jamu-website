@@ -25,7 +25,7 @@ function Footer({ theme }) {
   };
 
   // Nomor WA diseragamkan
-  const waNumber = "6285745135415";
+  const waNumber = "6281333321300";
 
   return (
     <footer

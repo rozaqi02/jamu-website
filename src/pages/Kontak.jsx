@@ -11,7 +11,7 @@ function Kontak({ theme }) {
   const [submitted, setSubmitted] = useState(false);
 
   // Nomor WA harus hanya angka (tanpa +) agar tidak 404
-  const whatsappNumber = "6285745135415";
+  const whatsappNumber = "6281333321300";
   const whatsappMessage = `Halo, saya ${nama} (${email}, ${telepon}):\nPesan: ${
     pesan || "Saya ingin tahu lebih banyak tentang Jamu Sugih Waras!"
   }`;
