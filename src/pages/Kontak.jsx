@@ -10,7 +10,8 @@ function Kontak({ theme }) {
   const [pesan, setPesan] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const whatsappNumber = "+6285745135415";
+  // Nomor WA harus hanya angka (tanpa +) agar tidak 404
+  const whatsappNumber = "6285745135415";
   const whatsappMessage = `Halo, saya ${nama} (${email}, ${telepon}):\nPesan: ${
     pesan || "Saya ingin tahu lebih banyak tentang Jamu Sugih Waras!"
   }`;
@@ -21,12 +22,12 @@ function Kontak({ theme }) {
       alert("Nama dan email wajib diisi.");
       return;
     }
-    window.open(
-      `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-        whatsappMessage
-      )}`,
-      "_blank"
-    );
+
+    // Format WA yang benar: https://wa.me/<nomor>?text=<encoded>
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+      whatsappMessage
+    )}`;
+    window.open(url, "_blank");
 
     setSubmitted(true);
     setNama("");
@@ -182,7 +183,6 @@ function Kontak({ theme }) {
                 }`}
               >
                 <p>📍 Alamat: Kalisongo, Malang</p>
-                <p>📧 Email: info@sugihwaras.com</p>
               </div>
             </div>
 

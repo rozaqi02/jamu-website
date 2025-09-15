@@ -62,7 +62,7 @@ function ChatBot() {
       return `Cara order ${userName}:\n1️⃣ Tambahkan produk ke keranjang\n2️⃣ Isi data checkout\n3️⃣ Transfer pembayaran ke BANK milik Jamu Sugih Waras\n4️⃣ Upload bukti di halaman konfirmasi pembayaran`;
     }
     if (lower.includes("hubungi") || lower.includes("admin")) {
-      return `${userName}, kamu bisa hubungi admin langsung 📞 via WhatsApp:\n👉 wa.me/6285745135415`;
+      return `${userName}, kamu bisa hubungi admin langsung 📞 via WhatsApp:\n👉 wa.me/6281333321300`;
     }
     return `${userName}, aku siap bantu! 😊 Tanya seputar harga, varian, order, atau kontak admin.`;
   };

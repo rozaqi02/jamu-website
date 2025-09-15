@@ -70,8 +70,8 @@ export default function Pay() {
         <div className="font-semibold mb-1">Transfer ke:</div>
         <ul className="text-sm">
           <li>Bank: BCA</li>
-          <li>Atas Nama: PT Jamu Sugih Waras</li>
-          <li>No. Rekening: 1234567890</li>
+          <li>Atas Nama: Zaqii Sheilla Ananda</li>
+          <li>No. Rekening: 3850866511</li>
         </ul>
         <div className="mt-2">Total: <strong>Rp {Number(order.total_amount).toLocaleString('id-ID')}</strong></div>
       </div>

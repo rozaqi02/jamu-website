@@ -1,6 +1,7 @@
+// src/components/Footer.jsx
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaEnvelope, FaWhatsapp, FaInstagram } from "react-icons/fa";
+import { FaWhatsapp, FaInstagram } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function Footer({ theme }) {
@@ -19,10 +20,12 @@ function Footer({ theme }) {
       }
     : {};
 
-  // Scroll smooth handler
   const smoothScrollTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // Nomor WA diseragamkan
+  const waNumber = "6285745135415";
 
   return (
     <footer
@@ -64,10 +67,10 @@ function Footer({ theme }) {
               y: [0, -25, 0],
               opacity: [0.3, 1, 0.3],
               backgroundColor: [
-                "rgba(34,197,94,0.8)", // green
-                "rgba(250,204,21,0.8)", // yellow
-                "rgba(249,115,22,0.8)", // orange
-                "rgba(34,197,94,0.8)", // back to green
+                "rgba(34,197,94,0.8)",
+                "rgba(250,204,21,0.8)",
+                "rgba(249,115,22,0.8)",
+                "rgba(34,197,94,0.8)",
               ],
             }}
             transition={{
@@ -182,21 +185,15 @@ function Footer({ theme }) {
               Hubungi Kami
             </h3>
             <div className="flex flex-col space-y-3 text-sm">
+              {/* Baris email DIHAPUS */}
               <a
-                href="mailto:info@sugihwaras.com"
-                className="flex items-center gap-2 hover:text-green-300 transition-colors"
-                aria-label="Email Sugih Waras"
-              >
-                <FaEnvelope /> info@sugihwaras.com
-              </a>
-              <a
-                href="https://wa.me/6285745135415"
+                href={`https://wa.me/${waNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 hover:text-green-300 transition-colors"
                 aria-label="Whatsapp Sugih Waras"
               >
-                <FaWhatsapp /> +62 857 4513 5415
+                <FaWhatsapp /> +{waNumber}
               </a>
               <a
                 href="https://www.instagram.com/rumahrempahsugihwaras/"
@@ -224,20 +221,13 @@ function Footer({ theme }) {
           transition={{ delay: 0.6, duration: 0.5 }}
         >
           <a
-            href="https://wa.me/6285745135415"
+            href={`https://wa.me/${waNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Whatsapp"
             className="w-9 h-9 flex items-center justify-center rounded-full bg-green-600 hover:bg-green-500 transition"
           >
             <FaWhatsapp />
-          </a>
-          <a
-            href="mailto:info@sugihwaras.com"
-            aria-label="Email"
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-green-600 hover:bg-green-500 transition"
-          >
-            <FaEnvelope />
           </a>
           <a
             href="https://www.instagram.com/rumahrempahsugihwaras/"

@@ -25,7 +25,7 @@ export default function Purchase() {
   // Link WhatsApp admin (prefilled message)
   const waLink = useMemo(() => {
     const text = `Halo Admin, saya sudah mengirim bukti pembayaran untuk order ${order?.order_number}. Mohon dicek ya. Terima kasih!`;
-    return `https://wa.me/6285745135415?text=${encodeURIComponent(text)}`;
+    return `https://wa.me/6281333321300?text=${encodeURIComponent(text)}`;
   }, [order?.order_number]);
 
   // load order + cek bukti
@@ -232,7 +232,7 @@ export default function Purchase() {
           </div>
           <div className="text-xs opacity-80 mt-2">
             Transfer ke: <br />
-            <strong>BANK BCA 123456789 a.n. PT Jamu Sugih Waras</strong>
+            <strong>BANK BCA 3850866511 a.n. Zaqii Sheilla Ananda</strong>
           </div>
         </div>
 
